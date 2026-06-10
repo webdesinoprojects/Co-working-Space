@@ -17,7 +17,6 @@ import { useTheme } from "@/lib/ThemeContext";
 
 export default function Footer() {
   const { theme } = useTheme();
-  const isDark = theme === "dark";
 
   return (
     <footer 

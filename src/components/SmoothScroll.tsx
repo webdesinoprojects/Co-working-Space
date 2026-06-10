@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, createContext, useContext, ReactNode, useRef } from "react";
+import { useEffect, createContext, useContext, ReactNode, useRef, useState } from "react";
 import Lenis from "lenis";
 import { usePathname } from "next/navigation";
 
@@ -12,6 +12,7 @@ export const useSmoothScroller = () => {
 
 export const SmoothScrollerProvider = ({ children }: { children: ReactNode }) => {
   const lenisRef = useRef<Lenis | null>(null);
+  const [lenisState, setLenisState] = useState<Lenis | null>(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -23,6 +24,7 @@ export const SmoothScrollerProvider = ({ children }: { children: ReactNode }) =>
     });
 
     lenisRef.current = lenis;
+    setLenisState(lenis);
 
     function raf(time: number) {
       lenis.raf(time);
@@ -34,6 +36,7 @@ export const SmoothScrollerProvider = ({ children }: { children: ReactNode }) =>
     return () => {
       lenis.destroy();
       lenisRef.current = null;
+      setLenisState(null);
     };
   }, []);
 
@@ -45,7 +48,7 @@ export const SmoothScrollerProvider = ({ children }: { children: ReactNode }) =>
   }, [pathname]);
 
   return (
-    <SmoothScrollerContext.Provider value={lenisRef.current}>
+    <SmoothScrollerContext.Provider value={lenisState}>
       {children}
     </SmoothScrollerContext.Provider>
   );

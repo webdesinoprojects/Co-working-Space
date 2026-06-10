@@ -191,7 +191,7 @@ export function LocationsSection() {
           viewport={{ once: true, margin: "-100px" }}
           className="px-5 sm:px-8 lg:px-12 grid grid-cols-2 md:grid-cols-4 md:grid-rows-3 gap-2 sm:gap-4 md:h-[600px] lg:h-[800px]"
         >
-          {locations.map((loc, i) => (
+          {locations.map((loc) => (
             <motion.div
               key={loc.name}
               variants={itemVariants}

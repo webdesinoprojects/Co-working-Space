@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight, Menu, X } from "lucide-react";
 import { LondonClock } from "@/components/LondonClock";
@@ -36,9 +37,15 @@ export function Navigation() {
             </button>
           </div>
           <div className="flex flex-col gap-4">
-            {["Workspaces", "Locations", "Journal", "Connect"].map((link) => (
-              <a key={link} href={`/${link.toLowerCase()}`} className="text-[28px] sm:text-[32px] font-medium text-gray-900" onClick={() => setMobileMenuOpen(false)}>
-                {link}
+            {[
+              { name: "About Us", path: "about" },
+              { name: "Workspaces", path: "workspaces" },
+              { name: "Locations", path: "locations" },
+              { name: "Journal", path: "journal" },
+              { name: "Connect", path: "connect" }
+            ].map((link) => (
+              <a key={link.name} href={`/${link.path}`} className="text-[28px] sm:text-[32px] font-medium text-gray-900" onClick={() => setMobileMenuOpen(false)}>
+                {link.name}
               </a>
             ))}
           </div>
@@ -54,13 +61,19 @@ export function Navigation() {
         <div className="bg-white/90 backdrop-blur-md rounded-full p-[5px] flex items-center justify-between shadow-[0_4px_24px_rgba(0,0,0,0.06)] border border-white/40">
           {/* LEFT */}
           <div className="flex items-center gap-6 pl-1">
-            <a href="/" className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center overflow-hidden hover:scale-105 transition-transform border border-gray-200">
+            <Link href="/" className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center overflow-hidden hover:scale-105 transition-transform border border-gray-200">
               <img src="/axion_logo.png" alt="Axion Logo" className="w-[70%] h-[70%] object-contain" />
-            </a>
+            </Link>
             <div className="hidden md:flex items-center gap-6">
-              {["Workspaces", "Locations", "Journal", "Connect"].map((link) => (
-                <a key={link} href={`/${link.toLowerCase()}`} className="text-[14px] text-gray-900 hover:text-[#F26522] transition-colors duration-300">
-                  {link}
+              {[
+                { name: "About Us", path: "about" },
+                { name: "Workspaces", path: "workspaces" },
+                { name: "Locations", path: "locations" },
+                { name: "Journal", path: "journal" },
+                { name: "Connect", path: "connect" }
+              ].map((link) => (
+                <a key={link.name} href={`/${link.path}`} className="text-[14px] text-gray-900 hover:text-[#F26522] transition-colors duration-300">
+                  {link.name}
                 </a>
               ))}
             </div>
