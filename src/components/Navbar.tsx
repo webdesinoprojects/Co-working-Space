@@ -27,10 +27,10 @@ const navItems = [
   {
     name: "Locations",
     dropdown: [
-      { name: "Coworking Space Noida Sector 2", href: "#locations" },
-      { name: "Coworking Space Noida Sector 3", href: "#locations" },
-      { name: "Virtual Office Noida", href: "#locations" },
-      { name: "Meeting Rooms Noida", href: "#locations" },
+      { name: "Coworking Space Noida Sector 2", href: "/locations/noida-sector-2" },
+      { name: "Coworking Space Noida Sector 3", href: "/locations/noida-sector-3" },
+      { name: "Virtual Office Noida", href: "/locations/virtual-office" },
+      { name: "Meeting Rooms Noida", href: "/locations/meeting-rooms" },
     ],
   },
   { name: "Accordion Spec", href: "#explore" },

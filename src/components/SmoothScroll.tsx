@@ -24,6 +24,7 @@ export const SmoothScrollerProvider = ({ children }: { children: ReactNode }) =>
     });
 
     lenisRef.current = lenis;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLenisState(lenis);
 
     function raf(time: number) {
