@@ -7,6 +7,7 @@ import { LocationsSection } from "@/components/LocationsSection";
 import { WhyChooseUsSection } from "@/components/WhyChooseUsSection";
 import { AmenitiesSection } from "@/components/AmenitiesSection";
 import { MembershipsSection } from "@/components/MembershipsSection";
+import { ServicesSection } from "@/components/ServicesSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 
 export default function Home() {
@@ -16,9 +17,10 @@ export default function Home() {
       <HeroSection />
       <AboutSection />
       <LocationsSection />
+      <MembershipsSection />
+      <ServicesSection />
       <WhyChooseUsSection />
       <AmenitiesSection />
-      <MembershipsSection />
       <TestimonialsSection />
     </main>
   );

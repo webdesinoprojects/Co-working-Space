@@ -5,43 +5,43 @@ import { ArrowRight } from "lucide-react";
 
 const locations = [
   {
-    name: "Mumbai",
+    name: "Delhi, Rithala",
     span: "col-span-2 md:col-span-2 md:row-span-2",
     img: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80",
     subtitle: "Flagship Hub",
   },
   {
-    name: "Bangalore",
+    name: "Delhi, Rithala",
     span: "col-span-1 md:col-span-1 md:row-span-1",
     img: "https://images.unsplash.com/photo-1527192491265-7e15c55b1ed2?auto=format&fit=crop&w=800&q=80",
     subtitle: "Tech Park",
   },
   {
-    name: "Delhi",
+    name: "Delhi, Rithala",
     span: "col-span-1 md:col-span-1 md:row-span-1",
     img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80",
     subtitle: "City Center",
   },
   {
-    name: "Pune",
+    name: "Delhi, Rithala",
     span: "col-span-1 md:col-span-1 md:row-span-1",
     img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=80",
     subtitle: "Innovation Lab",
   },
   {
-    name: "Hyderabad",
+    name: "Delhi, Rithala",
     span: "col-span-1 md:col-span-1 md:row-span-1",
     img: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=800&q=80",
     subtitle: "Cyber City",
   },
   {
-    name: "Chennai",
+    name: "Delhi, Rithala",
     span: "col-span-1 md:col-span-2 md:row-span-1",
     img: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80",
     subtitle: "Coastal Hub",
   },
   {
-    name: "Gurgaon",
+    name: "Delhi, Rithala",
     span: "col-span-1 md:col-span-2 md:row-span-1",
     img: "https://images.unsplash.com/photo-1517502884422-41eaead166d4?auto=format&fit=crop&w=800&q=80",
     subtitle: "Corporate Park",
@@ -175,7 +175,7 @@ export function LocationsSection() {
           className="px-5 sm:px-8 lg:px-12 flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10 sm:mb-14 lg:mb-16"
         >
           <h2 className="text-[clamp(1.75rem,7vw,4.2rem)] sm:text-[clamp(2.5rem,5vw,4.2rem)] font-medium leading-[1.08] tracking-[-0.03em] text-gray-900">
-            Premium Spaces <br className="hidden sm:block" /> Across India
+            Premium Spaces <br className="hidden sm:block" /> in Delhi, Rithala
           </h2>
           <button className="group flex items-center gap-3 text-[14px] font-medium text-gray-900 hover:text-[#F26522] transition-colors pb-2">
             View all locations
@@ -191,9 +191,9 @@ export function LocationsSection() {
           viewport={{ once: true, margin: "-100px" }}
           className="px-5 sm:px-8 lg:px-12 grid grid-cols-2 md:grid-cols-4 md:grid-rows-3 gap-2 sm:gap-4 md:h-[600px] lg:h-[800px]"
         >
-          {locations.map((loc) => (
+          {locations.map((loc, idx) => (
             <motion.div
-              key={loc.name}
+              key={idx}
               variants={itemVariants}
               className={`${loc.span} min-h-[140px] md:min-h-[200px] relative rounded-2xl overflow-hidden group shadow-lg shadow-black/5 bg-gray-200 cursor-pointer`}
             >

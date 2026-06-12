@@ -18,23 +18,12 @@ const navItems = [
   {
     name: "Workspaces",
     dropdown: [
-      { name: "Dedicated Desks", href: "#workspaces" },
-      { name: "Private Cabins", href: "#workspaces" },
-      { name: "Meeting Rooms", href: "#workspaces" },
-      { name: "Virtual Office", href: "#workspaces" },
+      { name: "Dedicated Desks", href: "/workspaces/dedicated-desks" },
+      { name: "Private Cabins", href: "/workspaces/private-cabins" },
+      { name: "Meeting Rooms", href: "/workspaces/meeting-rooms" },
+      { name: "Virtual Office", href: "/workspaces/virtual-office" },
     ],
   },
-  {
-    name: "Locations",
-    dropdown: [
-      { name: "Coworking Space Noida Sector 2", href: "/locations/noida-sector-2" },
-      { name: "Coworking Space Noida Sector 3", href: "/locations/noida-sector-3" },
-      { name: "Virtual Office Noida", href: "/locations/virtual-office" },
-      { name: "Meeting Rooms Noida", href: "/locations/meeting-rooms" },
-    ],
-  },
-  { name: "Accordion Spec", href: "#explore" },
-  { name: "Calculator", href: "#calculator" },
   { name: "FAQs", href: "/faq" },
 ];
 
