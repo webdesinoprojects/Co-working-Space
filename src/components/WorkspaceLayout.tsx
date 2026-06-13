@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { motion, useScroll } from "framer-motion";
-import { Play } from "lucide-react";
+import { Play, Sun, Moon } from "lucide-react";
 import Navbar from "@/components/Navbar";
 
 interface WorkspaceLayoutProps {
@@ -31,6 +32,8 @@ const ScrollSVG = () => {
 };
 
 export default function WorkspaceLayout({ title, description, stats, images, children }: WorkspaceLayoutProps) {
+  const [isNightMode, setIsNightMode] = useState(false);
+
   return (
     <main className="min-h-screen bg-[#faf8f5] text-gray-900 font-sans overflow-hidden relative">
       <Navbar />
@@ -114,16 +117,23 @@ export default function WorkspaceLayout({ title, description, stats, images, chi
               <path d="M45 25 L50 30 L55 25" />
             </motion.svg>
 
-            {/* SVG Decoration: Pill Toggle */}
-            <motion.div 
+            {/* Interactive Day/Night Toggle */}
+            <motion.button 
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
-              className="absolute bottom-[20%] left-[-10%] w-[160px] h-[70px] bg-white rounded-full border-2 border-gray-900 z-20 hidden md:flex items-center p-2 shadow-sm"
+              onClick={() => setIsNightMode(!isNightMode)}
+              className={`absolute bottom-[20%] left-[-10%] w-[160px] h-[70px] rounded-full border-2 z-30 hidden md:flex items-center p-2 shadow-sm transition-colors duration-500 cursor-pointer ${isNightMode ? 'bg-gray-900 border-gray-700 justify-end' : 'bg-white border-gray-900 justify-start'}`}
             >
-              <div className="w-14 h-14 rounded-full bg-[#b1a1c9] ml-auto"></div>
-            </motion.div>
+              <motion.div 
+                layout
+                transition={{ type: "spring", stiffness: 700, damping: 30 }}
+                className={`w-14 h-14 rounded-full flex items-center justify-center ${isNightMode ? 'bg-[#b1a1c9]' : 'bg-[#F26522]'}`}
+              >
+                {isNightMode ? <Moon size={24} className="text-gray-900" /> : <Sun size={24} className="text-white" />}
+              </motion.div>
+            </motion.button>
 
             {/* Top Right Image */}
             <motion.div 
@@ -131,9 +141,11 @@ export default function WorkspaceLayout({ title, description, stats, images, chi
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="absolute top-0 right-10 w-[55%] h-[45%] overflow-hidden rounded-lg shadow-xl border border-gray-100 z-10"
+              className="absolute top-0 right-10 w-[55%] h-[45%] overflow-hidden rounded-lg shadow-xl border border-gray-100 z-10 group"
             >
-              <img src={images[0]} alt="Workspace 1" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+              <img src={images[0]} alt="Workspace 1" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              <div className="absolute inset-0 bg-[#0b0f19]/70 mix-blend-multiply transition-opacity duration-700 pointer-events-none" style={{ opacity: isNightMode ? 1 : 0 }} />
+              <div className="absolute inset-0 bg-blue-900/20 mix-blend-overlay transition-opacity duration-700 pointer-events-none" style={{ opacity: isNightMode ? 1 : 0 }} />
             </motion.div>
 
             {/* Bottom Left Image */}
@@ -142,9 +154,11 @@ export default function WorkspaceLayout({ title, description, stats, images, chi
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="absolute bottom-10 left-0 w-[45%] h-[40%] overflow-hidden rounded-lg shadow-xl border border-gray-100 z-10"
+              className="absolute bottom-10 left-0 w-[45%] h-[40%] overflow-hidden rounded-lg shadow-xl border border-gray-100 z-10 group"
             >
-              <img src={images[1]} alt="Workspace 2" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+              <img src={images[1]} alt="Workspace 2" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              <div className="absolute inset-0 bg-[#0b0f19]/70 mix-blend-multiply transition-opacity duration-700 pointer-events-none" style={{ opacity: isNightMode ? 1 : 0 }} />
+              <div className="absolute inset-0 bg-blue-900/20 mix-blend-overlay transition-opacity duration-700 pointer-events-none" style={{ opacity: isNightMode ? 1 : 0 }} />
             </motion.div>
 
             {/* Bottom Right Image */}
@@ -153,9 +167,11 @@ export default function WorkspaceLayout({ title, description, stats, images, chi
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="absolute bottom-0 right-0 w-[50%] h-[50%] overflow-hidden rounded-lg shadow-2xl border border-gray-100 z-10"
+              className="absolute bottom-0 right-0 w-[50%] h-[50%] overflow-hidden rounded-lg shadow-2xl border border-gray-100 z-10 group"
             >
-              <img src={images[2]} alt="Workspace 3" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
+              <img src={images[2]} alt="Workspace 3" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              <div className="absolute inset-0 bg-[#0b0f19]/70 mix-blend-multiply transition-opacity duration-700 pointer-events-none" style={{ opacity: isNightMode ? 1 : 0 }} />
+              <div className="absolute inset-0 bg-blue-900/20 mix-blend-overlay transition-opacity duration-700 pointer-events-none" style={{ opacity: isNightMode ? 1 : 0 }} />
             </motion.div>
           </div>
 

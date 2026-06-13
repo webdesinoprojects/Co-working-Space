@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
-import { ArrowRight, MessageCircleQuestion } from "lucide-react";
+import { ArrowUpRight, MessageCircleQuestion } from "lucide-react";
+import { Caveat } from "next/font/google";
+
+const caveat = Caveat({ subsets: ["latin"] });
 
 const faqs = [
   {
@@ -66,19 +69,75 @@ const faqs = [
 
 export default function FAQPage() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      // Normalize mouse coordinates to a -1 to 1 scale
+      const x = (e.clientX / window.innerWidth) * 2 - 1;
+      const y = (e.clientY / window.innerHeight) * 2 - 1;
+      setMousePos({ x, y });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
-    <main className="min-h-screen font-sans bg-[#0a0a0a] relative overflow-hidden selection:bg-[#ff008a]/30">
+    <main className="min-h-screen font-sans bg-[#faf8f5] relative overflow-hidden selection:bg-[#F26522]/30">
       <Navbar />
 
-      {/* BACKGROUND GLOWS */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[#8400ff]/20 blur-[120px] pointer-events-none"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[#ff008a]/20 blur-[120px] pointer-events-none"></div>
-      
+      {/* INTERACTIVE 3D RINGS BACKGROUND */}
+      <div className="fixed inset-0 pointer-events-none flex justify-center items-center overflow-hidden z-0 opacity-50">
+        <style dangerouslySetInnerHTML={{__html: `
+          .tunnel-item {
+            position: absolute;
+            background-color: transparent;
+            width: calc(var(--i) * 6vmin);
+            aspect-ratio: 1;
+            border-radius: 50%;
+            border: 4px solid rgba(135, 206, 235, 0.7);
+            transform-style: preserve-3d;
+            transform: rotateX(70deg) translateZ(50px);
+            animation: tunnel-move 10s ease-in-out calc(var(--i) * 0.25s) infinite;
+            box-shadow: 0px 0px 15px rgba(255, 182, 193, 0.6), inset 0px 0px 15px rgba(255, 182, 193, 0.6);
+          }
+          @keyframes tunnel-move {
+            0%, 100% {
+              transform: rotateX(70deg) translateZ(50px) translateY(0px);
+              filter: hue-rotate(0deg);
+            }
+            50% {
+              /* Dip much deeper to hit the bottom of the screen */
+              transform: rotateX(70deg) translateZ(50px) translateY(-120vmin);
+              filter: hue-rotate(90deg);
+            }
+          }
+        `}} />
+        <motion.div
+          animate={{
+            rotateX: mousePos.y * -30, // Mouse tilt depth
+            rotateY: mousePos.x * 30,  // Mouse tilt horizontal
+          }}
+          transition={{ type: "spring", stiffness: 50, damping: 25 }}
+          style={{ transformStyle: "preserve-3d", perspective: "1000px" }}
+          className="relative flex justify-center items-center w-full h-full"
+        >
+          {/* Expanded to 40 items and 6vmin width to be massively huge */}
+          {Array.from({ length: 40 }).map((_, i) => (
+            <div
+              key={i}
+              className="tunnel-item mix-blend-multiply"
+              style={{ "--i": i } as React.CSSProperties}
+            ></div>
+          ))}
+        </motion.div>
+      </div>
+
       <section className="pt-40 pb-24 px-5 sm:px-8 lg:px-12 max-w-[1000px] mx-auto relative z-10">
         
         {/* HEADER */}
@@ -87,26 +146,26 @@ export default function FAQPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gray-200 shadow-sm mb-6"
           >
-            <MessageCircleQuestion className="w-5 h-5 text-[#60aed5]" />
-            <span className="text-sm font-semibold text-white tracking-wide uppercase">Got Questions?</span>
+            <MessageCircleQuestion className="w-5 h-5 text-[#F26522]" />
+            <span className="text-sm font-semibold text-gray-900 tracking-wide uppercase">Got Questions?</span>
           </motion.div>
           
           <motion.h1 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-[clamp(2.5rem,5vw,4.5rem)] font-extrabold leading-[1.1] text-white tracking-tight drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]"
+            className="text-[clamp(2.5rem,5vw,4.5rem)] font-extrabold leading-[1.1] text-gray-900 tracking-tight"
           >
-            Frequently Asked <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ff008a] to-[#8400ff]">Questions</span>
+            Frequently Asked <span className="text-[#F26522]">Questions</span>
           </motion.h1>
           
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-6 text-lg text-gray-400 max-w-2xl mx-auto"
+            className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto"
           >
             Everything you need to know about Axion Spaces, memberships, amenities, and how we can help your business thrive.
           </motion.p>
@@ -120,26 +179,26 @@ export default function FAQPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 + index * 0.05 }}
-              className={`rounded-2xl border transition-all duration-300 backdrop-blur-xl ${
+              className={`rounded-2xl border transition-all duration-300 ${
                 openIndex === index 
-                  ? "bg-white/10 border-white/30 shadow-[0_0_30px_rgba(132,0,255,0.15)]" 
-                  : "bg-black/40 border-white/10 hover:bg-white/5 hover:border-white/20"
+                  ? "bg-white border-[#F26522]/30 shadow-md" 
+                  : "bg-white border-gray-200 hover:bg-gray-50 hover:border-gray-300"
               }`}
             >
               <button
                 onClick={() => toggleFAQ(index)}
                 className="w-full flex items-center justify-between p-6 sm:p-8 text-left cursor-pointer group outline-none"
               >
-                <span className={`text-lg sm:text-xl font-medium transition-colors duration-300 ${openIndex === index ? "text-white" : "text-gray-300 group-hover:text-white"}`}>
+                <span className={`text-[24px] sm:text-[30px] font-bold transition-colors duration-300 ${caveat.className} ${openIndex === index ? "text-gray-900" : "text-gray-800 group-hover:text-gray-900"}`}>
                   {faq.question}
                 </span>
                 
-                <div className={`flex-shrink-0 ml-4 w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-500 ${
+                <div className={`flex-shrink-0 ml-4 w-12 h-12 rounded-full flex items-center justify-center border transition-all duration-500 ${
                   openIndex === index 
-                    ? "bg-[#ff008a] border-[#ff008a] text-white rotate-90 shadow-[0_0_15px_rgba(255,0,138,0.5)]" 
-                    : "bg-transparent border-white/20 text-gray-400 group-hover:border-white/50 group-hover:text-white"
+                    ? "bg-[#F26522] border-[#F26522] text-white rotate-90 shadow-lg shadow-[#F26522]/30" 
+                    : "bg-gray-50 border-gray-200 text-gray-500 group-hover:border-gray-300 group-hover:text-gray-900"
                 }`}>
-                  <ArrowRight className="w-5 h-5 transition-transform duration-300" />
+                  <ArrowUpRight className="w-6 h-6 transition-transform duration-300" />
                 </div>
               </button>
               
@@ -150,10 +209,23 @@ export default function FAQPage() {
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                    className="overflow-hidden"
+                    className="overflow-hidden rounded-b-2xl border-t border-gray-100"
                   >
-                    <div className="px-6 sm:px-8 pb-6 sm:pb-8 pt-0 text-gray-400 leading-relaxed text-[15px] sm:text-[16px]">
-                      {faq.answer}
+                    {/* NOTEBOOK STYLE ANSWER */}
+                    <div 
+                      className={`text-blue-700 font-medium ${caveat.className} text-[22px] sm:text-[28px]`}
+                      style={{
+                        background: `linear-gradient(transparent 92%, #a6d8fa 92%), linear-gradient(to right, transparent 50px, #f47b7b 50px, #f47b7b 52px, transparent 52px)`,
+                        backgroundSize: `100% 36px, 100% 100%`,
+                        lineHeight: `36px`,
+                        backgroundColor: `#fffdf8`,
+                        paddingBottom: `36px`,
+                        paddingTop: `2px`
+                      }}
+                    >
+                      <div className="pl-[70px] pr-8 sm:pr-12">
+                        {faq.answer}
+                      </div>
                     </div>
                   </motion.div>
                 )}

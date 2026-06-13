@@ -1,7 +1,20 @@
 "use client";
 
+import { ElementType } from "react";
 import { motion } from "framer-motion";
-import { User, Users, Laptop, Monitor, Briefcase, Building, Presentation, Video, CheckCircle2, XCircle } from "lucide-react";
+import { User, Users, Laptop, Monitor, Briefcase, Building, Presentation, Video } from "lucide-react";
+
+export interface ServiceFeature {
+  name: string;
+  included: boolean;
+}
+
+export interface ServiceOffering {
+  title: string;
+  icon: ElementType;
+  features: ServiceFeature[];
+  price?: string;
+}
 
 const AnimatedCheck = () => (
   <motion.svg
@@ -51,7 +64,7 @@ const AnimatedCross = () => (
   </motion.svg>
 );
 
-const offerings = [
+const offerings: ServiceOffering[] = [
   {
     title: "Day Pass",
     icon: User,
@@ -166,21 +179,66 @@ const offerings = [
   },
 ];
 
-export function ServicesSection() {
+export function ServicesSection({ offeringsList, title }: { offeringsList?: ServiceOffering[], title?: string }) {
+  const displayOfferings = offeringsList || offerings;
+  const displayTitle = title || "Price on Request";
   return (
-    <section className="bg-white pt-16 sm:pt-20 lg:pt-28 pb-16 sm:pb-20 lg:pb-28">
-      <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12">
+    <section className="bg-white pt-16 sm:pt-20 lg:pt-28 pb-16 sm:pb-20 lg:pb-28 relative overflow-hidden">
+      {/* Top Right to Bottom Left Geometric Tech Animation */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" preserveAspectRatio="none" viewBox="0 0 1440 800">
+        {/* Main Orange Circuit Line */}
+        <motion.path 
+          d="M 1440 50 L 1200 50 L 1200 250 L 800 250 L 800 550 L 400 550 L 400 800"
+          fill="none" 
+          stroke="#F26522" 
+          strokeWidth="3" 
+          strokeLinecap="square"
+          initial={{ pathLength: 0, opacity: 0 }}
+          whileInView={{ pathLength: 1, opacity: 0.15 }}
+          viewport={{ once: true }}
+          transition={{ duration: 2.5, ease: "easeInOut" }}
+        />
+        {/* Secondary Purple Dashed Line */}
+        <motion.path 
+          d="M 1440 150 L 1300 150 L 1300 400 L 900 400 L 900 700 L 200 700 L 200 800"
+          fill="none" 
+          stroke="#b1a1c9" 
+          strokeWidth="2" 
+          strokeDasharray="8 8"
+          initial={{ pathLength: 0, opacity: 0 }}
+          whileInView={{ pathLength: 1, opacity: 0.2 }}
+          viewport={{ once: true }}
+          transition={{ duration: 3, ease: "easeInOut", delay: 0.4 }}
+        />
+        {/* Accent Geometric Circle */}
+        <motion.circle 
+          cx="800" cy="250" r="8" fill="#F26522"
+          initial={{ scale: 0, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 0.3 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 2 }}
+        />
+        <motion.circle 
+          cx="400" cy="550" r="8" fill="#F26522"
+          initial={{ scale: 0, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 0.3 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 2.3 }}
+        />
+      </svg>
+
+      <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 relative z-10">
         <div className="flex flex-col items-center justify-center text-center mb-16">
           <div className="inline-block px-4 py-1.5 rounded-full border border-gray-300 text-[12px] font-bold uppercase tracking-widest text-gray-900 mb-6">
             Offerings
           </div>
           <h2 className="font-spaceGrotesk text-[clamp(2rem,4vw,3.5rem)] font-medium leading-[1.08] tracking-tight text-gray-900">
-            Price on Request
+            {displayTitle}
           </h2>
         </div>
 
         <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-7xl mx-auto">
-          {offerings.map((plan, idx) => (
+          {displayOfferings.map((plan, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0, y: 30 }}
@@ -197,9 +255,14 @@ export function ServicesSection() {
                 >
                   <plan.icon className="w-6 h-6" />
                 </motion.div>
-                <h3 className="font-spaceGrotesk text-[20px] font-semibold text-gray-900 text-center">
+                <h3 className="font-spaceGrotesk text-[20px] font-semibold text-gray-900 text-center mb-2">
                   {plan.title}
                 </h3>
+                {plan.price && (
+                  <div className="text-[#F26522] font-bold text-[18px]">
+                    {plan.price}
+                  </div>
+                )}
               </div>
 
               <ul className="flex-1 space-y-4 mb-10">

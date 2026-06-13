@@ -1,36 +1,24 @@
 "use client";
 
 import { 
-  Wifi, 
-  ShieldCheck, 
-  Car, 
-  Armchair, 
-  Zap, 
-  ThermometerSnowflake, 
-  DoorOpen, 
-  Wind, 
-  Phone, 
-  Cctv, 
-  Coffee, 
-  Bus, 
-  Users, 
-  Sparkles, 
-  Printer, 
-  Droplets 
+  Wifi, ShieldCheck, Car, Armchair, Zap, ThermometerSnowflake, DoorOpen, Wind, Phone, Cctv, Coffee, Bus, Users, Sparkles, Printer, Droplets,
+  Star, Hexagon, CircleDashed, Triangle, Key, Shield, Bike, Briefcase, Mic
 } from "lucide-react";
 
-import { motion, Variants } from "framer-motion";
+import { motion } from "framer-motion";
+
+import { ElementType } from "react";
 
 const amenities = [
-  { icon: Wifi, text: "High Speed Internet" },
-  { icon: ShieldCheck, text: "24 x 7 Security" },
-  { icon: Car, text: "2 Level Parking Space" },
-  { icon: Armchair, text: "Breakout Zone" },
-  { icon: Zap, text: "100% Power Backup" },
-  { icon: ThermometerSnowflake, text: "Air Conditioning" },
-  { icon: DoorOpen, text: "Dedicated Entrance" },
-  { icon: Wind, text: "Smoking Area" },
-  { icon: Phone, text: "Calling Booth" },
+  { icon: Wifi, text: "High-Speed WiFi" },
+  { icon: Printer, text: "Print & Scan" },
+  { icon: Coffee, text: "Free Coffee" },
+  { icon: Key, text: "24/7 Access" },
+  { icon: Shield, text: "Secure Entry" },
+  { icon: Bike, text: "Bike Storage" },
+  { icon: Briefcase, text: "Meeting Rooms" },
+  { icon: Zap, text: "Backup Power" },
+  { icon: Mic, text: "Podcast Studio" },
   { icon: Cctv, text: "CCTV Surveillance" },
   { icon: Coffee, text: "Coffee & Tea" },
   { icon: Bus, text: "Public Transport" },
@@ -40,20 +28,17 @@ const amenities = [
   { icon: Droplets, text: "Hygienic Washrooms" },
 ];
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.05 }
-  }
-};
+const bgIcons = [Star, Hexagon, CircleDashed, Triangle, Sparkles];
 
-const itemVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.95, y: 10 },
-  show: { opacity: 1, scale: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15 } }
-};
+export interface AmenityItem {
+  icon: ElementType;
+  text: string;
+}
 
-export function AmenitiesSection() {
+export function AmenitiesSection({ amenitiesList }: { amenitiesList?: AmenityItem[] }) {
+  const displayAmenities = amenitiesList || amenities;
+  const repeatedAmenities = Array(10).fill(displayAmenities).flat();
+
   return (
     <section className="bg-white pt-16 sm:pt-20 lg:pt-28 pb-12 sm:pb-16 lg:pb-24 overflow-hidden relative">
       
@@ -70,35 +55,10 @@ export function AmenitiesSection() {
           transition={{ repeat: Infinity, duration: 10, ease: "easeInOut" }}
           className="w-full h-full"
         >
-          {/* viewBox scaled to typical section dimensions like 1440x800 */}
           <svg viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" preserveAspectRatio="none">
-            <motion.path 
-              d="M1800 -100 C1200 200 600 600 -200 1100" 
-              stroke="#F26522" 
-              strokeWidth="6" 
-              strokeOpacity="0.4" 
-              initial={{ pathLength: 0, opacity: 0 }} 
-              whileInView={{ pathLength: 1, opacity: 1 }} 
-              transition={{ duration: 2.5, ease: "circOut" }} 
-            />
-            <motion.path 
-              d="M1900 0 C1300 300 700 700 -100 1200" 
-              stroke="#F26522" 
-              strokeWidth="18" 
-              strokeOpacity="0.15" 
-              initial={{ pathLength: 0, opacity: 0 }} 
-              whileInView={{ pathLength: 1, opacity: 1 }} 
-              transition={{ duration: 2.8, delay: 0.3, ease: "circOut" }} 
-            />
-            <motion.path 
-              d="M1850 150 C1400 450 800 800 -100 1300" 
-              stroke="#111827" 
-              strokeWidth="8" 
-              strokeOpacity="0.2" 
-              initial={{ pathLength: 0, opacity: 0 }} 
-              whileInView={{ pathLength: 1, opacity: 1 }} 
-              transition={{ duration: 3.2, delay: 0.6, ease: "circOut" }} 
-            />
+            <motion.path d="M1800 -100 C1200 200 600 600 -200 1100" stroke="#F26522" strokeWidth="6" strokeOpacity="0.4" initial={{ pathLength: 0, opacity: 0 }} whileInView={{ pathLength: 1, opacity: 1 }} transition={{ duration: 2.5, ease: "circOut" }} />
+            <motion.path d="M1900 0 C1300 300 700 700 -100 1200" stroke="#F26522" strokeWidth="18" strokeOpacity="0.15" initial={{ pathLength: 0, opacity: 0 }} whileInView={{ pathLength: 1, opacity: 1 }} transition={{ duration: 2.8, delay: 0.3, ease: "circOut" }} />
+            <motion.path d="M1850 150 C1400 450 800 800 -100 1300" stroke="#111827" strokeWidth="8" strokeOpacity="0.2" initial={{ pathLength: 0, opacity: 0 }} whileInView={{ pathLength: 1, opacity: 1 }} transition={{ duration: 3.2, delay: 0.6, ease: "circOut" }} />
           </svg>
         </motion.div>
       </motion.div>
@@ -123,32 +83,45 @@ export function AmenitiesSection() {
           </div>
         </div>
 
+      </div>
+
+      {/* MARQUEE CARDS */}
+      <div className="relative flex overflow-hidden w-[100vw] ml-[calc(-50vw+50%)] py-8 z-10">
         <motion.div 
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-100px" }}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5"
+          className="flex gap-4 sm:gap-6 px-4 sm:px-6 w-max"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{ repeat: Infinity, ease: "linear", duration: 60 }}
         >
-          {amenities.map((item, index) => {
+          {repeatedAmenities.map((item, index) => {
             const Icon = item.icon;
+            const BgAnimIcon = bgIcons[index % bgIcons.length];
+
             return (
-              <motion.div 
+              <div 
                 key={index}
-                variants={itemVariants}
-                className="bg-[#FAFAFA] border border-gray-100 rounded-2xl flex flex-col items-center justify-center text-center p-6 sm:p-8 hover:bg-gray-900 hover:border-gray-900 hover:text-white transition-all duration-300 group shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.1)] cursor-pointer"
+                className="relative overflow-hidden bg-[#FAFAFA] border border-gray-100 rounded-2xl flex flex-col items-center justify-center text-center p-6 sm:p-8 hover:bg-gray-900 hover:border-gray-900 hover:text-white transition-all duration-300 group shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.1)] cursor-pointer flex-shrink-0 w-48 sm:w-64 h-48 sm:h-56"
               >
-                <div className="w-12 h-12 rounded-full bg-white group-hover:bg-gray-800 flex items-center justify-center mb-4 transition-colors duration-300 shadow-sm group-hover:shadow-none">
+                {/* Subtle Background Animation */}
+                <motion.div
+                  animate={{ rotate: [0, 360], scale: [1, 1.1, 1] }}
+                  transition={{ duration: 15 + (index % 5) * 2, repeat: Infinity, ease: "linear" }}
+                  className="absolute -right-8 -bottom-8 text-gray-200 group-hover:text-gray-800 transition-colors duration-500 opacity-40 pointer-events-none"
+                >
+                   <BgAnimIcon size={120} strokeWidth={0.5} />
+                </motion.div>
+
+                <div className="relative z-10 w-12 h-12 rounded-full bg-white group-hover:bg-gray-800 flex items-center justify-center mb-4 transition-colors duration-300 shadow-sm group-hover:shadow-none">
                   <Icon size={24} className="text-gray-800 group-hover:text-[#F26522] transition-colors duration-300" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-[13px] sm:text-[15px] font-semibold text-gray-900 group-hover:text-white transition-colors duration-300">
+                <h3 className="relative z-10 text-[13px] sm:text-[15px] font-semibold text-gray-900 group-hover:text-white transition-colors duration-300">
                   {item.text}
                 </h3>
-              </motion.div>
+              </div>
             );
           })}
         </motion.div>
       </div>
+
     </section>
   );
 }
