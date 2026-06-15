@@ -13,9 +13,10 @@ export default async function ConnectPage() {
   // automatically appear in the dropdown without touching the CMS.
   let mergedData = data ?? undefined;
   if (mergedData && workspaces.length > 0) {
-    const existingValues = new Set(mergedData.interest_options.map((o) => o.value));
+    const normalize = (s: string) => s.toLowerCase().replace(/-/g, "").replace(/s$/, "");
+    const existingNormalized = new Set(mergedData.interest_options.map((o) => normalize(o.value)));
     const workspaceOptions = workspaces
-      .filter((w) => !existingValues.has(w.slug))
+      .filter((w) => !existingNormalized.has(normalize(w.slug)))
       .map((w) => ({ label: w.nav_label, value: w.slug }));
     mergedData = {
       ...mergedData,

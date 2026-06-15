@@ -341,12 +341,26 @@ export function ServicesSection({
 
               <div className="mt-auto flex justify-center">
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Link
-                    href={enquireBaseHref.startsWith("#") ? enquireBaseHref : `${enquireBaseHref}?interest=${encodeURIComponent(plan.title)}`}
-                    className="bg-[#F26522] text-white font-semibold text-[15px] py-3.5 px-8 rounded-full shadow-lg shadow-[#F26522]/30 hover:bg-[#e05a1a] transition-colors inline-block text-center"
-                  >
-                    Enquire Now
-                  </Link>
+                  {enquireBaseHref.startsWith("#") ? (
+                    <a
+                      href={enquireBaseHref}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const el = document.querySelector(enquireBaseHref);
+                        if (el) el.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className="bg-[#F26522] text-white font-semibold text-[15px] py-3.5 px-8 rounded-full shadow-lg shadow-[#F26522]/30 hover:bg-[#e05a1a] transition-colors inline-block text-center"
+                    >
+                      Enquire Now
+                    </a>
+                  ) : (
+                    <Link
+                      href={`${enquireBaseHref}?interest=${encodeURIComponent(plan.title)}`}
+                      className="bg-[#F26522] text-white font-semibold text-[15px] py-3.5 px-8 rounded-full shadow-lg shadow-[#F26522]/30 hover:bg-[#e05a1a] transition-colors inline-block text-center"
+                    >
+                      Enquire Now
+                    </Link>
+                  )}
                 </motion.div>
               </div>
             </motion.div>

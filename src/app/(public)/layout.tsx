@@ -23,20 +23,23 @@ export default async function PublicLayout({ children }: { children: ReactNode }
     nav_label,
   }));
   const mergedContactData = contactData
-    ? {
-        ...contactData,
-        interest_options: [
-          ...contactData.interest_options,
-          ...workspaces
-            .filter((workspace) =>
-              contactData.interest_options.every((option) => option.value !== workspace.slug)
-            )
-            .map((workspace) => ({
-              label: workspace.nav_label,
-              value: workspace.slug,
-            })),
-        ],
-      }
+    ? (() => {
+        // Normalize slug for dedup: lowercase, strip trailing 's', collapse hyphens
+        const normalize = (s: string) => s.toLowerCase().replace(/-/g, "").replace(/s$/, "");
+        const existingNormalized = new Set(
+          contactData.interest_options.map((o) => normalize(o.value))
+        );
+        const newOptions = workspaces
+          .filter((workspace) => !existingNormalized.has(normalize(workspace.slug)))
+          .map((workspace) => ({
+            label: workspace.nav_label,
+            value: workspace.slug,
+          }));
+        return {
+          ...contactData,
+          interest_options: [...contactData.interest_options, ...newOptions],
+        };
+      })()
     : undefined;
 
   return (
