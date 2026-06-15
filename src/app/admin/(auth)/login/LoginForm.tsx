@@ -2,6 +2,7 @@
 
 import { useActionState, useState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { loginAdminAction, type LoginState } from "./actions";
 
@@ -91,14 +92,14 @@ function SubmitButton() {
 export function LoginForm() {
   const [state, formAction] = useActionState(loginAdminAction, initialState);
   const [cowState, setCowState] = useState<CowState>("idle");
+  const router = useRouter();
 
   useEffect(() => {
     if (state.success) {
-      // Full browser navigation — no Next.js router, no SPA tricks.
-      // This is the most reliable way to navigate after cookie is set.
-      window.location.href = "/admin";
+      router.push("/admin");
+      router.refresh();
     }
-  }, [state.success]);
+  }, [state.success, router]);
 
   return (
     <div className="pointer-events-auto relative mt-28 w-full max-w-[460px]">
