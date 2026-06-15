@@ -50,5 +50,20 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  // Exclude the auth endpoints (/admin/login, /admin/logout) from the proxy.
+  //
+  // Server Actions and Route Handlers run as POST/GET requests to the route
+  // they live on. The login Server Action (signInWithPassword) and the logout
+  // Route Handler (signOut) BOTH set Set-Cookie headers to write/clear the
+  // Supabase session. If the proxy runs on those requests, it returns its own
+  // NextResponse and — on Vercel, where the Edge proxy and the action run in
+  // separate execution contexts — the proxy response drops the action's
+  // Set-Cookie headers. The session cookie never reaches the browser, so every
+  // following request is unauthenticated and bounces back to /admin/login.
+  //
+  // Excluding these paths at the matcher level (per Next.js proxy docs) means
+  // the auth requests bypass the proxy entirely and their Set-Cookie headers
+  // are delivered intact. Real auth is still enforced by requireAdmin() in the
+  // protected layout, so security is unaffected.
+  matcher: ["/admin/((?!login|logout).*)"],
 };
