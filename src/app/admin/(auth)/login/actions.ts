@@ -1,10 +1,10 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/server/db/client";
 
 export type LoginState = {
   error: string | null;
+  success?: boolean;
 };
 
 export async function loginAdminAction(
@@ -39,5 +39,5 @@ export async function loginAdminAction(
     return { error: "This account is not enabled for admin access." };
   }
 
-  redirect("/admin");
+  return { error: null, success: true };
 }

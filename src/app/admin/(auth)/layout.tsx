@@ -6,7 +6,7 @@ export default function AdminAuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#070712]">
+    <div className="relative min-h-screen overflow-hidden bg-[#f0f0f0]">
       <div className="absolute inset-0 z-0">
         <Galaxy
           mouseRepulsion
@@ -23,8 +23,9 @@ export default function AdminAuthLayout({
           speed={1}
         />
       </div>
-      <div className="pointer-events-none absolute inset-0 z-[1] bg-[radial-gradient(circle_at_center,rgba(139,109,232,0.16),rgba(7,7,18,0.72)_62%)]" />
+      <div className="pointer-events-none absolute inset-0 z-[1] bg-white/70 backdrop-blur-[2px]" />
       <div className="pointer-events-none relative z-10">{children}</div>
     </div>
   );
 }
+

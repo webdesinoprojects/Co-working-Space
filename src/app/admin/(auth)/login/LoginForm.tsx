@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { loginAdminAction, type LoginState } from "./actions";
 
@@ -81,7 +82,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="mt-3 w-full rounded-md bg-[#cc1459] px-4 py-3 text-[13px] font-black uppercase tracking-[0.35em] text-white shadow-[0_12px_24px_rgba(204,20,89,0.24)] transition hover:bg-[#b6104d] disabled:cursor-not-allowed disabled:opacity-60"
+      className="mt-3 w-full rounded-xl bg-neutral-900 px-4 py-3 text-[13px] font-black uppercase tracking-[0.35em] text-white shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-60"
     >
       {pending ? "Signing in..." : "Login"}
     </button>
@@ -91,19 +92,27 @@ function SubmitButton() {
 export function LoginForm() {
   const [state, formAction] = useActionState(loginAdminAction, initialState);
   const [cowState, setCowState] = useState<CowState>("idle");
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state.success) {
+      router.push("/admin");
+      router.refresh();
+    }
+  }, [state.success, router]);
 
   return (
     <div className="pointer-events-auto relative mt-28 w-full max-w-[460px]">
       <CowMascot state={cowState} />
       <form
         action={formAction}
-        className="relative rounded-[18px] border border-white/10 bg-[#151021]/92 px-12 pb-12 pt-20 shadow-[0_24px_90px_rgba(0,0,0,0.42)] backdrop-blur-xl"
+        className="relative rounded-[18px] border border-white/60 bg-white/40 backdrop-blur-xl px-12 pb-12 pt-20 shadow-[0_8px_32px_rgba(0,0,0,0.08)]"
       >
         <div className="space-y-6">
           <div>
             <label
               htmlFor="email"
-              className="mb-2 block text-[18px] font-black text-white"
+              className="mb-2 block text-[18px] font-black text-neutral-900"
             >
               Enter your email
             </label>
@@ -115,7 +124,7 @@ export function LoginForm() {
               required
               onFocus={() => setCowState("email")}
               onBlur={() => setCowState("idle")}
-              className="w-full border-0 border-b-2 border-white/35 bg-transparent px-1 py-2 text-[16px] text-white outline-none transition placeholder:text-white/35 focus:border-[#86b44b] focus:ring-0"
+              className="w-full border-0 border-b-2 border-neutral-300 bg-transparent px-1 py-2 text-[16px] text-neutral-900 outline-none transition placeholder:text-neutral-400 focus:border-neutral-900 focus:ring-0"
               placeholder="Email"
             />
           </div>
@@ -123,7 +132,7 @@ export function LoginForm() {
           <div>
             <label
               htmlFor="password"
-              className="mb-2 block text-[18px] font-black text-white"
+              className="mb-2 block text-[18px] font-black text-neutral-900"
             >
               Enter your password
             </label>
@@ -135,13 +144,13 @@ export function LoginForm() {
               required
               onFocus={() => setCowState("password")}
               onBlur={() => setCowState("idle")}
-              className="w-full border-0 border-b-2 border-white/35 bg-transparent px-1 py-2 text-[16px] text-white outline-none transition placeholder:text-white/35 focus:border-[#86b44b] focus:ring-0"
+              className="w-full border-0 border-b-2 border-neutral-300 bg-transparent px-1 py-2 text-[16px] text-neutral-900 outline-none transition placeholder:text-neutral-400 focus:border-neutral-900 focus:ring-0"
               placeholder="Password"
             />
           </div>
 
           {state.error && (
-            <p className="rounded-md border border-red-400/30 bg-red-950/50 px-3 py-2 text-sm text-red-100">
+            <p className="rounded-md border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700">
               {state.error}
             </p>
           )}

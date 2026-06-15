@@ -1,11 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
-  FileText,
   Image as ImageIcon,
   MessageSquare,
   LogOut,
@@ -62,11 +60,10 @@ const topItems = [
 
 export function AdminSidebar({
   isOpen,
-  onToggle,
   workspaceItems = [],
 }: {
   isOpen: boolean;
-  onToggle: () => void;
+  onToggle?: () => void;
   workspaceItems?: WorkspaceNavItem[];
 }) {
   const pathname = usePathname();
