@@ -1,6 +1,6 @@
 "use server";
 
-import { createSupabaseServerClient } from "@/server/db/client";
+import { createSupabaseActionClient } from "@/server/db/client";
 
 export type LoginState = {
   error: string | null;
@@ -18,7 +18,7 @@ export async function loginAdminAction(
     return { error: "Enter your email and password." };
   }
 
-  const supabase = await createSupabaseServerClient({ canSetCookies: true });
+  const supabase = await createSupabaseActionClient();
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,

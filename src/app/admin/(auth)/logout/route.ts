@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createSupabaseServerClient } from "@/server/db/client";
+import { createSupabaseActionClient } from "@/server/db/client";
 
 export async function GET(request: NextRequest) {
-  const supabase = await createSupabaseServerClient({ canSetCookies: true });
+  const supabase = await createSupabaseActionClient();
   await supabase.auth.signOut();
 
   return NextResponse.redirect(new URL("/admin/login", request.url));
