@@ -25,24 +25,24 @@ export function InfiniteMarquee({
 
   return (
     // Outer wrapper to prevent horizontal scroll from the tilted scale-110 inner div
-    <div className="relative w-full overflow-hidden flex items-center justify-center my-8 sm:my-16 py-8">
-      
+    <div className="relative w-full overflow-hidden flex items-center justify-center my-6 sm:my-10 py-4">
+
       {/* The actual rotated marquee tape */}
-      <div className={`relative flex w-[110vw] max-w-none py-4 sm:py-6 ${bgColor} ${borderColor} ${textColor} ${rotation} scale-105 sm:scale-110 z-20 shadow-[0_15px_0_0_rgba(17,24,39,1)]`}>
+      <div className={`relative flex w-full max-w-none py-3 sm:py-4 ${bgColor} ${borderColor} ${textColor} ${rotation} scale-100 sm:scale-[1.03] z-20 shadow-[0_10px_0_0_rgba(17,24,39,1)]`}>
         <motion.div
-          className="flex whitespace-nowrap gap-8 sm:gap-16 items-center pl-8 sm:pl-16"
+          className="flex whitespace-nowrap gap-6 sm:gap-10 items-center pl-6 sm:pl-10"
           animate={{
             x: reverse ? ["-50%", "0%"] : ["0%", "-50%"],
           }}
           transition={{
             repeat: Infinity,
             ease: "linear",
-            duration: 80, // slightly faster for more energy
+            duration: 140,
           }}
         >
           {repeatedItems.map((item, index) => (
-            <div key={index} className="flex items-center gap-8 sm:gap-16">
-              <span className="text-[2rem] sm:text-[3.5rem] md:text-[4.5rem] font-black tracking-tighter uppercase font-spaceGrotesk whitespace-nowrap">
+            <div key={index} className="flex items-center gap-6 sm:gap-10">
+              <span className="text-[1.25rem] sm:text-[2rem] md:text-[2.75rem] font-black tracking-tighter uppercase font-spaceGrotesk whitespace-nowrap">
                 {item}
               </span>
               
@@ -52,8 +52,8 @@ export function InfiniteMarquee({
                 transition={{ repeat: Infinity, duration: 5, ease: "linear" }}
                 className="flex-shrink-0"
               >
-                <Asterisk size={48} strokeWidth={3} className="text-gray-900 hidden sm:block" />
-                <Asterisk size={32} strokeWidth={3} className="text-gray-900 block sm:hidden" />
+                <Asterisk size={32} strokeWidth={3} className="text-gray-900 hidden sm:block" />
+                <Asterisk size={22} strokeWidth={3} className="text-gray-900 block sm:hidden" />
               </motion.div>
             </div>
           ))}

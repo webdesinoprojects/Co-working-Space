@@ -12,10 +12,11 @@ import {
   LogOut,
   Sparkles,
 } from "lucide-react";
+import type { WorkspaceNavItem } from "@/components/WorkspaceNavContext";
 
 // ─── Nav tree ─────────────────────────────────────────────────────────────────
 
-const contentGroups = [
+const baseContentGroups = [
   {
     section: "Homepage",
     base: "/admin/content/home",
@@ -45,13 +46,7 @@ const contentGroups = [
   {
     section: "Workspaces",
     base: "/admin/content/workspaces",
-    items: [
-      { name: "Overview", href: "/overview" },
-      { name: "Dedicated Desks", href: "/dedicated-desks" },
-      { name: "Private Cabins", href: "/private-cabins" },
-      { name: "Meeting Rooms", href: "/meeting-rooms" },
-      { name: "Virtual Office", href: "/virtual-office" },
-    ],
+    items: [{ name: "All Workspaces", href: "" }],
   },
   {
     section: "FAQ",
@@ -69,11 +64,27 @@ const topItems = [
 export function AdminSidebar({
   isOpen,
   onToggle,
+  workspaceItems = [],
 }: {
   isOpen: boolean;
   onToggle: () => void;
+  workspaceItems?: WorkspaceNavItem[];
 }) {
   const pathname = usePathname();
+  const contentGroups = baseContentGroups.map((group) =>
+    group.section === "Workspaces"
+      ? {
+          ...group,
+          items: [
+            { name: "All Workspaces", href: "" },
+            ...workspaceItems.map((workspace) => ({
+              name: workspace.nav_label,
+              href: `/${workspace.slug}`,
+            })),
+          ],
+        }
+      : group
+  );
 
   if (!isOpen) return null;
 

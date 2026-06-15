@@ -374,3 +374,130 @@ export type IkAuthParamsVM = {
 export type ActionResult<T = void> =
   | { success: true; data?: T }
   | { success: false; error: string; fieldErrors?: Record<string, string[]> };
+
+// -- Admin Workspaces ----------------------------------------------------------
+export type AdminWorkspaceListItemVM = {
+  id: string;
+  slug: string;
+  nav_label: string;
+  card_title: string;
+  sort_order: number;
+  is_active: boolean;
+  is_featured: boolean;
+  overview_image: AdminImagePreview | null;
+};
+
+export type AdminWorkspaceHeroImageVM = {
+  id: string | null;
+  workspace_id: string;
+  slot: number;
+  image_asset_id: string | null;
+  image: AdminImagePreview | null;
+};
+
+export type AdminWorkspaceStatVM = {
+  id: string;
+  workspace_id: string;
+  value: string;
+  label: string;
+  sort_order: number;
+  is_active: boolean;
+};
+
+export type AdminWorkspaceGalleryImageVM = {
+  id: string;
+  workspace_id: string;
+  sort_order: number;
+  image_asset_id: string | null;
+  image: AdminImagePreview | null;
+  caption: string | null;
+  is_active: boolean;
+};
+
+export type AdminWorkspaceMarqueeItemVM = {
+  id: string;
+  band_id: string;
+  item_text: string;
+  sort_order: number;
+  is_active: boolean;
+};
+
+export type AdminWorkspaceMarqueeBandVM = {
+  id: string;
+  workspace_id: string;
+  theme: "light" | "dark";
+  reverse: boolean;
+  sort_order: number;
+  is_active: boolean;
+  items: AdminWorkspaceMarqueeItemVM[];
+};
+
+export type AdminWorkspaceAmenityVM = {
+  id: string;
+  workspace_id: string;
+  icon_key: string;
+  label: string;
+  sort_order: number;
+  is_active: boolean;
+};
+
+export type AdminWorkspacePlanFeatureVM = {
+  id: string;
+  plan_id: string;
+  feature_text: string;
+  is_included: boolean;
+  sort_order: number;
+};
+
+export type AdminWorkspacePlanVM = {
+  id: string;
+  section_id: string;
+  title: string;
+  icon_key: string;
+  price_text: string | null;
+  sort_order: number;
+  is_active: boolean;
+  features: AdminWorkspacePlanFeatureVM[];
+};
+
+export type AdminWorkspacePlanSectionVM = {
+  id: string;
+  workspace_id: string;
+  badge_text: string;
+  title: string;
+  plans: AdminWorkspacePlanVM[];
+};
+
+export type AdminWorkspaceEditorVM = {
+  id: string;
+  slug: string;
+  nav_label: string;
+  card_title: string;
+  card_description: string;
+  overview_image_asset_id: string | null;
+  overview_image: AdminImagePreview | null;
+  hero_title: string;
+  hero_description: string;
+  cta_label: string;
+  cta_href: string;
+  video_label: string;
+  video_href: string | null;
+  sort_order: number;
+  is_active: boolean;
+  is_featured: boolean;
+  meta_title: string | null;
+  meta_description: string | null;
+  hero_images: AdminWorkspaceHeroImageVM[];
+  stats: AdminWorkspaceStatVM[];
+  gallery: AdminWorkspaceGalleryImageVM[];
+  marquee_bands: AdminWorkspaceMarqueeBandVM[];
+  amenities: AdminWorkspaceAmenityVM[];
+  plan_section: AdminWorkspacePlanSectionVM | null;
+};
+
+export type AdminWorkspaceOverviewVM = {
+  id: string;
+  badge_text: string;
+  title: string;
+  body_text: string;
+};

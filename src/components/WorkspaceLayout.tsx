@@ -10,6 +10,10 @@ interface WorkspaceLayoutProps {
   description: string;
   stats: { value: string; label: string }[];
   images: [string, string, string];
+  ctaLabel?: string;
+  ctaHref?: string;
+  videoLabel?: string;
+  videoHref?: string | null;
   children?: React.ReactNode;
 }
 
@@ -31,7 +35,17 @@ const ScrollSVG = () => {
   );
 };
 
-export default function WorkspaceLayout({ title, description, stats, images, children }: WorkspaceLayoutProps) {
+export default function WorkspaceLayout({
+  title,
+  description,
+  stats,
+  images,
+  ctaLabel = "Get started",
+  ctaHref = "#contact",
+  videoLabel = "Watch video",
+  videoHref,
+  children,
+}: WorkspaceLayoutProps) {
   const [isNightMode, setIsNightMode] = useState(false);
 
   return (
@@ -70,15 +84,23 @@ export default function WorkspaceLayout({ title, description, stats, images, chi
               transition={{ delay: 0.2 }}
               className="flex flex-wrap items-center gap-6 mb-16"
             >
-              <button className="bg-[#9db89a] text-white px-8 py-3.5 rounded-full font-semibold text-[15px] hover:bg-[#8ca889] transition-colors shadow-sm">
-                Get started
-              </button>
-              <button className="flex items-center gap-2 text-gray-900 font-semibold text-[15px] hover:text-[#F26522] transition-colors group">
+              <a
+                href={ctaHref}
+                className="bg-[#9db89a] text-white px-8 py-3.5 rounded-full font-semibold text-[15px] hover:bg-[#8ca889] transition-colors shadow-sm"
+              >
+                {ctaLabel}
+              </a>
+              <a
+                href={videoHref ?? "#contact"}
+                target={videoHref ? "_blank" : undefined}
+                rel={videoHref ? "noreferrer" : undefined}
+                className="flex items-center gap-2 text-gray-900 font-semibold text-[15px] hover:text-[#F26522] transition-colors group"
+              >
                 <div className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center group-hover:border-[#F26522] transition-colors">
                   <Play className="w-3.5 h-3.5 fill-current" />
                 </div>
-                Watch video
-              </button>
+                {videoLabel}
+              </a>
             </motion.div>
 
             <motion.div 

@@ -4,10 +4,17 @@ import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { ToastProvider } from "@/components/admin/Toast";
+import type { WorkspaceNavItem } from "@/components/WorkspaceNavContext";
 
 const LiquidChrome = dynamic(() => import("./LiquidChrome").then(mod => mod.LiquidChrome), { ssr: false });
 
-export function AdminLayoutShell({ children }: { children: React.ReactNode }) {
+export function AdminLayoutShell({
+  children,
+  workspaceItems = [],
+}: {
+  children: React.ReactNode;
+  workspaceItems?: WorkspaceNavItem[];
+}) {
   const [open, setOpen] = useState(true);
 
   useEffect(() => {
@@ -40,7 +47,11 @@ export function AdminLayoutShell({ children }: { children: React.ReactNode }) {
       {/* Main Container - Apple Vision Pro style ultra-glass */}
       <div className="relative z-10 flex h-full w-full p-4 sm:p-6 lg:p-8 pointer-events-none">
         <div className="flex w-full h-full bg-white/5 backdrop-blur-sm border border-white/40 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)] rounded-[2.5rem] overflow-hidden pointer-events-auto">
-          <AdminSidebar isOpen={open} onToggle={() => setOpen((v) => !v)} />
+          <AdminSidebar
+            isOpen={open}
+            onToggle={() => setOpen((v) => !v)}
+            workspaceItems={workspaceItems}
+          />
           <ToastProvider>
             <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-transparent">
               {children}

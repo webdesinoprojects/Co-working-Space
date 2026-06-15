@@ -35,11 +35,7 @@ const contentTree = [
     section: "Workspaces",
     base: "/admin/content/workspaces",
     items: [
-      { name: "Overview", href: "/overview" },
-      { name: "Dedicated Desks", href: "/dedicated-desks" },
-      { name: "Private Cabins", href: "/private-cabins" },
-      { name: "Meeting Rooms", href: "/meeting-rooms" },
-      { name: "Virtual Office", href: "/virtual-office" },
+      { name: "All Workspaces", href: "" },
     ]
   },
   {

@@ -43,3 +43,6 @@ next-env.d.ts
 
 # User-specific developer docs
 developer/
+
+# Local agent worktrees
+.claude/
