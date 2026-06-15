@@ -18,7 +18,7 @@ export async function loginAdminAction(
     return { error: "Enter your email and password." };
   }
 
-  const supabase = await createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient({ canSetCookies: true });
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
