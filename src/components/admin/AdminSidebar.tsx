@@ -152,13 +152,17 @@ export function AdminSidebar({
       </div>
 
       <div className="p-4 border-t border-neutral-100 mt-auto">
-        <Link
-          href="/admin/logout"
-          className="flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-500 hover:text-red-600 hover:bg-red-50 transition-colors font-medium mt-1"
-        >
-          <LogOut className="w-5 h-5 text-neutral-400" />
-          <span className="text-[15px]">Log out</span>
-        </Link>
+        {/* POST form, not a <Link>: a GET logout route gets prefetched by
+            Next.js in production and signs the user out automatically. */}
+        <form action="/admin/logout" method="post">
+          <button
+            type="submit"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-500 hover:text-red-600 hover:bg-red-50 transition-colors font-medium mt-1"
+          >
+            <LogOut className="w-5 h-5 text-neutral-400" />
+            <span className="text-[15px]">Log out</span>
+          </button>
+        </form>
       </div>
     </aside>
   );

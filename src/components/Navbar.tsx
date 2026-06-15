@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -85,19 +85,19 @@ export default function Navbar({ workspaceNavItems }: { workspaceNavItems?: Work
 
   return (
     <nav className="fixed top-0 z-50 w-full px-3 py-3 select-none">
-      <div className={`mx-auto flex items-center justify-between px-4 py-3 md:px-6 max-w-7xl rounded-[1.25rem] border transition-all duration-300 ${scrolled ? 'bg-black/70 backdrop-blur-md border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.12)]' : 'bg-transparent border-transparent shadow-none'}`}>
+      <div className={`mx-auto flex items-center justify-between px-4 py-3 md:px-6 max-w-7xl rounded-[1.25rem] border transition-all duration-300 ${scrolled ? 'bg-black/80 backdrop-blur-xl border-white/20 shadow-[0_8px_30px_rgba(0,0,0,0.3)]' : 'bg-black/25 backdrop-blur-md border-white/10 shadow-lg'}`}>
         <Link
           href="/"
-          className="flex items-center gap-2 rounded-full transition-all hover:scale-105 active:scale-95 h-10 w-28 sm:h-12 sm:w-36 relative"
+          className="flex items-center gap-2 rounded-full transition-all hover:scale-105 active:scale-95 h-10 w-28 sm:h-12 sm:w-36 relative bg-white/90 backdrop-blur-sm px-3 py-1"
         >
-          <img src="/axion_logo.png" alt="Axion Logo" className="absolute inset-0 w-full h-full object-contain object-left" />
+          <img src="/axion_logo.png" alt="Axion Logo" className="absolute inset-0 w-full h-full object-contain object-center scale-90" />
         </Link>
 
         <ul className="hidden items-center gap-1 lg:flex">
           {navItems.map((item) =>
             "dropdown" in item && item.dropdown ? (
               <li key={item.name} className="group relative">
-                <button className={`flex items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold cursor-pointer transition-colors ${scrolled ? 'text-white/90 hover:bg-white/10 hover:text-white' : 'text-gray-900 hover:bg-gray-100 hover:text-black'}`}>
+                <button className="flex items-center gap-1 rounded-full px-4 py-2 text-sm font-semibold cursor-pointer transition-colors text-white/90 hover:bg-white/10 hover:text-white">
                   {item.name}
                   <ChevronDown className="h-4 w-4 transition-transform group-hover:rotate-180" />
                 </button>
@@ -107,10 +107,10 @@ export default function Navbar({ workspaceNavItems }: { workspaceNavItems?: Work
                     <button
                       key={sub.href}
                       onClick={() => handleNavClick(sub.href)}
-                      className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold text-white/90 hover:bg-white/10 hover:text-white cursor-pointer text-left"
+                      className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-sm font-semibold text-white/90 hover:bg-white/10 hover:text-white cursor-pointer text-left group/sub"
                     >
                       {sub.name}
-                      <ArrowRight className="h-4 w-4 text-gray-400 group-hover:text-white" />
+                      <ArrowRight className="h-4 w-4 text-gray-400 group-hover/sub:text-white" />
                     </button>
                   ))}
                 </div>
@@ -119,7 +119,7 @@ export default function Navbar({ workspaceNavItems }: { workspaceNavItems?: Work
               <li key={item.name}>
                 <button
                   onClick={() => handleNavClick("href" in item ? item.href : "/")}
-                  className={`rounded-full px-4 py-2 text-sm font-semibold cursor-pointer transition-colors ${scrolled ? 'text-white/90 hover:bg-white/10 hover:text-white' : 'text-gray-900 hover:bg-gray-100 hover:text-black'}`}
+                  className="rounded-full px-4 py-2 text-sm font-semibold cursor-pointer transition-colors text-white/90 hover:bg-white/10 hover:text-white"
                 >
                   {item.name}
                 </button>
