@@ -2,8 +2,9 @@
 
 import { motion, Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import type { LocationsSectionVM } from "@/features/homepage/types";
 
-const locations = [
+const STATIC_LOCATIONS = [
   {
     name: "Delhi, Rithala",
     span: "col-span-2 md:col-span-2 md:row-span-2",
@@ -48,35 +49,49 @@ const locations = [
   },
 ];
 
+// Bento grid span assignment for up to 7 dynamic cards
+const SPAN_CLASSES = [
+  "col-span-2 md:col-span-2 md:row-span-2",
+  "col-span-1 md:col-span-1 md:row-span-1",
+  "col-span-1 md:col-span-1 md:row-span-1",
+  "col-span-1 md:col-span-1 md:row-span-1",
+  "col-span-1 md:col-span-1 md:row-span-1",
+  "col-span-1 md:col-span-2 md:row-span-1",
+  "col-span-1 md:col-span-2 md:row-span-1",
+];
+
+const FALLBACK_IMG = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80";
+
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
+    transition: { staggerChildren: 0.1 },
   },
 };
 
 const itemVariants: Variants = {
   hidden: { opacity: 0, y: 30 },
-  show: { 
-    opacity: 1, 
+  show: {
+    opacity: 1,
     y: 0,
-    transition: {
-      type: "spring",
-      stiffness: 100,
-      damping: 15,
-    }
+    transition: { type: "spring", stiffness: 100, damping: 15 },
   },
 };
 
-export function LocationsSection() {
+export function LocationsSection({ data }: { data?: LocationsSectionVM }) {
+  const badge = data?.badge_text ?? "Our Growing Network";
+  const title = data?.title ?? "Premium Spaces in Delhi, Rithala";
+  const viewAllLabel = data?.view_all_label ?? "View all locations";
+  const viewAllHref = data?.view_all_href ?? "#";
+
+  const hasDynamicCards = data && data.cards.length > 0;
+
   return (
     <section id="locations" className="bg-[#F5F5F5] pt-16 sm:pt-20 lg:pt-28 pb-16 sm:pb-20 lg:pb-28 overflow-hidden relative">
-      
+
       {/* SCATTERED BACKGROUND SVG ANIMATION */}
-      <motion.div 
+      <motion.div
         className="absolute inset-0 z-0 pointer-events-none"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -84,7 +99,7 @@ export function LocationsSection() {
         transition={{ duration: 1.5 }}
       >
         {/* Floating Ring - Top Left */}
-        <motion.div 
+        <motion.div
           className="absolute top-[10%] left-[5%] text-[#F26522]/20"
           animate={{ y: [0, -30, 0], x: [0, 20, 0], rotate: [0, 45, 0] }}
           transition={{ repeat: Infinity, duration: 12, ease: "easeInOut" }}
@@ -95,7 +110,7 @@ export function LocationsSection() {
         </motion.div>
 
         {/* Rotating Cross - Top Right */}
-        <motion.div 
+        <motion.div
           className="absolute top-[20%] right-[10%] text-gray-400/30"
           animate={{ rotate: 360, scale: [1, 1.2, 1] }}
           transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
@@ -106,7 +121,7 @@ export function LocationsSection() {
         </motion.div>
 
         {/* Floating Abstract Shape - Middle Left */}
-        <motion.div 
+        <motion.div
           className="absolute top-[50%] left-[2%] text-[#00A1BA]/20"
           animate={{ y: [0, 40, 0], rotate: [0, -30, 0] }}
           transition={{ repeat: Infinity, duration: 15, ease: "easeInOut" }}
@@ -118,7 +133,7 @@ export function LocationsSection() {
         </motion.div>
 
         {/* Drifting Dots - Bottom Right */}
-        <motion.div 
+        <motion.div
           className="absolute bottom-[10%] right-[5%] text-gray-400/40"
           animate={{ x: [0, -30, 0], y: [0, -20, 0] }}
           transition={{ repeat: Infinity, duration: 10, ease: "easeInOut" }}
@@ -137,7 +152,7 @@ export function LocationsSection() {
         </motion.div>
 
         {/* Huge Sweeping Arch - Bottom Left behind grid */}
-        <motion.div 
+        <motion.div
           className="absolute bottom-[-10%] left-[-10%] text-[#F26522]/10"
           animate={{ scale: [1, 1.05, 1], rotate: [0, 5, 0] }}
           transition={{ repeat: Infinity, duration: 25, ease: "easeInOut" }}
@@ -151,7 +166,7 @@ export function LocationsSection() {
 
       <div className="max-w-[1440px] mx-auto relative z-10">
         {/* Badge Row */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -162,7 +177,7 @@ export function LocationsSection() {
             2
           </div>
           <div className="text-[12px] sm:text-[13px] font-medium border border-gray-300 rounded-full px-3 sm:px-4 py-1 sm:py-1.5 text-gray-900">
-            Our Growing Network
+            {badge}
           </div>
         </motion.div>
 
@@ -175,70 +190,108 @@ export function LocationsSection() {
           className="px-5 sm:px-8 lg:px-12 flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10 sm:mb-14 lg:mb-16"
         >
           <h2 className="text-[clamp(1.75rem,7vw,4.2rem)] sm:text-[clamp(2.5rem,5vw,4.2rem)] font-medium leading-[1.08] tracking-[-0.03em] text-gray-900">
-            Premium Spaces <br className="hidden sm:block" /> in Delhi, Rithala
+            {title}
           </h2>
-          <button className="group flex items-center gap-3 text-[14px] font-medium text-gray-900 hover:text-[#F26522] transition-colors pb-2">
-            View all locations
+          <a
+            href={viewAllHref}
+            className="group flex items-center gap-3 text-[14px] font-medium text-gray-900 hover:text-[#F26522] transition-colors pb-2"
+          >
+            {viewAllLabel}
             <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-          </button>
+          </a>
         </motion.div>
 
         {/* BENTO GRID */}
-        <motion.div 
+        <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-100px" }}
           className="px-5 sm:px-8 lg:px-12 grid grid-cols-2 md:grid-cols-4 md:grid-rows-3 gap-2 sm:gap-4 md:h-[600px] lg:h-[800px]"
         >
-          {locations.map((loc, idx) => (
-            <motion.div
-              key={idx}
-              variants={itemVariants}
-              className={`${loc.span} min-h-[140px] md:min-h-[200px] relative rounded-2xl overflow-hidden group shadow-lg shadow-black/5 bg-gray-200 cursor-pointer`}
-            >
-              <img 
-                src={loc.img} 
-                alt={`${loc.name} Workspace`} 
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-              />
-              
-              {/* Gradient Overlay & Hover Backdrop */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 group-hover:opacity-0"></div>
-              <div className="absolute inset-0 bg-[#00A1BA]/80 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-3 sm:p-6 gap-2 sm:gap-3">
-                
-                {/* City Name moves up slightly on hover */}
-                <h3 className="text-[18px] sm:text-[26px] font-semibold text-white mb-0 sm:mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                  {loc.name}
-                </h3>
-                
-                {/* 3 Action Buttons mimicking the user's reference */}
-                <div className="w-full max-w-[200px] hidden sm:flex flex-col gap-2 transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-75">
-                  <button className="w-full py-2 px-4 border border-white/80 text-white text-[11px] font-bold tracking-wider uppercase hover:bg-white hover:text-[#00A1BA] transition-colors rounded-sm">
-                    Request a Visit
-                  </button>
-                  <button className="w-full py-2 px-4 bg-white text-[#00A1BA] text-[11px] font-bold tracking-wider uppercase hover:bg-white/90 transition-colors rounded-sm">
-                    Book Meeting Room
-                  </button>
-                  <button className="w-full py-2 px-4 border border-white/80 text-white text-[11px] font-bold tracking-wider uppercase hover:bg-white hover:text-[#00A1BA] transition-colors rounded-sm">
-                    Book Your Space
-                  </button>
-                </div>
+          {hasDynamicCards
+            ? data.cards.slice(0, 7).map((card, idx) => {
+                const span = SPAN_CLASSES[idx] ?? "col-span-1 md:col-span-1 md:row-span-1";
+                const imgSrc = card.image?.url ?? STATIC_LOCATIONS[idx]?.img ?? FALLBACK_IMG;
+                const imgAlt = card.image?.alt || card.location_name;
 
-                {/* Mobile simplified hover CTA */}
-                <span className="sm:hidden text-white text-[10px] font-medium tracking-wide uppercase border-b border-white/40 pb-0.5 mt-1 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-75">
-                  View Space
-                </span>
-              </div>
-              
-              {/* Default non-hover Text Content */}
-              <div className="absolute inset-0 p-3 sm:p-6 flex flex-col justify-end group-hover:opacity-0 transition-opacity duration-300">
-                <h3 className="text-[16px] sm:text-[24px] font-semibold text-white mb-1">
-                  {loc.name}
-                </h3>
-              </div>
-            </motion.div>
-          ))}
+                return (
+                  <motion.div
+                    key={card.id}
+                    variants={itemVariants}
+                    className={`${span} min-h-[140px] md:min-h-[200px] relative rounded-2xl overflow-hidden group shadow-lg shadow-black/5 bg-gray-200 cursor-pointer`}
+                  >
+                    <img
+                      src={imgSrc}
+                      alt={imgAlt}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 group-hover:opacity-0"></div>
+                    <div className="absolute inset-0 bg-[#00A1BA]/80 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-3 sm:p-6 gap-2 sm:gap-3">
+                      <h3 className="text-[18px] sm:text-[26px] font-semibold text-white mb-0 sm:mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                        {card.location_name}
+                      </h3>
+                      <div className="w-full max-w-[200px] hidden sm:flex flex-col gap-2 transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-75">
+                        <a href={card.hover_visit_href} className="w-full py-2 px-4 border border-white/80 text-white text-[11px] font-bold tracking-wider uppercase hover:bg-white hover:text-[#00A1BA] transition-colors rounded-sm text-center">
+                          {card.hover_visit_label}
+                        </a>
+                        <a href={card.hover_meeting_href} className="w-full py-2 px-4 bg-white text-[#00A1BA] text-[11px] font-bold tracking-wider uppercase hover:bg-white/90 transition-colors rounded-sm text-center">
+                          {card.hover_meeting_label}
+                        </a>
+                        <a href={card.hover_space_href} className="w-full py-2 px-4 border border-white/80 text-white text-[11px] font-bold tracking-wider uppercase hover:bg-white hover:text-[#00A1BA] transition-colors rounded-sm text-center">
+                          {card.hover_space_label}
+                        </a>
+                      </div>
+                      <span className="sm:hidden text-white text-[10px] font-medium tracking-wide uppercase border-b border-white/40 pb-0.5 mt-1 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-75">
+                        View Space
+                      </span>
+                    </div>
+                    <div className="absolute inset-0 p-3 sm:p-6 flex flex-col justify-end group-hover:opacity-0 transition-opacity duration-300">
+                      <h3 className="text-[16px] sm:text-[24px] font-semibold text-white mb-1">
+                        {card.location_name}
+                      </h3>
+                    </div>
+                  </motion.div>
+                );
+              })
+            : STATIC_LOCATIONS.map((loc, idx) => (
+                <motion.div
+                  key={idx}
+                  variants={itemVariants}
+                  className={`${loc.span} min-h-[140px] md:min-h-[200px] relative rounded-2xl overflow-hidden group shadow-lg shadow-black/5 bg-gray-200 cursor-pointer`}
+                >
+                  <img
+                    src={loc.img}
+                    alt={`${loc.name} Workspace`}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 group-hover:opacity-0"></div>
+                  <div className="absolute inset-0 bg-[#00A1BA]/80 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-3 sm:p-6 gap-2 sm:gap-3">
+                    <h3 className="text-[18px] sm:text-[26px] font-semibold text-white mb-0 sm:mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                      {loc.name}
+                    </h3>
+                    <div className="w-full max-w-[200px] hidden sm:flex flex-col gap-2 transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-75">
+                      <button type="button" className="w-full py-2 px-4 border border-white/80 text-white text-[11px] font-bold tracking-wider uppercase hover:bg-white hover:text-[#00A1BA] transition-colors rounded-sm">
+                        Request a Visit
+                      </button>
+                      <button type="button" className="w-full py-2 px-4 bg-white text-[#00A1BA] text-[11px] font-bold tracking-wider uppercase hover:bg-white/90 transition-colors rounded-sm">
+                        Book Meeting Room
+                      </button>
+                      <button type="button" className="w-full py-2 px-4 border border-white/80 text-white text-[11px] font-bold tracking-wider uppercase hover:bg-white hover:text-[#00A1BA] transition-colors rounded-sm">
+                        Book Your Space
+                      </button>
+                    </div>
+                    <span className="sm:hidden text-white text-[10px] font-medium tracking-wide uppercase border-b border-white/40 pb-0.5 mt-1 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-75">
+                      View Space
+                    </span>
+                  </div>
+                  <div className="absolute inset-0 p-3 sm:p-6 flex flex-col justify-end group-hover:opacity-0 transition-opacity duration-300">
+                    <h3 className="text-[16px] sm:text-[24px] font-semibold text-white mb-1">
+                      {loc.name}
+                    </h3>
+                  </div>
+                </motion.div>
+              ))}
         </motion.div>
       </div>
     </section>

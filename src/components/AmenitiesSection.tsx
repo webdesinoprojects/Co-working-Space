@@ -1,15 +1,45 @@
 "use client";
 
-import { 
-  Wifi, ShieldCheck, Car, Armchair, Zap, ThermometerSnowflake, DoorOpen, Wind, Phone, Cctv, Coffee, Bus, Users, Sparkles, Printer, Droplets,
-  Star, Hexagon, CircleDashed, Triangle, Key, Shield, Bike, Briefcase, Mic
-} from "lucide-react";
-
-import { motion } from "framer-motion";
-
 import { ElementType } from "react";
+import {
+  Wifi, ShieldCheck, Car, Armchair, Zap, ThermometerSnowflake, DoorOpen, Wind, Phone, Cctv, Coffee, Bus, Users, Sparkles, Printer, Droplets,
+  Star, Hexagon, CircleDashed, Triangle, Key, Shield, Bike, Briefcase, Mic, HelpCircle,
+} from "lucide-react";
+import { motion } from "framer-motion";
+import type { AmenityVM } from "@/features/homepage/types";
 
-const amenities = [
+// Maps icon_key strings stored in DB to Lucide components
+const AMENITY_ICON_MAP: Record<string, ElementType> = {
+  wifi: Wifi,
+  printer: Printer,
+  coffee: Coffee,
+  key: Key,
+  shield: Shield,
+  "shield-check": ShieldCheck,
+  bike: Bike,
+  briefcase: Briefcase,
+  zap: Zap,
+  mic: Mic,
+  cctv: Cctv,
+  bus: Bus,
+  users: Users,
+  sparkles: Sparkles,
+  droplets: Droplets,
+  phone: Phone,
+  armchair: Armchair,
+  thermometer: ThermometerSnowflake,
+  "thermometer-snowflake": ThermometerSnowflake,
+  door: DoorOpen,
+  "door-open": DoorOpen,
+  wind: Wind,
+  car: Car,
+};
+
+function resolveAmenityIcon(icon_key: string): ElementType {
+  return AMENITY_ICON_MAP[icon_key.toLowerCase()] ?? HelpCircle;
+}
+
+const STATIC_AMENITIES = [
   { icon: Wifi, text: "High-Speed WiFi" },
   { icon: Printer, text: "Print & Scan" },
   { icon: Coffee, text: "Free Coffee" },
@@ -35,15 +65,33 @@ export interface AmenityItem {
   text: string;
 }
 
-export function AmenitiesSection({ amenitiesList }: { amenitiesList?: AmenityItem[] }) {
-  const displayAmenities = amenitiesList || amenities;
+export function AmenitiesSection({
+  amenitiesList,
+  dynamicAmenities,
+  dynamicBadge,
+  dynamicTitle,
+}: {
+  amenitiesList?: AmenityItem[];
+  dynamicAmenities?: AmenityVM[];
+  dynamicBadge?: string;
+  dynamicTitle?: string;
+}) {
+  const badge = dynamicBadge ?? "Premium Amenities";
+  const title = dynamicTitle ?? "Our Amenities";
+
+  const displayAmenities: AmenityItem[] =
+    amenitiesList ??
+    (dynamicAmenities && dynamicAmenities.length > 0
+      ? dynamicAmenities.map((a) => ({ icon: resolveAmenityIcon(a.icon_key), text: a.label }))
+      : STATIC_AMENITIES);
+
   const repeatedAmenities = Array(10).fill(displayAmenities).flat();
 
   return (
     <section className="bg-white pt-16 sm:pt-20 lg:pt-28 pb-12 sm:pb-16 lg:pb-24 overflow-hidden relative">
-      
+
       {/* ABSOLUTE BACKGROUND WAVES */}
-      <motion.div 
+      <motion.div
         className="hidden lg:block absolute inset-0 w-full h-full pointer-events-none z-0"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -64,7 +112,7 @@ export function AmenitiesSection({ amenitiesList }: { amenitiesList?: AmenityIte
       </motion.div>
 
       <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 relative z-10">
-        
+
         {/* HEADER ROW */}
         <div className="relative flex items-center justify-between w-full mb-12 sm:mb-16 z-10">
           <div className="relative z-20">
@@ -73,12 +121,12 @@ export function AmenitiesSection({ amenitiesList }: { amenitiesList?: AmenityIte
                 3
               </div>
               <div className="text-[12px] sm:text-[13px] font-medium border border-gray-200 bg-white/80 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1 sm:py-1.5 text-gray-900 shadow-sm">
-                Premium Amenities
+                {badge}
               </div>
             </div>
-            
+
             <h2 className="text-[clamp(2rem,5vw,3.5rem)] font-bold leading-[1.05] tracking-tight text-gray-900">
-              Our Amenities
+              {title}
             </h2>
           </div>
         </div>
@@ -87,7 +135,7 @@ export function AmenitiesSection({ amenitiesList }: { amenitiesList?: AmenityIte
 
       {/* MARQUEE CARDS */}
       <div className="relative flex overflow-hidden w-[100vw] ml-[calc(-50vw+50%)] py-8 z-10">
-        <motion.div 
+        <motion.div
           className="flex gap-4 sm:gap-6 px-4 sm:px-6 w-max"
           animate={{ x: ["0%", "-50%"] }}
           transition={{ repeat: Infinity, ease: "linear", duration: 60 }}
@@ -97,7 +145,7 @@ export function AmenitiesSection({ amenitiesList }: { amenitiesList?: AmenityIte
             const BgAnimIcon = bgIcons[index % bgIcons.length];
 
             return (
-              <div 
+              <div
                 key={index}
                 className="relative overflow-hidden bg-[#FAFAFA] border border-gray-100 rounded-2xl flex flex-col items-center justify-center text-center p-6 sm:p-8 hover:bg-gray-900 hover:border-gray-900 hover:text-white transition-all duration-300 group shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.1)] cursor-pointer flex-shrink-0 w-48 sm:w-64 h-48 sm:h-56"
               >
@@ -107,7 +155,7 @@ export function AmenitiesSection({ amenitiesList }: { amenitiesList?: AmenityIte
                   transition={{ duration: 15 + (index % 5) * 2, repeat: Infinity, ease: "linear" }}
                   className="absolute -right-8 -bottom-8 text-gray-200 group-hover:text-gray-800 transition-colors duration-500 opacity-40 pointer-events-none"
                 >
-                   <BgAnimIcon size={120} strokeWidth={0.5} />
+                  <BgAnimIcon size={120} strokeWidth={0.5} />
                 </motion.div>
 
                 <div className="relative z-10 w-12 h-12 rounded-full bg-white group-hover:bg-gray-800 flex items-center justify-center mb-4 transition-colors duration-300 shadow-sm group-hover:shadow-none">

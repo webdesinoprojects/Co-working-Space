@@ -2,10 +2,11 @@
 
 import { motion, Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import type { IntroSectionVM } from "@/features/homepage/types";
 
 const waveContainerVariants: Variants = {
   hidden: { opacity: 0 },
-  visible: { 
+  visible: {
     opacity: 1,
     transition: {
       duration: 1,
@@ -17,19 +18,33 @@ const waveContainerVariants: Variants = {
 
 const wavePathVariants: Variants = {
   hidden: { pathLength: 0, opacity: 0 },
-  visible: { 
-    pathLength: 1, 
+  visible: {
+    pathLength: 1,
     opacity: 1,
-    transition: { duration: 2.5, ease: "easeInOut" } 
+    transition: { duration: 2.5, ease: "easeInOut" }
   }
 };
 
-export function AboutSection() {
+const FALLBACK_LEFT = "https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1280&q=85";
+const FALLBACK_RIGHT = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1280&q=85";
+
+export function AboutSection({ data }: { data?: IntroSectionVM }) {
+  const badge = data?.badge_text ?? "Introducing Axion";
+  const title = data?.title ?? "Strategy-led workspaces, delivering results for professionals and beyond.";
+  const body = data?.body_text ?? "Through ergonomic design, thoughtful architecture, and iteration we help growing teams realize their full potential in physical spaces.";
+  const ctaLabel = data?.cta_label ?? "About our spaces";
+  const ctaHref = data?.cta_href ?? "#";
+
+  const leftImg = data?.left_image?.url ?? FALLBACK_LEFT;
+  const leftAlt = data?.left_image?.alt || "Workspace Details";
+  const rightImg = data?.right_image?.url ?? FALLBACK_RIGHT;
+  const rightAlt = data?.right_image?.alt || "Workspace Environment";
+
   return (
     <section id="workspaces" className="bg-white pt-16 sm:pt-20 lg:pt-32 pb-12 sm:pb-16 lg:pb-24 overflow-hidden relative">
-      
+
       {/* DIAGONAL SCATTERED WAVES BACKGROUND */}
-      <motion.div 
+      <motion.div
         className="hidden lg:block absolute inset-0 z-0 pointer-events-none"
         variants={waveContainerVariants}
         initial="hidden"
@@ -42,45 +57,44 @@ export function AboutSection() {
           className="w-full h-full"
         >
           <svg viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" preserveAspectRatio="none">
-            {/* Top Right to Bottom Left Diagonal Lines */}
-            <motion.path 
+            <motion.path
               variants={wavePathVariants}
-              d="M1600 -100 Q 1100 200 600 500 T -200 1000" 
-              stroke="#00A1BA" 
-              strokeWidth="1.5" 
-              strokeOpacity="0.3" 
+              d="M1600 -100 Q 1100 200 600 500 T -200 1000"
+              stroke="#00A1BA"
+              strokeWidth="1.5"
+              strokeOpacity="0.3"
             />
-            <motion.path 
+            <motion.path
               variants={wavePathVariants}
-              d="M1800 0 Q 1200 300 700 600 T -100 1100" 
-              stroke="#F26522" 
-              strokeWidth="1" 
-              strokeOpacity="0.4" 
+              d="M1800 0 Q 1200 300 700 600 T -100 1100"
+              stroke="#F26522"
+              strokeWidth="1"
+              strokeOpacity="0.4"
             />
-            <motion.path 
+            <motion.path
               variants={wavePathVariants}
-              d="M1500 -200 Q 1000 100 500 400 T -300 900" 
-              stroke="#111827" 
-              strokeWidth="1.5" 
+              d="M1500 -200 Q 1000 100 500 400 T -300 900"
+              stroke="#111827"
+              strokeWidth="1.5"
               strokeDasharray="6 6"
-              strokeOpacity="0.2" 
+              strokeOpacity="0.2"
             />
-            <motion.path 
+            <motion.path
               variants={wavePathVariants}
-              d="M1900 -50 Q 1300 400 800 700 T 0 1200" 
-              stroke="#F26522" 
-              strokeWidth="2.5" 
-              strokeOpacity="0.1" 
+              d="M1900 -50 Q 1300 400 800 700 T 0 1200"
+              stroke="#F26522"
+              strokeWidth="2.5"
+              strokeOpacity="0.1"
             />
           </svg>
         </motion.div>
       </motion.div>
 
       <div className="max-w-[1440px] mx-auto relative z-10">
-        
+
         {/* HEADER ROW */}
         <div className="relative flex items-center justify-between w-full mb-12 sm:mb-16 lg:mb-28 z-10 px-5 sm:px-8 lg:px-12">
-          
+
           {/* Left: Text & Badge */}
           <div className="relative z-20">
             {/* Badge Row */}
@@ -89,13 +103,12 @@ export function AboutSection() {
                 1
               </div>
               <div className="text-[12px] sm:text-[13px] font-medium border border-gray-200 bg-white/80 backdrop-blur-sm rounded-full px-3 sm:px-4 py-1 sm:py-1.5 text-gray-900 shadow-sm">
-                Introducing Axion
+                {badge}
               </div>
             </div>
-            
+
             <h2 className="text-[clamp(1.5rem,4vw,3.2rem)] font-medium leading-[1.12] tracking-[-0.02em] text-gray-900 max-w-4xl relative">
-              Strategy-led workspaces, delivering <br className="hidden sm:block" />
-              results for professionals and beyond.
+              {title}
             </h2>
           </div>
         </div>
@@ -106,27 +119,30 @@ export function AboutSection() {
           <div className="lg:hidden flex flex-col gap-8">
             <div className="flex flex-col items-start gap-6">
               <p className="text-[15px] sm:text-[17px] leading-[1.6] font-medium text-gray-900">
-                Through ergonomic design, thoughtful architecture, and iteration we help growing teams realize their full potential in physical spaces.
+                {body}
               </p>
-              <button className="group flex items-center gap-4 bg-[#F26522] text-white text-[13px] font-medium rounded-full pl-5 pr-2 py-2">
+              <a
+                href={ctaHref}
+                className="group flex items-center gap-4 bg-[#F26522] text-white text-[13px] font-medium rounded-full pl-5 pr-2 py-2"
+              >
                 <div className="h-[20px] overflow-hidden flex flex-col">
-                  <span className="transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-translate-y-[20px]">About our spaces</span>
-                  <span className="transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-translate-y-[20px]">About our spaces</span>
+                  <span className="transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-translate-y-[20px]">{ctaLabel}</span>
+                  <span className="transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-translate-y-[20px]">{ctaLabel}</span>
                 </div>
                 <div className="w-7 h-7 bg-white rounded-full flex items-center justify-center">
                   <ArrowRight size={14} className="text-[#F26522] transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-rotate-45" />
                 </div>
-              </button>
+              </a>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
-              <img 
-                src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1280&q=85" 
-                alt="Workspace Details" 
+              <img
+                src={leftImg}
+                alt={leftAlt}
                 className="w-full sm:w-[45%] aspect-[438/346] rounded-xl sm:rounded-2xl object-cover grayscale hover:grayscale-0 transition-all duration-700"
               />
-              <img 
-                src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1280&q=85" 
-                alt="Workspace Environment" 
+              <img
+                src={rightImg}
+                alt={rightAlt}
                 className="w-full sm:w-[55%] aspect-[900/600] rounded-xl sm:rounded-2xl object-cover grayscale hover:grayscale-0 transition-all duration-700"
               />
             </div>
@@ -134,28 +150,31 @@ export function AboutSection() {
 
           {/* DESKTOP LAYOUT */}
           <div className="hidden lg:grid grid-cols-[26%_1fr_48%] items-end gap-6 xl:gap-8">
-            <img 
-              src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1280&q=85" 
-              alt="Workspace Details" 
+            <img
+              src={leftImg}
+              alt={leftAlt}
               className="w-full aspect-[438/346] rounded-2xl object-cover self-end grayscale hover:grayscale-0 transition-all duration-700"
             />
             <div className="flex flex-col items-start gap-6 self-start justify-end h-full pt-4">
               <p className="text-[16px] xl:text-[18px] leading-[1.65] font-medium text-gray-900">
-                Through ergonomic design, thoughtful<br/>architecture, and iteration we help growing<br/>teams realize their full potential.
+                {body}
               </p>
-              <button className="group flex items-center gap-4 bg-[#F26522] text-white text-[13px] font-medium rounded-full pl-5 pr-2 py-2">
+              <a
+                href={ctaHref}
+                className="group flex items-center gap-4 bg-[#F26522] text-white text-[13px] font-medium rounded-full pl-5 pr-2 py-2"
+              >
                 <div className="h-[20px] overflow-hidden flex flex-col">
-                  <span className="transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-translate-y-[20px]">About our spaces</span>
-                  <span className="transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-translate-y-[20px]">About our spaces</span>
+                  <span className="transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-translate-y-[20px]">{ctaLabel}</span>
+                  <span className="transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-translate-y-[20px]">{ctaLabel}</span>
                 </div>
                 <div className="w-7 h-7 bg-white rounded-full flex items-center justify-center">
                   <ArrowRight size={14} className="text-[#F26522] transition-transform duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)] group-hover:-rotate-45" />
                 </div>
-              </button>
+              </a>
             </div>
-            <img 
-              src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1280&q=85" 
-              alt="Workspace Environment" 
+            <img
+              src={rightImg}
+              alt={rightAlt}
               className="w-full aspect-[3/2] rounded-2xl object-cover self-end grayscale hover:grayscale-0 transition-all duration-700"
             />
           </div>

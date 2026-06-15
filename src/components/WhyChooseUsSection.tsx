@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, Variants } from "framer-motion";
+import type { WhyChooseUsSectionVM } from "@/features/homepage/types";
 
 const RollingTrackAnimation = () => (
   <div className="w-full h-32 relative flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
@@ -96,28 +97,39 @@ const reasons = [
   {
     title: "Pro level Digital Marketing",
     desc: "Dive into the depth of the Digital Marketing world and learn skills that would never make you loose. Be a magician of the digital world as it would be wise to not be a spectator but be the creator.",
+    animation_key: "rolling-track",
     Animation: RollingTrackAnimation,
     theme: "light",
   },
   {
     title: "Entrepreneurship",
     desc: "Time has gone, for the jobseekers as the market is changing everyday and every moment thus we here at Axion trains our members not just to fit in any kind of jobs but to survive anywhere on their own.",
+    animation_key: "isometric-cube",
     Animation: IsometricCubeAnimation,
     theme: "dark",
   },
   {
     title: "Sales Training",
     desc: "It's not enough for you to just learn a handful of digital marketing skills and run out of your comfort zone to achieve your goals. Thus we have included this Sales training just to make sure you are able to sell what you are best in.",
+    animation_key: "rising-graph",
     Animation: RisingGraphAnimation,
     theme: "light",
   },
   {
     title: "Personality Development",
     desc: "Once you are stuffed with every kind of skills, had gone through every technique of entrepreneurship and even become the data scientist.. don't you feel you need to polish your personality? We promise to polish that for you.",
+    animation_key: "ripple",
     Animation: RippleAnimation,
     theme: "dark",
   },
 ];
+
+const ANIMATION_MAP = {
+  "rolling-track": RollingTrackAnimation,
+  "isometric-cube": IsometricCubeAnimation,
+  "rising-graph": RisingGraphAnimation,
+  ripple: RippleAnimation,
+};
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -129,7 +141,22 @@ const itemVariants: Variants = {
   show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 20 } }
 };
 
-export function WhyChooseUsSection() {
+export function WhyChooseUsSection({ data }: { data?: WhyChooseUsSectionVM }) {
+  const badge = data?.badge_text ?? "Our Core Value";
+  const title = data?.title ?? "Why Should You Choose Axion?";
+  const body =
+    data?.body_text ??
+    "Because Axion, Is A Place your Ideas deserve..!! a simple question with a simple answer well if your are reading let us tell you more about these big lines we say.. An incubator, A lab of innovations, start-up friendly community, Axion, has many faces to get described. Axion is a archetypical ecosystem, providing essential resources and hard support to the birthing start-ups. Axion is truly a birthing suite for start-ups, turning expectations into reality.";
+  const displayReasons =
+    data && data.cards.length > 0
+      ? data.cards.map((card) => ({
+          title: card.title,
+          desc: card.description,
+          Animation: ANIMATION_MAP[card.animation_key as keyof typeof ANIMATION_MAP] ?? RippleAnimation,
+          theme: card.theme,
+        }))
+      : reasons;
+
   return (
     <section className="bg-[#FAFAFA] pt-16 sm:pt-20 lg:pt-28 pb-16 sm:pb-20 lg:pb-28 overflow-hidden relative">
       <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 relative z-10">
@@ -145,7 +172,7 @@ export function WhyChooseUsSection() {
               4
             </div>
             <div className="text-[12px] sm:text-[13px] font-medium border border-[#F26522]/20 bg-white rounded-full px-4 py-1.5 text-gray-900 shadow-sm">
-              Our Core Value
+              {badge}
             </div>
           </motion.div>
 
@@ -156,7 +183,7 @@ export function WhyChooseUsSection() {
             transition={{ delay: 0.1 }}
             className="text-[clamp(1.8rem,4vw,3.2rem)] font-bold leading-[1.12] tracking-[-0.02em] text-gray-900 mb-6 uppercase"
           >
-            Why Should You Choose Axion?
+            {title}
           </motion.h2>
 
           <motion.p 
@@ -166,7 +193,7 @@ export function WhyChooseUsSection() {
             transition={{ delay: 0.2 }}
             className="text-[14px] sm:text-[16px] text-gray-600 leading-relaxed"
           >
-            Because Axion, Is A Place your Ideas deserve..!! a simple question with a simple answer well if your are reading let us tell you more about these big lines we say.. An incubator, A lab of innovations, start-up friendly community, Axion, has many faces to get described. Axion is a archetypical ecosystem, providing essential resources and hard support to the birthing start-ups. Axion is truly a birthing suite for start-ups, turning expectations into reality.
+            {body}
           </motion.p>
         </div>
 
@@ -177,7 +204,7 @@ export function WhyChooseUsSection() {
           viewport={{ once: true, margin: "-50px" }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8"
         >
-          {reasons.map((item, i) => (
+          {displayReasons.map((item, i) => (
             <motion.div 
               key={i}
               variants={itemVariants}

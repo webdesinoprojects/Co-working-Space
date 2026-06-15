@@ -24,9 +24,6 @@ export const metadata: Metadata = {
   },
 };
 
-import { ContactSection } from "@/components/ContactSection";
-import { FooterSection } from "@/components/FooterSection";
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -41,8 +38,6 @@ export default function RootLayout({
           <Toaster position="top-right" richColors />
           <SmoothScrollerProvider>
             {children}
-            <ContactSection />
-            <FooterSection />
           </SmoothScrollerProvider>
         </ThemeProvider>
       </body>

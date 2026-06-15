@@ -1,33 +1,118 @@
 "use client";
 
-import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Linkedin, MessageCircle } from "lucide-react";
+import { ElementType } from "react";
+import {
+  Facebook,
+  Instagram,
+  Linkedin,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Phone,
+  Twitter,
+  Youtube,
+} from "lucide-react";
+import type { FooterLinkVM, FooterSocialLinkVM } from "@/features/homepage/types";
 
-export function FooterSection() {
+const SOCIAL_ICON_MAP: Record<string, ElementType> = {
+  facebook: Facebook,
+  twitter: Twitter,
+  x: Twitter,
+  instagram: Instagram,
+  linkedin: Linkedin,
+  youtube: Youtube,
+  whatsapp: MessageCircle,
+  "message-circle": MessageCircle,
+};
+
+function resolveSocialIcon(platform: string, iconKey: string): ElementType | null {
+  const key = iconKey.toLowerCase() || platform.toLowerCase();
+  return SOCIAL_ICON_MAP[key] ?? SOCIAL_ICON_MAP[platform.toLowerCase()] ?? null;
+}
+
+function DynamicSocialLinks({ links }: { links: FooterSocialLinkVM[] }) {
+  return (
+    <div className="flex items-center gap-5">
+      {links.map((link) => {
+        const Icon = resolveSocialIcon(link.platform, link.icon_key);
+
+        return (
+          <a
+            key={link.id}
+            href={link.href}
+            aria-label={link.label}
+            target="_blank"
+            rel="noreferrer"
+            className="text-gray-400 hover:text-white transition-colors"
+          >
+            {Icon ? (
+              <Icon size={20} />
+            ) : (
+              <div className="w-5 h-5 rounded-full border border-current flex items-center justify-center text-[10px] font-bold">
+                {link.platform.charAt(0).toUpperCase()}
+              </div>
+            )}
+          </a>
+        );
+      })}
+    </div>
+  );
+}
+
+function StaticSocialLinks() {
+  return (
+    <div className="flex items-center gap-5">
+      <a href="#" aria-label="Facebook" className="text-gray-400 hover:text-white transition-colors">
+        <Facebook size={20} />
+      </a>
+      <a href="#" aria-label="Twitter" className="text-gray-400 hover:text-white transition-colors">
+        <Twitter size={20} />
+      </a>
+      <a href="#" aria-label="Instagram" className="text-gray-400 hover:text-white transition-colors">
+        <Instagram size={20} />
+      </a>
+      <a href="#" aria-label="LinkedIn" className="text-gray-400 hover:text-white transition-colors">
+        <Linkedin size={20} />
+      </a>
+      <a href="#" aria-label="WhatsApp" className="text-gray-400 hover:text-[#25D366] transition-colors">
+        <MessageCircle size={20} />
+      </a>
+    </div>
+  );
+}
+
+export function FooterSection({
+  links,
+  socialLinks,
+}: {
+  links?: FooterLinkVM[];
+  socialLinks?: FooterSocialLinkVM[];
+}) {
+  const sitemapLinks = links?.filter((link) => link.group_key === "sitemap") ?? [];
+  const hasDynamicFooterLinks = sitemapLinks.length > 0;
+  const hasDynamicLinks = socialLinks && socialLinks.length > 0;
+
   return (
     <footer className="bg-gray-900 text-white pt-24 pb-8 rounded-t-[40px] mt-[-40px] relative z-10 border-t border-gray-800">
       <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12">
-        
-        {/* Top Grid Area */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-20">
-          
-          {/* Column 1: Addresses */}
           <div className="flex flex-col gap-8">
             <div>
               <h4 className="text-[12px] font-bold tracking-widest text-gray-500 uppercase mb-4">Address I</h4>
               <p className="text-[14px] text-gray-300 leading-relaxed font-medium">
-                148, Best Business Park,<br /> Netaji Subash Place,<br /> Pitampura, New Delhi – 110034
+                148, Best Business Park,<br /> Netaji Subash Place,<br /> Pitampura, New Delhi - 110034
               </p>
             </div>
             <div>
               <h4 className="text-[12px] font-bold tracking-widest text-gray-500 uppercase mb-4">Address II</h4>
               <p className="text-[14px] text-gray-300 leading-relaxed font-medium">
-                11th Floor, Best Sky Tower,<br /> Netaji Subash Place,<br /> Pitampura, New Delhi – 110034
+                11th Floor, Best Sky Tower,<br /> Netaji Subash Place,<br /> Pitampura, New Delhi - 110034
               </p>
             </div>
             <div>
               <h4 className="text-[12px] font-bold tracking-widest text-gray-500 uppercase mb-4">Address III</h4>
               <p className="text-[14px] text-gray-300 leading-relaxed font-medium">
-                Lower Ground, Best Business Square<br /> Plot No. 26, Sector-20, Dwarka,<br /> New Delhi – 110075
+                Lower Ground, Best Business Square<br /> Plot No. 26, Sector-20, Dwarka,<br /> New Delhi - 110075
               </p>
               <p className="text-[13px] text-[#F26522] font-semibold mt-3">
                 Timings: 9:00 AM to 7:30 PM
@@ -35,7 +120,6 @@ export function FooterSection() {
             </div>
           </div>
 
-          {/* Column 2: Contact Info */}
           <div className="flex flex-col gap-8">
             <div>
               <h4 className="text-[12px] font-bold tracking-widest text-gray-500 uppercase mb-4">Call Us</h4>
@@ -60,18 +144,19 @@ export function FooterSection() {
             </div>
           </div>
 
-          {/* Column 3: Sitemap */}
           <div className="flex flex-col gap-2">
             <h4 className="text-[12px] font-bold tracking-widest text-gray-500 uppercase mb-4">Sitemap</h4>
-            {[
-              { name: "About", href: "/about" },
-              { name: "Offerings", href: "/workspaces" },
-              { name: "Amenities", href: "/#amenities" },
-              { name: "Contact Us", href: "/connect" },
-              { name: "Privacy Policy", href: "#" },
-            ].map((link) => (
-              <a 
-                key={link.name} 
+            {(hasDynamicFooterLinks
+              ? sitemapLinks.map((link) => ({ name: link.label, href: link.href }))
+              : [
+                  { name: "About", href: "/about" },
+                  { name: "Offerings", href: "/workspaces" },
+                  { name: "Amenities", href: "/#amenities" },
+                  { name: "Contact Us", href: "/connect" },
+                  { name: "Privacy Policy", href: "#" },
+                ]).map((link) => (
+              <a
+                key={link.name}
                 href={link.href}
                 className="text-[14px] text-gray-300 hover:text-white hover:translate-x-1 transition-all py-2 font-medium uppercase tracking-wide"
               >
@@ -80,61 +165,63 @@ export function FooterSection() {
             ))}
           </div>
 
-          {/* Column 4: Maps placeholders */}
           <div className="flex flex-col gap-6">
-            <div className="relative w-full h-[150px] bg-gray-800 rounded-xl overflow-hidden border border-gray-700 group cursor-pointer">
-              {/* Fake Map UI for aesthetics */}
-              <div className="absolute inset-0 opacity-40 group-hover:opacity-60 transition-opacity" style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, #374151 10%, transparent 11%), radial-gradient(circle at 50% 50%, #374151 10%, transparent 11%)', backgroundSize: '20px 20px' }}></div>
-              <div className="absolute inset-0 flex items-center justify-center flex-col gap-2">
-                <MapPin size={32} className="text-[#F26522] drop-shadow-[0_0_15px_rgba(242,101,34,0.5)]" />
-                <span className="text-[12px] font-bold bg-white text-gray-900 px-3 py-1 rounded shadow-lg">Pitampura Center</span>
+            {["Pitampura Center", "Dwarka Center"].map((label, index) => (
+              <div
+                key={label}
+                className="relative w-full h-[150px] bg-gray-800 rounded-xl overflow-hidden border border-gray-700 group cursor-pointer"
+              >
+                <div
+                  className="absolute inset-0 opacity-40 group-hover:opacity-60 transition-opacity"
+                  style={{
+                    backgroundImage:
+                      "radial-gradient(circle at 50% 50%, #374151 10%, transparent 11%), radial-gradient(circle at 50% 50%, #374151 10%, transparent 11%)",
+                    backgroundSize: "20px 20px",
+                    backgroundPosition: index === 0 ? undefined : "10px 10px",
+                  }}
+                />
+                <div className="absolute inset-0 flex items-center justify-center flex-col gap-2">
+                  <MapPin
+                    size={32}
+                    className={index === 0 ? "text-[#F26522]" : "text-[#00A1BA]"}
+                  />
+                  <span className="text-[12px] font-bold bg-white text-gray-900 px-3 py-1 rounded shadow-lg">
+                    {label}
+                  </span>
+                </div>
+                <div className="absolute top-3 left-3 bg-white text-gray-900 text-[10px] font-bold px-2 py-1 rounded">
+                  Open in Maps
+                </div>
               </div>
-              <div className="absolute top-3 left-3 bg-white text-gray-900 text-[10px] font-bold px-2 py-1 rounded">Open in Maps ↗</div>
-            </div>
-
-            <div className="relative w-full h-[150px] bg-gray-800 rounded-xl overflow-hidden border border-gray-700 group cursor-pointer">
-              {/* Fake Map UI for aesthetics */}
-              <div className="absolute inset-0 opacity-40 group-hover:opacity-60 transition-opacity" style={{ backgroundImage: 'radial-gradient(circle at 50% 50%, #374151 10%, transparent 11%), radial-gradient(circle at 50% 50%, #374151 10%, transparent 11%)', backgroundSize: '20px 20px', backgroundPosition: '10px 10px' }}></div>
-              <div className="absolute inset-0 flex items-center justify-center flex-col gap-2">
-                <MapPin size={32} className="text-[#00A1BA] drop-shadow-[0_0_15px_rgba(0,161,186,0.5)]" />
-                <span className="text-[12px] font-bold bg-white text-gray-900 px-3 py-1 rounded shadow-lg">Dwarka Center</span>
-              </div>
-              <div className="absolute top-3 left-3 bg-white text-gray-900 text-[10px] font-bold px-2 py-1 rounded">Open in Maps ↗</div>
-            </div>
+            ))}
           </div>
-
         </div>
 
-        {/* Disclaimer Note */}
         <div className="text-center pb-8 border-b border-gray-800">
           <p className="text-[12px] text-gray-500 font-medium">
             Note: Amenities may vary center to center and all the pictures used in the website may differ from the actual.
           </p>
         </div>
 
-        {/* Bottom Bar: Copyright & Socials */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-8">
           <div className="text-[13px] text-gray-500 font-medium">
             &copy; Copyright 2022 - {new Date().getFullYear()} | Axion Spaces | All Rights Reserved
           </div>
-          
-          <div className="flex items-center gap-5">
-            <a href="#" className="text-gray-400 hover:text-white transition-colors"><Facebook size={20} /></a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors"><Twitter size={20} /></a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors"><Instagram size={20} /></a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors">
-              {/* Pinterest Icon (lucide doesn't have it natively, using a circle as placeholder or text) */}
-              <div className="w-5 h-5 rounded-full border border-current flex items-center justify-center text-[10px] font-bold">P</div>
-            </a>
-            <a href="#" className="text-gray-400 hover:text-white transition-colors"><Linkedin size={20} /></a>
-            <a href="#" className="text-gray-400 hover:text-[#25D366] transition-colors"><MessageCircle size={20} /></a>
-          </div>
-        </div>
 
+          {hasDynamicLinks ? (
+            <DynamicSocialLinks links={socialLinks} />
+          ) : (
+            <StaticSocialLinks />
+          )}
+        </div>
       </div>
 
-      {/* Floating WhatsApp Button */}
-      <a href="https://wa.me/919639636131" target="_blank" rel="noreferrer" className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(37,211,102,0.4)] transition-transform hover:scale-110">
+      <a
+        href="https://wa.me/919639636131"
+        target="_blank"
+        rel="noreferrer"
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(37,211,102,0.4)] transition-transform hover:scale-110"
+      >
         <MessageCircle size={28} />
       </a>
     </footer>

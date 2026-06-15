@@ -40,8 +40,8 @@ export default function Footer() {
               <Star className="h-3 w-3 fill-current" />
               HQ Office Hours
             </div>
-            <p className="font-display text-lg font-bold text-foreground">Monday – Saturday</p>
-            <p className="font-mono text-sm text-muted">8:00 AM – 8:00 PM</p>
+            <p className="font-display text-lg font-bold text-foreground">Monday - Saturday</p>
+            <p className="font-mono text-sm text-muted">8:00 AM - 8:00 PM</p>
           </div>
         </div>
 
@@ -82,7 +82,7 @@ export default function Footer() {
                 <MapPin className="mb-4 h-5 w-5 text-brand" />
                 <p className="mb-2 font-display text-sm font-bold uppercase tracking-tight text-foreground">Mumbai Hub</p>
                 <p className="font-body text-[13px] leading-relaxed text-muted">
-                  Bandra Kurla Complex, Bandra (East), Mumbai, Maharashtra – 400051
+                  Bandra Kurla Complex, Bandra (East), Mumbai, Maharashtra - 400051
                 </p>
               </div>
 

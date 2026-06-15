@@ -2,7 +2,12 @@
 
 import { ElementType } from "react";
 import { motion } from "framer-motion";
-import { User, Users, Laptop, Monitor, Briefcase, Building, Presentation, Video } from "lucide-react";
+import {
+  User, Users, Laptop, Monitor, Briefcase, Building, Presentation, Video,
+  Wifi, Coffee, Key, Shield, Bike, Zap, Mic, Bus, Sparkles, Printer, Droplets,
+  Phone, HelpCircle,
+} from "lucide-react";
+import type { OfferingVM } from "@/features/homepage/types";
 
 export interface ServiceFeature {
   name: string;
@@ -14,6 +19,43 @@ export interface ServiceOffering {
   icon: ElementType;
   features: ServiceFeature[];
   price?: string;
+}
+
+// Maps icon_key strings stored in DB to Lucide components
+const OFFERING_ICON_MAP: Record<string, ElementType> = {
+  user: User,
+  users: Users,
+  laptop: Laptop,
+  monitor: Monitor,
+  briefcase: Briefcase,
+  building: Building,
+  presentation: Presentation,
+  video: Video,
+  wifi: Wifi,
+  coffee: Coffee,
+  key: Key,
+  shield: Shield,
+  bike: Bike,
+  zap: Zap,
+  mic: Mic,
+  bus: Bus,
+  sparkles: Sparkles,
+  printer: Printer,
+  droplets: Droplets,
+  phone: Phone,
+};
+
+function resolveOfferingIcon(icon_key: string): ElementType {
+  return OFFERING_ICON_MAP[icon_key.toLowerCase()] ?? HelpCircle;
+}
+
+function offeringVmToServiceOffering(vm: OfferingVM): ServiceOffering {
+  return {
+    title: vm.title,
+    icon: resolveOfferingIcon(vm.icon_key),
+    price: vm.price_text ?? undefined,
+    features: vm.features.map((f) => ({ name: f.feature_text, included: f.is_included })),
+  };
 }
 
 const AnimatedCheck = () => (
@@ -64,7 +106,7 @@ const AnimatedCross = () => (
   </motion.svg>
 );
 
-const offerings: ServiceOffering[] = [
+const STATIC_OFFERINGS: ServiceOffering[] = [
   {
     title: "Day Pass",
     icon: User,
@@ -179,46 +221,57 @@ const offerings: ServiceOffering[] = [
   },
 ];
 
-export function ServicesSection({ offeringsList, title }: { offeringsList?: ServiceOffering[], title?: string }) {
-  const displayOfferings = offeringsList || offerings;
+export function ServicesSection({
+  offeringsList,
+  title,
+  dynamicOfferings,
+}: {
+  offeringsList?: ServiceOffering[];
+  title?: string;
+  dynamicOfferings?: OfferingVM[];
+}) {
+  const resolvedOfferings: ServiceOffering[] =
+    offeringsList ??
+    (dynamicOfferings && dynamicOfferings.length > 0
+      ? dynamicOfferings.map(offeringVmToServiceOffering)
+      : STATIC_OFFERINGS);
+
   const displayTitle = title || "Price on Request";
+
   return (
     <section className="bg-white pt-16 sm:pt-20 lg:pt-28 pb-16 sm:pb-20 lg:pb-28 relative overflow-hidden">
       {/* Top Right to Bottom Left Geometric Tech Animation */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none z-0" preserveAspectRatio="none" viewBox="0 0 1440 800">
-        {/* Main Orange Circuit Line */}
-        <motion.path 
+        <motion.path
           d="M 1440 50 L 1200 50 L 1200 250 L 800 250 L 800 550 L 400 550 L 400 800"
-          fill="none" 
-          stroke="#F26522" 
-          strokeWidth="3" 
+          fill="none"
+          stroke="#F26522"
+          strokeWidth="3"
           strokeLinecap="square"
           initial={{ pathLength: 0, opacity: 0 }}
           whileInView={{ pathLength: 1, opacity: 0.15 }}
           viewport={{ once: true }}
           transition={{ duration: 2.5, ease: "easeInOut" }}
         />
-        {/* Secondary Purple Dashed Line */}
-        <motion.path 
+        <motion.path
           d="M 1440 150 L 1300 150 L 1300 400 L 900 400 L 900 700 L 200 700 L 200 800"
-          fill="none" 
-          stroke="#b1a1c9" 
-          strokeWidth="2" 
+          fill="none"
+          stroke="#b1a1c9"
+          strokeWidth="2"
           strokeDasharray="8 8"
           initial={{ pathLength: 0, opacity: 0 }}
           whileInView={{ pathLength: 1, opacity: 0.2 }}
           viewport={{ once: true }}
           transition={{ duration: 3, ease: "easeInOut", delay: 0.4 }}
         />
-        {/* Accent Geometric Circle */}
-        <motion.circle 
+        <motion.circle
           cx="800" cy="250" r="8" fill="#F26522"
           initial={{ scale: 0, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 0.3 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 2 }}
         />
-        <motion.circle 
+        <motion.circle
           cx="400" cy="550" r="8" fill="#F26522"
           initial={{ scale: 0, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 0.3 }}
@@ -238,7 +291,7 @@ export function ServicesSection({ offeringsList, title }: { offeringsList?: Serv
         </div>
 
         <div className="flex flex-wrap justify-center gap-6 md:gap-8 max-w-7xl mx-auto">
-          {displayOfferings.map((plan, idx) => (
+          {resolvedOfferings.map((plan, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0, y: 30 }}
@@ -249,7 +302,7 @@ export function ServicesSection({ offeringsList, title }: { offeringsList?: Serv
               className="bg-[#F8F8F8] rounded-3xl p-8 md:p-10 flex flex-col w-full md:w-[calc(33.333%-22px)] max-w-[400px] border border-gray-100 transition-all duration-300"
             >
               <div className="flex flex-col items-center mb-8">
-                <motion.div 
+                <motion.div
                   whileHover={{ rotate: 10, scale: 1.1 }}
                   className="w-14 h-14 bg-gray-900 text-white rounded-full flex items-center justify-center mb-4 shadow-lg"
                 >
@@ -267,8 +320,8 @@ export function ServicesSection({ offeringsList, title }: { offeringsList?: Serv
 
               <ul className="flex-1 space-y-4 mb-10">
                 {plan.features.map((feat, i) => (
-                  <motion.li 
-                    key={i} 
+                  <motion.li
+                    key={i}
                     className="flex items-center gap-3"
                     initial={{ opacity: 0, x: -10 }}
                     whileInView={{ opacity: 1, x: 0 }}
@@ -276,7 +329,7 @@ export function ServicesSection({ offeringsList, title }: { offeringsList?: Serv
                     transition={{ delay: 0.2 + i * 0.05 }}
                   >
                     {feat.included ? <AnimatedCheck /> : <AnimatedCross />}
-                    <span className={`text-[14px] font-medium ${feat.included ? 'text-gray-700' : 'text-gray-400'}`}>
+                    <span className={`text-[14px] font-medium ${feat.included ? "text-gray-700" : "text-gray-400"}`}>
                       {feat.name}
                     </span>
                   </motion.li>
@@ -284,7 +337,8 @@ export function ServicesSection({ offeringsList, title }: { offeringsList?: Serv
               </ul>
 
               <div className="mt-auto flex justify-center">
-                <motion.button 
+                <motion.button
+                  type="button"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="bg-[#F26522] text-white font-semibold text-[15px] py-3.5 px-8 rounded-full shadow-lg shadow-[#F26522]/30 hover:bg-[#e05a1a] transition-colors"
