@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useTransition, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Mail, Phone, CheckCircle, AlertCircle } from "lucide-react";
+import { ArrowRight, Mail, Phone, CheckCircle, AlertCircle, X } from "lucide-react";
 import { submitContactAction } from "@/features/contact/actions";
 import type { ContactSubmitResult } from "@/features/contact/types";
 import type { ContactSectionVM } from "@/features/homepage/types";
@@ -140,11 +140,29 @@ const FALLBACK_CONTACT: ContactSectionVM = {
   ],
 };
 
-export function ContactSection({ data }: { data?: ContactSectionVM }) {
+export function ContactSection({
+  data,
+  initialInterest,
+  sourcePath,
+}: {
+  data?: ContactSectionVM;
+  initialInterest?: string;
+  sourcePath?: string;
+}) {
   const content = data ?? FALLBACK_CONTACT;
   const [pandaState, setPandaState] = useState<"idle" | "peek" | "close">("idle");
   const [result, setResult] = useState<ContactSubmitResult | null>(null);
   const [isPending, startTransition] = useTransition();
+  const [toastVisible, setToastVisible] = useState(false);
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  function showToast() {
+    setToastVisible(true);
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => setToastVisible(false), 4000);
+  }
+
+  useEffect(() => () => { if (toastTimer.current) clearTimeout(toastTimer.current); }, []);
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -152,6 +170,7 @@ export function ContactSection({ data }: { data?: ContactSectionVM }) {
     startTransition(async () => {
       const r = await submitContactAction(formData);
       setResult(r);
+      if (r.success) showToast();
     });
   }
 
@@ -258,7 +277,7 @@ export function ContactSection({ data }: { data?: ContactSectionVM }) {
             ) : (
               <form className="relative z-10 flex flex-col gap-10" onSubmit={handleSubmit}>
                 {/* Hidden source path */}
-                <input type="hidden" name="source_path" value={content.source_path} />
+                <input type="hidden" name="source_path" value={sourcePath ?? content.source_path} />
 
                 {result && !result.success && (
                   <div className="flex items-center gap-3 bg-red-50 border border-red-100 rounded-xl px-4 py-3">
@@ -313,7 +332,7 @@ export function ContactSection({ data }: { data?: ContactSectionVM }) {
                     <select
                       suppressHydrationWarning
                       name="interest"
-                      defaultValue=""
+                      defaultValue={initialInterest ?? ""}
                       onFocus={() => setPandaState("peek")}
                       onBlur={() => setPandaState("idle")}
                       className="w-full bg-transparent border-0 border-b-2 border-gray-200 py-2 text-[16px] text-gray-500 focus:text-gray-900 focus:outline-none focus:border-gray-900 transition-colors appearance-none cursor-pointer rounded-none focus:ring-0"
@@ -360,6 +379,30 @@ export function ContactSection({ data }: { data?: ContactSectionVM }) {
           </div>
         </motion.div>
 
+      </div>
+
+      {/* Submission toast */}
+      <div
+        aria-live="polite"
+        className={`fixed bottom-6 right-6 z-[200] flex items-center gap-3 bg-neutral-900/95 backdrop-blur-md text-white pl-3 pr-4 py-3 rounded-2xl shadow-2xl border border-white/10 min-w-[220px] max-w-xs transition-all duration-300 ${
+          toastVisible ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 translate-y-3 pointer-events-none"
+        }`}
+      >
+        <span className="flex items-center justify-center w-7 h-7 rounded-xl bg-green-500/20 shrink-0">
+          <CheckCircle size={13} className="text-green-400" />
+        </span>
+        <div className="flex-1 min-w-0">
+          <p className="text-xs font-semibold text-white leading-tight">Enquiry received!</p>
+          <p className="text-[11px] text-neutral-400 mt-0.5">We&apos;ll get back to you shortly.</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setToastVisible(false)}
+          className="text-neutral-600 hover:text-neutral-300 transition-colors shrink-0 ml-1"
+          aria-label="Dismiss"
+        >
+          <X size={12} />
+        </button>
       </div>
     </section>
   );

@@ -1,6 +1,7 @@
 "use client";
 
 import { ElementType } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   User, Users, Laptop, Monitor, Briefcase, Building, Presentation, Video,
@@ -225,10 +226,12 @@ export function ServicesSection({
   offeringsList,
   title,
   dynamicOfferings,
+  enquireBaseHref = "/connect",
 }: {
   offeringsList?: ServiceOffering[];
   title?: string;
   dynamicOfferings?: OfferingVM[];
+  enquireBaseHref?: string;
 }) {
   const resolvedOfferings: ServiceOffering[] =
     offeringsList ??
@@ -337,14 +340,14 @@ export function ServicesSection({
               </ul>
 
               <div className="mt-auto flex justify-center">
-                <motion.button
-                  type="button"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-[#F26522] text-white font-semibold text-[15px] py-3.5 px-8 rounded-full shadow-lg shadow-[#F26522]/30 hover:bg-[#e05a1a] transition-colors"
-                >
-                  Enquire Now
-                </motion.button>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Link
+                    href={enquireBaseHref.startsWith("#") ? enquireBaseHref : `${enquireBaseHref}?interest=${encodeURIComponent(plan.title)}`}
+                    className="bg-[#F26522] text-white font-semibold text-[15px] py-3.5 px-8 rounded-full shadow-lg shadow-[#F26522]/30 hover:bg-[#e05a1a] transition-colors inline-block text-center"
+                  >
+                    Enquire Now
+                  </Link>
+                </motion.div>
               </div>
             </motion.div>
           ))}

@@ -130,7 +130,7 @@ export default function Navbar({ workspaceNavItems }: { workspaceNavItems?: Work
 
         <div className="hidden items-center gap-3 lg:flex">
           <button
-            onClick={() => handleNavClick("calculator")}
+            onClick={() => handleNavClick("#contact")}
             className="btn-primary min-h-[2.5rem] px-5 text-sm py-2 cursor-pointer shadow-md flex items-center gap-2"
           >
             <span>Book a Tour</span>
@@ -243,7 +243,7 @@ export default function Navbar({ workspaceNavItems }: { workspaceNavItems?: Work
 
               <div className="p-6 border-t border-white/10 bg-[#0A0A0A]">
                 <button
-                  onClick={() => handleNavClick("calculator")}
+                  onClick={() => handleNavClick("#contact")}
                   className="group flex w-full items-center justify-center gap-3 rounded-full bg-[#1A1A1A] hover:bg-[#F26522] py-4 text-[16px] font-bold text-white transition-all duration-300 shadow-md"
                 >
                   <span>Book a Tour</span>

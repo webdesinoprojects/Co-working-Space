@@ -501,3 +501,29 @@ export type AdminWorkspaceOverviewVM = {
   title: string;
   body_text: string;
 };
+
+// -- Admin FAQ ----------------------------------------------------------------
+export type AdminFaqSectionVM = {
+  id: string;
+  badge_text: string;
+  title: string;
+  highlighted_word: string;
+  body_text: string;
+};
+
+export type AdminFaqCategoryVM = {
+  id: string;
+  label: string;
+  slug: string;
+  sort_order: number;
+  is_active: boolean;
+};
+
+export type AdminFaqItemVM = {
+  id: string;
+  category_id: string | null;
+  question: string;
+  answer: string;
+  sort_order: number;
+  is_active: boolean;
+};

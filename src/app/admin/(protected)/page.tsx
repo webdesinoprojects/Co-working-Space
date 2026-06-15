@@ -17,7 +17,7 @@ async function fetchDashboardData() {
 
   const yearAgo = new Date(Date.now() - 365 * 24 * 60 * 60 * 1000).toISOString();
 
-  const [msgRes, mediaRes, recentRes] = await Promise.all([
+  const [msgRes, mediaRes, recentRes, workspacesRes, faqRes] = await Promise.all([
     supabase
       .from("contact_messages")
       .select("id, status, interest, created_at")
@@ -29,10 +29,14 @@ async function fetchDashboardData() {
       .select("id, full_name, email, interest, status, created_at")
       .order("created_at", { ascending: false })
       .limit(4),
+    supabase.from("workspaces").select("id", { count: "exact", head: true }).eq("is_active", true),
+    supabase.from("faq_items").select("id", { count: "exact", head: true }).eq("is_active", true),
   ]);
 
   const messages = msgRes.data ?? [];
-  const mediaCount = msgRes.error ? 0 : (mediaRes.count ?? 0);
+  const mediaCount = mediaRes.error ? 0 : (mediaRes.count ?? 0);
+  const activeWorkspaces = workspacesRes.error ? 0 : (workspacesRes.count ?? 0);
+  const activeFaqItems = faqRes.error ? 0 : (faqRes.count ?? 0);
 
   // Aggregate counts
   const statusMap: Record<string, number> = {};
@@ -89,6 +93,8 @@ async function fetchDashboardData() {
     resolved: statusMap["resolved"] ?? 0,
     spam: statusMap["spam"] ?? 0,
     mediaCount,
+    activeWorkspaces,
+    activeFaqItems,
     dailyData,
     monthlyData,
     byInterest,

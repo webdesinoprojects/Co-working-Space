@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import Link from "next/link";
 import {
   AreaChart,
@@ -16,23 +16,14 @@ import {
 } from "recharts";
 import {
   Mail,
-  Image as ImageIcon,
-  ArrowRight,
-  CheckCircle2,
-  Circle,
   TrendingUp,
   LayoutGrid,
-  Users,
   FileText,
-  MessageCircle,
   Share2,
-  MapPin,
-  CreditCard,
-  Shield,
-  Sparkles,
-  ChevronDown,
   Building,
+  Clock,
 } from "lucide-react";
+import { motion, useAnimation } from "framer-motion";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -46,6 +37,8 @@ interface Props {
   resolved: number;
   spam: number;
   mediaCount: number;
+  activeWorkspaces: number;
+  activeFaqItems: number;
   dailyData: { date: string; label: string; shortLabel?: string; count: number }[];
   monthlyData: { date: string; label: string; shortLabel?: string; count: number }[];
   byInterest: { interest: string; count: number }[];
@@ -68,6 +61,208 @@ const STATUS_LABEL: Record<string, string> = {
   archived: "Archived",
   spam: "Spam",
 };
+
+// ─── IST Clock ────────────────────────────────────────────────────────────────
+
+function useISTClock() {
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => {
+    setNow(new Date());
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  return now;
+}
+
+function DashMouse({ flipped = false }: { flipped?: boolean }) {
+  return (
+    <svg
+      width="24"
+      height="16"
+      viewBox="0 0 24 16"
+      fill="none"
+      style={{ transform: flipped ? "scaleX(-1)" : undefined, display: "block" }}
+    >
+      {/* Body */}
+      <ellipse cx="14.5" cy="9.5" rx="8" ry="5" fill="#9ca3af" />
+      {/* Head */}
+      <ellipse cx="5.5" cy="8" rx="5.5" ry="4.5" fill="#9ca3af" />
+      {/* Ear */}
+      <ellipse cx="4.5" cy="3.5" rx="3" ry="2.5" fill="#9ca3af" />
+      <ellipse cx="4.5" cy="3.5" rx="1.8" ry="1.5" fill="#fda4af" />
+      {/* Eye */}
+      <circle cx="4" cy="7.5" r="1.3" fill="#111827" />
+      <circle cx="4.4" cy="7.1" r="0.4" fill="white" />
+      {/* Whiskers */}
+      <line x1="7" y1="8" x2="11" y2="7.5" stroke="#d1d5db" strokeWidth="0.6" strokeLinecap="round" />
+      <line x1="7" y1="9" x2="11" y2="9"   stroke="#d1d5db" strokeWidth="0.6" strokeLinecap="round" />
+      {/* Tail */}
+      <path d="M22.5 9.5 C25 7 24.5 13.5 22 13" stroke="#9ca3af" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+      {/* Legs */}
+      <line x1="10" y1="14" x2="9"   y2="15.5" stroke="#9ca3af" strokeWidth="1.2" strokeLinecap="round" />
+      <line x1="14" y1="14.5" x2="13.5" y2="16" stroke="#9ca3af" strokeWidth="1.2" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function ISTClockCard() {
+  const now = useISTClock();
+  const cardRef = useRef<HTMLDivElement>(null);
+  const mouseOrbiterRef = useRef<HTMLDivElement>(null);
+  const orbitAngleRef = useRef(0);
+  const [escaped, setEscaped] = useState(false);
+  const [flipped, setFlipped] = useState(false);
+  const escapedRef = useRef(false);
+  const prevXRef = useRef(0);
+  const mouseControls = useAnimation();
+
+  // Unmount cleanup
+  useEffect(() => () => { escapedRef.current = false; }, []);
+
+  // Orbit animation (rAF, zero re-renders)
+  useEffect(() => {
+    if (escaped) return;
+    let rafId: number;
+    const radius = 34;
+    const tick = () => {
+      orbitAngleRef.current += 0.022;
+      const a = orbitAngleRef.current;
+      const x = radius * Math.cos(a);
+      const y = radius * Math.sin(a);
+      if (mouseOrbiterRef.current) {
+        const flip = Math.sin(a) > 0; // moving left on top half
+        mouseOrbiterRef.current.style.transform =
+          `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scaleX(${flip ? -1 : 1})`;
+      }
+      rafId = requestAnimationFrame(tick);
+    };
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+  }, [escaped]);
+
+  async function runEscape() {
+    escapedRef.current = true;
+    while (escapedRef.current) {
+      const x = 40 + Math.random() * (window.innerWidth - 120);
+      const y = 40 + Math.random() * (window.innerHeight - 120);
+      setFlipped(x < prevXRef.current);
+      prevXRef.current = x;
+      await mouseControls.start({
+        x,
+        y,
+        transition: { duration: 0.38 + Math.random() * 0.42, ease: [0.25, 0.46, 0.45, 0.94] },
+      });
+      if (!escapedRef.current) break;
+      await new Promise((r) => setTimeout(r, 70 + Math.random() * 130));
+    }
+  }
+
+  function handleMouseEnter() {
+    if (escapedRef.current || !cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    mouseControls.set({ x: cx, y: cy, opacity: 1, scale: 1 });
+    prevXRef.current = cx;
+    setEscaped(true);
+    runEscape();
+  }
+
+  function handleMouseLeave() {
+    if (!escapedRef.current || !cardRef.current) return;
+    escapedRef.current = false;
+    const rect = cardRef.current.getBoundingClientRect();
+    mouseControls
+      .start({
+        x: rect.left + rect.width / 2,
+        y: rect.top + rect.height / 2,
+        opacity: 0,
+        scale: 0.4,
+        transition: { duration: 0.32, ease: "easeIn" },
+      })
+      .then(() => setEscaped(false));
+  }
+
+  const time = now
+    ? now.toLocaleTimeString("en-IN", { timeZone: "Asia/Kolkata", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true })
+    : "--:--:--";
+
+  const rawHour = now ? parseInt(now.toLocaleString("en-IN", { timeZone: "Asia/Kolkata", hour: "numeric", hour12: false })) : 0;
+  const rawMin  = now ? parseInt(now.toLocaleString("en-IN", { timeZone: "Asia/Kolkata", minute: "2-digit" })) : 0;
+  const rawSec  = now ? parseInt(now.toLocaleString("en-IN", { timeZone: "Asia/Kolkata", second: "2-digit" })) : 0;
+
+  const hourDeg = (rawHour % 12) * 30 + rawMin * 0.5;
+  const minDeg  = rawMin * 6;
+  const secDeg  = rawSec * 6;
+
+  const date = now
+    ? now.toLocaleDateString("en-IN", { timeZone: "Asia/Kolkata", weekday: "short", day: "numeric", month: "short" })
+    : "";
+
+  return (
+    <div
+      ref={cardRef}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className="bg-[#111111]/80 backdrop-blur-md rounded-3xl p-5 shadow-sm border border-white/10 flex flex-col items-center justify-center text-white relative overflow-hidden cursor-default select-none"
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+
+      {/* Clock face */}
+      <div className="relative w-24 h-24 mb-3">
+        <svg viewBox="0 0 100 100" className="w-full h-full">
+          <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="1.5" />
+          {Array.from({ length: 12 }).map((_, i) => {
+            const a = (i * 30 - 90) * (Math.PI / 180);
+            return (
+              <line
+                key={i}
+                x1={50 + 40 * Math.cos(a)} y1={50 + 40 * Math.sin(a)}
+                x2={50 + 44 * Math.cos(a)} y2={50 + 44 * Math.sin(a)}
+                stroke="rgba(255,255,255,0.3)" strokeWidth="2" strokeLinecap="round"
+              />
+            );
+          })}
+          <line x1="50" y1="50" x2={50 + 24 * Math.cos((hourDeg - 90) * (Math.PI / 180))} y2={50 + 24 * Math.sin((hourDeg - 90) * (Math.PI / 180))} stroke="white" strokeWidth="3" strokeLinecap="round" />
+          <line x1="50" y1="50" x2={50 + 33 * Math.cos((minDeg  - 90) * (Math.PI / 180))} y2={50 + 33 * Math.sin((minDeg  - 90) * (Math.PI / 180))} stroke="rgba(255,255,255,0.8)" strokeWidth="2" strokeLinecap="round" />
+          <line x1="50" y1="50" x2={50 + 36 * Math.cos((secDeg  - 90) * (Math.PI / 180))} y2={50 + 36 * Math.sin((secDeg  - 90) * (Math.PI / 180))} stroke="#F26522" strokeWidth="1.5" strokeLinecap="round" />
+          <circle cx="50" cy="50" r="3"   fill="white" />
+          <circle cx="50" cy="50" r="1.5" fill="#F26522" />
+        </svg>
+
+        {/* Orbiting mouse (hidden while escaped) */}
+        {!escaped && (
+          <div className="absolute inset-0 pointer-events-none" style={{ overflow: "visible" }}>
+            <div
+              ref={mouseOrbiterRef}
+              className="absolute"
+              style={{ top: "50%", left: "50%" }}
+            >
+              <DashMouse />
+            </div>
+          </div>
+        )}
+      </div>
+
+      <p className="text-[11px] font-mono font-bold tracking-widest text-white/60 tabular-nums">{time}</p>
+      <div className="mt-2 text-center">
+        <p className="text-[13px] font-semibold tracking-tight">New Delhi</p>
+        <p className="text-[10px] text-neutral-400 font-medium mt-0.5">IST · UTC+5:30</p>
+      </div>
+      <p className="mt-1.5 text-[10px] font-semibold text-neutral-500 uppercase tracking-wider">{date}</p>
+
+      {/* Fixed escaped mouse — always mounted, invisible until escape */}
+      <motion.div
+        className="fixed top-0 left-0 z-[500] pointer-events-none"
+        style={{ marginLeft: -12, marginTop: -8 }}
+        initial={{ opacity: 0, scale: 0 }}
+        animate={mouseControls}
+      >
+        <DashMouse flipped={flipped} />
+      </motion.div>
+    </div>
+  );
+}
 
 // ─── Chart Tooltip ────────────────────────────────────────────────────────────
 
@@ -99,6 +294,8 @@ export function DashboardClient({
   resolved,
   spam,
   mediaCount,
+  activeWorkspaces,
+  activeFaqItems,
   dailyData,
   monthlyData,
   byInterest,
@@ -112,14 +309,7 @@ export function DashboardClient({
     return dailyData.slice(-days);
   }, [period, dailyData, monthlyData]);
 
-  const donutData = byInterest.length > 0 
-    ? byInterest.map((b) => ({ name: b.interest || "Unknown", value: b.count }))
-    : [
-        { name: "Private Cabins", value: 45 },
-        { name: "Dedicated Desks", value: 30 },
-        { name: "Meeting Rooms", value: 15 },
-        { name: "Virtual Office", value: 10 },
-      ];
+  const donutData = byInterest.map((b) => ({ name: b.interest || "Unknown", value: b.count }));
 
   const totalInterest = donutData.reduce((s, i) => s + i.value, 0) || 1;
 
@@ -284,34 +474,46 @@ export function DashboardClient({
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6">
           <div className="bg-white/40 backdrop-blur-xl rounded-[2rem] p-6 shadow-sm border border-white/60 flex flex-col text-neutral-900">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-lg font-semibold tracking-tight">Month goals:</h2>
-              <div className="w-6 h-6 border border-neutral-300 rounded-full flex items-center justify-center text-[8px] font-bold">1/4</div>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold tracking-tight">Recent Messages</h2>
+              <Clock className="w-4 h-4 text-neutral-400" />
             </div>
-            
-            <div className="space-y-4">
-              <label className="flex items-center gap-3 cursor-pointer">
-                <div className="w-5 h-5 rounded-[4px] bg-neutral-900 text-white flex items-center justify-center shrink-0">
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                </div>
-                <span className="text-sm font-medium">Review pending messages</span>
-              </label>
-              
-              <label className="flex items-center gap-3 cursor-pointer">
-                <div className="w-5 h-5 rounded-[4px] border-2 border-neutral-300 flex items-center justify-center shrink-0"></div>
-                <span className="text-sm font-medium text-neutral-400">Update homepage hero</span>
-              </label>
 
-              <label className="flex items-center gap-3 cursor-pointer">
-                <div className="w-5 h-5 rounded-[4px] border-2 border-neutral-300 flex items-center justify-center shrink-0"></div>
-                <span className="text-sm font-medium text-neutral-400">Process media assets</span>
-              </label>
+            {recentMessages.length === 0 ? (
+              <div className="flex-1 flex items-center justify-center text-xs text-neutral-400 font-medium">
+                No messages yet
+              </div>
+            ) : (
+              <div className="space-y-3 flex-1">
+                {recentMessages.slice(0, 4).map((msg) => (
+                  <Link
+                    key={msg.id}
+                    href="/admin/messages"
+                    className="flex items-center gap-3 rounded-xl p-2.5 hover:bg-white/50 transition-colors group"
+                  >
+                    <div className="w-7 h-7 rounded-full bg-neutral-900 text-white flex items-center justify-center text-[10px] font-bold shrink-0">
+                      {msg.full_name.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[12px] font-semibold truncate leading-tight">{msg.full_name}</p>
+                      <p className="text-[10px] text-neutral-400 truncate">{msg.interest ?? msg.email}</p>
+                    </div>
+                    <span className={`text-[9px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full shrink-0 ${
+                      msg.status === "new" ? "bg-neutral-900 text-white" :
+                      msg.status === "in_progress" ? "bg-yellow-100 text-yellow-700" :
+                      msg.status === "resolved" ? "bg-green-100 text-green-700" :
+                      "bg-neutral-100 text-neutral-500"
+                    }`}>
+                      {STATUS_LABEL[msg.status] ?? msg.status}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            )}
 
-              <label className="flex items-center gap-3 cursor-pointer">
-                <div className="w-5 h-5 rounded-[4px] border-2 border-neutral-300 flex items-center justify-center shrink-0"></div>
-                <span className="text-sm font-medium text-neutral-400">Add new workspaces</span>
-              </label>
-            </div>
+            <Link href="/admin/messages" className="mt-4 flex items-center justify-center gap-2 w-full py-2.5 border border-neutral-300 rounded-xl text-sm font-semibold hover:bg-neutral-50 transition-colors">
+              <Mail className="w-3.5 h-3.5" /> View all messages
+            </Link>
           </div>
 
           <div className="flex flex-col">
@@ -320,64 +522,30 @@ export function DashboardClient({
              </div>
              
              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 flex-1">
-               {/* Card 1: Combined Inbox */}
-               <div className="bg-white/40 backdrop-blur-xl rounded-3xl p-5 shadow-sm border border-white/60 flex flex-col justify-between text-neutral-900">
-                 <div className="flex items-center justify-between mb-4">
-                   <div className="flex items-center gap-2">
-                     <Mail className="w-4 h-4 text-neutral-600" />
-                     <h3 className="font-semibold text-sm">Inbox</h3>
-                   </div>
-                 </div>
-                 
-                 {recentMessages[0] ? (
-                   <div className="mb-4 flex-1">
-                     <h4 className="font-semibold text-[13px] leading-tight mb-1 truncate">{recentMessages[0].full_name}</h4>
-                     <p className="text-[11px] text-neutral-500 truncate">{recentMessages[0].email}</p>
-                   </div>
-                 ) : (
-                   <div className="mb-4 flex-1 flex items-center justify-center text-xs text-neutral-400 font-medium bg-white/30 rounded-xl">
-                     No recent inquiries
-                   </div>
-                 )}
-                 
-                 <Link href="/admin/messages" className="w-full py-2.5 bg-neutral-900 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-2 hover:bg-neutral-800 transition-colors mt-auto">
-                   Open Inbox <ArrowRight className="w-3 h-3" />
-                 </Link>
-               </div>
+               {/* Card 1: IST Clock */}
+               <ISTClockCard />
 
-               {/* Card 2: Occupancy Rate */}
+               {/* Card 2: Active Workspaces */}
                <div className="bg-white/40 backdrop-blur-xl rounded-3xl p-5 shadow-sm border border-white/60 flex flex-col items-center justify-center text-neutral-900 relative">
-                 <h3 className="font-semibold text-sm absolute top-5 left-5">Occupancy</h3>
+                 <h3 className="font-semibold text-sm absolute top-5 left-5">Workspaces</h3>
                  <Building className="w-4 h-4 text-neutral-400 absolute top-5 right-5" />
-                 
-                 <div className="mt-6 relative w-20 h-20 flex items-center justify-center">
-                   <svg className="w-full h-full transform -rotate-90">
-                     <circle cx="40" cy="40" r="36" stroke="currentColor" strokeWidth="6" fill="transparent" className="text-white/60" />
-                     <circle cx="40" cy="40" r="36" stroke="currentColor" strokeWidth="6" fill="transparent" strokeDasharray="226" strokeDashoffset="60" className="text-neutral-900 drop-shadow-md transition-all duration-1000" />
-                   </svg>
-                   <div className="absolute inset-0 flex items-center justify-center flex-col">
-                     <span className="text-lg font-bold">73%</span>
-                   </div>
+                 <div className="mt-6 flex flex-col items-center gap-2">
+                   <div className="text-4xl font-bold">{activeWorkspaces}</div>
+                   <p className="text-[10px] text-neutral-500 font-semibold uppercase tracking-wider">Active workspaces</p>
                  </div>
-                 <p className="text-[10px] text-neutral-500 font-semibold mt-3 uppercase tracking-wider">146 / 200 Seats</p>
                </div>
 
-               {/* Card 3: Engagement */}
+               {/* Card 3: Active FAQ Items */}
                <div className="bg-white/40 backdrop-blur-xl rounded-3xl p-5 shadow-sm border border-white/60 flex flex-col justify-between text-neutral-900">
                  <div className="flex items-center justify-between mb-4">
-                   <h3 className="font-semibold text-sm">Engagement</h3>
-                   <Users className="w-4 h-4 text-neutral-400" />
+                   <h3 className="font-semibold text-sm">FAQ Items</h3>
+                   <FileText className="w-4 h-4 text-neutral-400" />
                  </div>
                  <div className="flex-1 flex flex-col justify-center">
-                   <div className="text-3xl font-bold tracking-tight mb-1">1,248</div>
-                   <div className="text-[10px] font-bold text-green-600 flex items-center gap-1 uppercase tracking-wider">
-                     <TrendingUp className="w-3 h-3" /> +12.5% vs last week
+                   <div className="text-3xl font-bold tracking-tight mb-1">{activeFaqItems}</div>
+                   <div className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">
+                     Active questions
                    </div>
-                 </div>
-                 <div className="flex items-end gap-1.5 h-8 mt-4">
-                   {[30, 45, 25, 60, 40, 80, 50].map((v, i) => (
-                     <div key={i} className="flex-1 bg-neutral-900 rounded-t-sm opacity-80" style={{ height: `${v}%` }} />
-                   ))}
                  </div>
                </div>
              </div>
@@ -387,9 +555,6 @@ export function DashboardClient({
         <div className="mt-8">
           <div className="flex items-center justify-between mb-4 px-2">
              <h2 className="text-lg font-semibold tracking-tight">System Status</h2>
-             <div className="text-xs font-semibold text-neutral-500 flex items-center gap-1">
-               Sort by <ChevronDown className="w-3 h-3" />
-             </div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

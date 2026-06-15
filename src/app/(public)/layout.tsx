@@ -26,7 +26,9 @@ export default async function PublicLayout({ children }: { children: ReactNode }
   return (
     <WorkspaceNavProvider items={workspaceNavItems}>
       {children}
-      <ContactSection data={contactData ?? undefined} />
+      <div id="contact">
+        <ContactSection data={contactData ?? undefined} />
+      </div>
       <FooterSection links={footerLinks} socialLinks={footerSocials} />
     </WorkspaceNavProvider>
   );

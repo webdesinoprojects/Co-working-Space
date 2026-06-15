@@ -1,10 +1,22 @@
-export default function FaqPage() {
-  return (
-    <div className="p-8">
-      <h1 className="text-2xl font-semibold mb-6 text-neutral-900">FAQ</h1>
-      <div className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-2xl p-6 shadow-lg">
-        <p className="text-neutral-500 text-sm">FAQ editor coming soon.</p>
+import { getAdminFaqSection, getAdminFaqCategories, getAdminFaqItems } from "@/server/repositories/admin-faq";
+import FaqAdminClient from "./FaqAdminClient";
+
+export default async function FaqAdminPage() {
+  const [section, categories, items] = await Promise.all([
+    getAdminFaqSection(),
+    getAdminFaqCategories(),
+    getAdminFaqItems(),
+  ]);
+
+  if (!section) {
+    return (
+      <div className="p-8">
+        <p className="text-neutral-500 text-sm">
+          FAQ section not found. Ensure migration 011_faq_cms.sql has been applied.
+        </p>
       </div>
-    </div>
-  );
+    );
+  }
+
+  return <FaqAdminClient section={section} categories={categories} items={items} />;
 }

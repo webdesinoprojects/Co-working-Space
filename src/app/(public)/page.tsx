@@ -51,6 +51,7 @@ export default async function Home() {
       <ServicesSection
         title={offeringsData?.title}
         dynamicOfferings={offeringsData?.offerings}
+        enquireBaseHref="#contact"
       />
       <WhyChooseUsSection data={whyChooseUsData ?? undefined} />
       <AmenitiesSection

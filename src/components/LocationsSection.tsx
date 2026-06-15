@@ -192,13 +192,6 @@ export function LocationsSection({ data }: { data?: LocationsSectionVM }) {
           <h2 className="text-[clamp(1.75rem,7vw,4.2rem)] sm:text-[clamp(2.5rem,5vw,4.2rem)] font-medium leading-[1.08] tracking-[-0.03em] text-gray-900">
             {title}
           </h2>
-          <a
-            href={viewAllHref}
-            className="group flex items-center gap-3 text-[14px] font-medium text-gray-900 hover:text-[#F26522] transition-colors pb-2"
-          >
-            {viewAllLabel}
-            <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-          </a>
         </motion.div>
 
         {/* BENTO GRID */}
