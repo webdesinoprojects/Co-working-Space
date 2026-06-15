@@ -1,10 +1,10 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/server/db/client";
 
 export type LoginState = {
   error: string | null;
-  success?: boolean;
 };
 
 export async function loginAdminAction(
@@ -39,5 +39,8 @@ export async function loginAdminAction(
     return { error: "This account is not enabled for admin access." };
   }
 
-  return { error: null, success: true };
+  // Server-side redirect keeps the Set-Cookie headers from signInWithPassword
+  // in the same response. This avoids the race condition caused by
+  // router.push() + router.refresh() firing two concurrent requests.
+  redirect("/admin");
 }
