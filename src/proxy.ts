@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
-import { AUTH_COOKIE_OPTIONS } from "@/server/auth/cookie-options";
+import { AUTH_COOKIE_OPTIONS, COOKIE_WRITE_OPTIONS } from "@/server/auth/cookie-options";
 
 // This proxy refreshes the Supabase session on every protected admin request and
 // redirects unauthenticated visitors to the login page.
@@ -33,7 +33,7 @@ export async function proxy(request: NextRequest) {
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, {
               ...options,
-              ...AUTH_COOKIE_OPTIONS,
+              ...COOKIE_WRITE_OPTIONS,
             })
           );
         },

@@ -10,13 +10,21 @@
 
 const isProduction = process.env.NODE_ENV === "production";
 
+// These are passed to createServerClient's `cookieOptions` so Supabase uses
+// them as DEFAULTS for all cookies it creates.
 export const AUTH_COOKIE_OPTIONS = {
-  // Keep admins signed in for 30 days instead of forcing a login every visit.
-  maxAge: 60 * 60 * 24 * 30, // seconds
+  maxAge: 60 * 60 * 24 * 30, // 30 days
   path: "/",
   sameSite: "lax" as const,
-  // CRITICAL: Browsers silently refuse to store cookies without `secure: true`
-  // on HTTPS origins. Localhost gets a special exemption, which is why cookies
-  // work locally but vanish in production without this flag.
+  secure: isProduction,
+};
+
+// These are the options we FORCE on every Set-Cookie in the setAll callback.
+// IMPORTANT: Do NOT include maxAge here! Supabase uses maxAge: 0 to delete
+// stale cookie chunks during token rotation. Overriding it prevents cleanup
+// and corrupts the session.
+export const COOKIE_WRITE_OPTIONS = {
+  path: "/",
+  sameSite: "lax" as const,
   secure: isProduction,
 };

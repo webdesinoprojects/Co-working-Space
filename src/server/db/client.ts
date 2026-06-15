@@ -1,7 +1,7 @@
 import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-import { AUTH_COOKIE_OPTIONS } from "@/server/auth/cookie-options";
+import { AUTH_COOKIE_OPTIONS, COOKIE_WRITE_OPTIONS } from "@/server/auth/cookie-options";
 
 export async function createSupabaseServerClient() {
   const cookieStore = await cookies();
@@ -18,7 +18,7 @@ export async function createSupabaseServerClient() {
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) => {
-              cookieStore.set(name, value, { ...options, ...AUTH_COOKIE_OPTIONS });
+              cookieStore.set(name, value, { ...options, ...COOKIE_WRITE_OPTIONS });
             });
           } catch {
             // Server Components cannot set cookies. Only Server Actions and
