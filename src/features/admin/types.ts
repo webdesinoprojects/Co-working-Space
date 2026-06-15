@@ -293,6 +293,74 @@ export type MessagesListVM = {
   total: number;
 };
 
+// -- Admin About Hero ----------------------------------------------------------
+export type AdminAboutHeroImageVM = {
+  id: string | null;
+  section_id: string;
+  slot: number;
+  image_asset_id: string | null;
+  image: AdminImagePreview | null;
+};
+
+export type AdminAboutHeroSectionVM = {
+  id: string;
+  headline: string;
+  subtext: string;
+  images: AdminAboutHeroImageVM[];
+};
+
+// -- Admin About Pillars (Values) ----------------------------------------------
+export type AdminAboutPillarCardVM = {
+  id: string;
+  section_id: string;
+  sort_order: number;
+  icon_key: string;
+  label: string;
+  stat: string;
+  description: string;
+  is_active: boolean;
+};
+
+export type AdminAboutPillarsSectionVM = {
+  id: string;
+  cards: AdminAboutPillarCardVM[];
+};
+
+// -- Admin About Story ---------------------------------------------------------
+export type AdminAboutStoryImageVM = {
+  id: string | null;
+  section_id: string;
+  slot: number;
+  image_asset_id: string | null;
+  image: AdminImagePreview | null;
+};
+
+export type AdminAboutStorySectionVM = {
+  id: string;
+  subheading: string;
+  heading: string;
+  body_1: string;
+  body_2: string;
+  body_3: string;
+  belief_1_title: string;
+  belief_1_text: string;
+  belief_2_title: string;
+  belief_2_text: string;
+  images: AdminAboutStoryImageVM[];
+};
+
+// -- Admin About Client Stories -----------------------------------------------
+export type AdminAboutClientStoryVM = {
+  id: string;
+  sort_order: number;
+  tag: string;
+  author: string;
+  title: string;
+  description: string;
+  icon_key: string;
+  is_active: boolean;
+};
+
 // -- ImageKit Auth -------------------------------------------------------------
 export type IkAuthParamsVM = {
   token: string;
