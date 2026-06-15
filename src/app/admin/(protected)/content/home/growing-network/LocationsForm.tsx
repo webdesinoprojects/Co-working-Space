@@ -121,6 +121,8 @@ export function LocationsForm({ data }: { data: AdminLocationsSectionVM }) {
   const { showToast } = useToast();
 
   useEffect(() => {
+    // Keep local sortable state aligned after router refreshes.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCards(data.cards);
   }, [data.cards]);
 

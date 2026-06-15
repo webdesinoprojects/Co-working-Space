@@ -22,12 +22,28 @@ export default async function PublicLayout({ children }: { children: ReactNode }
     slug,
     nav_label,
   }));
+  const mergedContactData = contactData
+    ? {
+        ...contactData,
+        interest_options: [
+          ...contactData.interest_options,
+          ...workspaces
+            .filter((workspace) =>
+              contactData.interest_options.every((option) => option.value !== workspace.slug)
+            )
+            .map((workspace) => ({
+              label: workspace.nav_label,
+              value: workspace.slug,
+            })),
+        ],
+      }
+    : undefined;
 
   return (
     <WorkspaceNavProvider items={workspaceNavItems}>
       {children}
       <div id="contact">
-        <ContactSection data={contactData ?? undefined} />
+        <ContactSection data={mergedContactData} />
       </div>
       <FooterSection links={footerLinks} socialLinks={footerSocials} />
     </WorkspaceNavProvider>
