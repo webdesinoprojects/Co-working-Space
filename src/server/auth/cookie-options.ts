@@ -7,9 +7,16 @@
 // next/headers into the proxy bundle.
 //
 // Both clients MUST use the same options so they read and write the same cookie.
+
+const isProduction = process.env.NODE_ENV === "production";
+
 export const AUTH_COOKIE_OPTIONS = {
   // Keep admins signed in for 30 days instead of forcing a login every visit.
   maxAge: 60 * 60 * 24 * 30, // seconds
   path: "/",
   sameSite: "lax" as const,
+  // CRITICAL: Browsers silently refuse to store cookies without `secure: true`
+  // on HTTPS origins. Localhost gets a special exemption, which is why cookies
+  // work locally but vanish in production without this flag.
+  secure: isProduction,
 };
