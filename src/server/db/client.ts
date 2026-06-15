@@ -28,7 +28,10 @@ export async function createSupabaseServerClient(
           cookiesToSet.forEach(({ name, value, options }) => {
             cookieStore.set(name, value, {
               ...options,
+              path: "/",
+              sameSite: "lax" as const,
               secure: process.env.NODE_ENV === "production",
+              httpOnly: false,
             });
           });
         },
