@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import {
   AreaChart,
@@ -84,23 +85,19 @@ function DashMouse({ flipped = false }: { flipped?: boolean }) {
       style={{ transform: flipped ? "scaleX(-1)" : undefined, display: "block" }}
     >
       {/* Body */}
-      <ellipse cx="14.5" cy="9.5" rx="8" ry="5" fill="#9ca3af" />
-      {/* Head */}
-      <ellipse cx="5.5" cy="8" rx="5.5" ry="4.5" fill="#9ca3af" />
+      <path d="M18 9.5C18 6.5 14 5 11 5C8 5 4 6.5 4 9.5C4 12.5 8 14 11 14C14 14 18 12.5 18 9.5Z" fill="#9ca3af" />
       {/* Ear */}
-      <ellipse cx="4.5" cy="3.5" rx="3" ry="2.5" fill="#9ca3af" />
-      <ellipse cx="4.5" cy="3.5" rx="1.8" ry="1.5" fill="#fda4af" />
+      <ellipse cx="6" cy="4.5" rx="3" ry="2.5" fill="#9ca3af" />
+      <ellipse cx="6" cy="4.5" rx="1.5" ry="1" fill="#fda4af" />
       {/* Eye */}
-      <circle cx="4" cy="7.5" r="1.3" fill="#111827" />
-      <circle cx="4.4" cy="7.1" r="0.4" fill="white" />
+      <circle cx="5" cy="8" r="1.2" fill="#111827" />
+      <circle cx="5.3" cy="7.7" r="0.4" fill="white" />
       {/* Whiskers */}
-      <line x1="7" y1="8" x2="11" y2="7.5" stroke="#d1d5db" strokeWidth="0.6" strokeLinecap="round" />
-      <line x1="7" y1="9" x2="11" y2="9"   stroke="#d1d5db" strokeWidth="0.6" strokeLinecap="round" />
+      <path d="M4 9 L1 8 M4 10 L1 11" stroke="#d1d5db" strokeWidth="0.6" strokeLinecap="round" />
       {/* Tail */}
-      <path d="M22.5 9.5 C25 7 24.5 13.5 22 13" stroke="#9ca3af" strokeWidth="1.5" strokeLinecap="round" fill="none" />
-      {/* Legs */}
-      <line x1="10" y1="14" x2="9"   y2="15.5" stroke="#9ca3af" strokeWidth="1.2" strokeLinecap="round" />
-      <line x1="14" y1="14.5" x2="13.5" y2="16" stroke="#9ca3af" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M17 9.5 C21 9.5 22 13 24 12" stroke="#9ca3af" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+      {/* Little feet */}
+      <path d="M9 13.5 L9 15 M14 13.5 L14 15" stroke="#9ca3af" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }
@@ -110,77 +107,219 @@ function ISTClockCard() {
   const cardRef = useRef<HTMLDivElement>(null);
   const mouseOrbiterRef = useRef<HTMLDivElement>(null);
   const orbitAngleRef = useRef(0);
-  const [escaped, setEscaped] = useState(false);
+  const [isEscaped, setIsEscaped] = useState(false);
   const [flipped, setFlipped] = useState(false);
-  const escapedRef = useRef(false);
+  const statusRef = useRef<'orbiting' | 'escaping' | 'returning'>('orbiting');
+  const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const escapeLoopRunningRef = useRef(false);
   const prevXRef = useRef(0);
   const mouseControls = useAnimation();
+  const [mounted, setMounted] = useState(false);
 
-  // Unmount cleanup
-  useEffect(() => () => { escapedRef.current = false; }, []);
+  useEffect(() => {
+    setMounted(true);
+    return () => { if (idleTimerRef.current) clearTimeout(idleTimerRef.current); };
+  }, []);
 
   // Orbit animation (rAF, zero re-renders)
   useEffect(() => {
-    if (escaped) return;
     let rafId: number;
     const radius = 34;
     const tick = () => {
-      orbitAngleRef.current += 0.022;
-      const a = orbitAngleRef.current;
-      const x = radius * Math.cos(a);
-      const y = radius * Math.sin(a);
-      if (mouseOrbiterRef.current) {
-        const flip = Math.sin(a) > 0; // moving left on top half
-        mouseOrbiterRef.current.style.transform =
-          `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scaleX(${flip ? -1 : 1})`;
+      if (statusRef.current === 'orbiting') {
+        orbitAngleRef.current += 0.022;
+        const a = orbitAngleRef.current;
+        const x = radius * Math.cos(a);
+        const y = radius * Math.sin(a);
+        if (mouseOrbiterRef.current) {
+          const flip = Math.sin(a) > 0;
+          mouseOrbiterRef.current.style.transform =
+            `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scaleX(${flip ? -1 : 1})`;
+        }
       }
       rafId = requestAnimationFrame(tick);
     };
     rafId = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafId);
-  }, [escaped]);
+  }, []);
 
-  async function runEscape() {
-    escapedRef.current = true;
-    while (escapedRef.current) {
-      const x = 40 + Math.random() * (window.innerWidth - 120);
-      const y = 40 + Math.random() * (window.innerHeight - 120);
-      setFlipped(x < prevXRef.current);
-      prevXRef.current = x;
+  async function runEscapeLoop() {
+    if (escapeLoopRunningRef.current) return;
+    escapeLoopRunningRef.current = true;
+    
+    while (statusRef.current === 'escaping') {
+      const currentY = (mouseControls as any).current?.y?.get() || (window.innerHeight / 2);
+      
+      // Short scurry distance (max 150px)
+      let newX = prevXRef.current + (Math.random() - 0.5) * 300;
+      let newY = currentY + (Math.random() - 0.5) * 300;
+
+      // Keep within bounds
+      newX = Math.max(80, Math.min(window.innerWidth - 80, newX));
+      newY = Math.max(80, Math.min(window.innerHeight - 80, newY));
+      
+      // Calculate actual distance to enforce constant running speed
+      const actualDx = newX - prevXRef.current;
+      const actualDy = newY - currentY;
+      const dist = Math.sqrt(actualDx * actualDx + actualDy * actualDy) || 1;
+      
+      setFlipped(newX < prevXRef.current);
+      prevXRef.current = newX;
+      
       await mouseControls.start({
-        x,
-        y,
-        transition: { duration: 0.38 + Math.random() * 0.42, ease: [0.25, 0.46, 0.45, 0.94] },
+        x: newX,
+        y: newY,
+        // Linear easing creates a "running" look instead of a "skipping/teleporting" look
+        // Speed: 150 pixels per second
+        transition: { duration: dist / 150, ease: "linear" },
       });
-      if (!escapedRef.current) break;
-      await new Promise((r) => setTimeout(r, 70 + Math.random() * 130));
+      
+      if (statusRef.current !== 'escaping') break;
+      // Very short pause to simulate mouse sniffing around before next step
+      await new Promise((r) => setTimeout(r, 50 + Math.random() * 150));
+    }
+    escapeLoopRunningRef.current = false;
+  }
+
+  function resetIdleTimer() {
+    if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+    idleTimerRef.current = setTimeout(() => {
+      if (statusRef.current === 'escaping') {
+        returnToClock();
+      }
+    }, 6000); // 6 seconds idle timeout
+  }
+
+  function handleClockHover() {
+    if (statusRef.current !== 'orbiting') return;
+    
+    statusRef.current = 'escaping';
+    setIsEscaped(true);
+    
+    if (cardRef.current) {
+      const rect = cardRef.current.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      mouseControls.set({ x: cx, y: cy, opacity: 1, scale: 1 });
+      prevXRef.current = cx;
+    }
+    
+    runEscapeLoop();
+    resetIdleTimer();
+  }
+
+  const dartCooldownRef = useRef(0);
+
+  // Proximity trigger: if the cursor gets within 100px of the escaped mouse, it darts away!
+  useEffect(() => {
+    if (!isEscaped) return;
+
+    const handleGlobalMouseMove = (e: MouseEvent) => {
+      if (statusRef.current !== 'escaping') return;
+      if (Date.now() - dartCooldownRef.current < 300) return;
+
+      const currentX = (mouseControls as any).current?.x?.get() || prevXRef.current;
+      const currentY = (mouseControls as any).current?.y?.get() || window.innerHeight / 2;
+
+      const dx = currentX - e.clientX;
+      const dy = currentY - e.clientY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      if (dist < 100) { // Proximity radius (~2-3 cm)
+        triggerDart(e.clientX, e.clientY);
+      }
+    };
+
+    window.addEventListener('mousemove', handleGlobalMouseMove);
+    return () => window.removeEventListener('mousemove', handleGlobalMouseMove);
+  }, [isEscaped, mouseControls]);
+
+  function triggerDart(mouseX: number, mouseY: number) {
+    if (statusRef.current === 'escaping') {
+      resetIdleTimer();
+      dartCooldownRef.current = Date.now();
+      
+      const currentX = prevXRef.current;
+      const currentY = (mouseControls as any).current?.y?.get() || mouseY;
+      
+      const dx = currentX - mouseX;
+      const dy = currentY - mouseY;
+      const angleAway = Math.atan2(dy, dx);
+      
+      let bestTargetX = currentX;
+      let bestTargetY = currentY;
+      let maxScore = -Infinity;
+
+      const pushDist = 150 + Math.random() * 100; // Scurry distance
+
+      // Evaluate 5 possible escape angles (-90 to +90 degrees from straight away)
+      for (let i = -2; i <= 2; i++) {
+        const testAngle = angleAway + (i * Math.PI / 3);
+        const tx = currentX + Math.cos(testAngle) * pushDist;
+        const ty = currentY + Math.sin(testAngle) * pushDist;
+        
+        const distLeft = tx - 80;
+        const distRight = (window.innerWidth - 80) - tx;
+        const distTop = ty - 80;
+        const distBottom = (window.innerHeight - 80) - ty;
+        const minBorderDist = Math.min(distLeft, distRight, distTop, distBottom);
+        
+        let score = minBorderDist;
+        
+        // Huge penalty if this angle runs directly out of bounds
+        if (minBorderDist < 0) {
+          score -= 10000;
+        }
+
+        if (score > maxScore) {
+          maxScore = score;
+          bestTargetX = tx;
+          bestTargetY = ty;
+        }
+      }
+
+      // Ensure strict bounds
+      bestTargetX = Math.max(80, Math.min(window.innerWidth - 80, bestTargetX));
+      bestTargetY = Math.max(80, Math.min(window.innerHeight - 80, bestTargetY));
+
+      const actualDx = bestTargetX - currentX;
+      const actualDy = bestTargetY - currentY;
+      const distToRun = Math.sqrt(actualDx * actualDx + actualDy * actualDy) || 1;
+
+      setFlipped(bestTargetX < prevXRef.current);
+      prevXRef.current = bestTargetX;
+      
+      mouseControls.start({
+        x: bestTargetX,
+        y: bestTargetY,
+        transition: { duration: distToRun / 450, ease: "linear" },
+      });
     }
   }
 
-  function handleMouseEnter() {
-    if (escapedRef.current || !cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    mouseControls.set({ x: cx, y: cy, opacity: 1, scale: 1 });
-    prevXRef.current = cx;
-    setEscaped(true);
-    runEscape();
+  function handleEscapedMouseHover(e: React.MouseEvent) {
+    triggerDart(e.clientX, e.clientY);
   }
 
-  function handleMouseLeave() {
-    if (!escapedRef.current || !cardRef.current) return;
-    escapedRef.current = false;
-    const rect = cardRef.current.getBoundingClientRect();
-    mouseControls
-      .start({
-        x: rect.left + rect.width / 2,
-        y: rect.top + rect.height / 2,
+  function returnToClock() {
+    statusRef.current = 'returning';
+    if (cardRef.current) {
+      const rect = cardRef.current.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      setFlipped(cx < prevXRef.current);
+      
+      mouseControls.start({
+        x: cx,
+        y: cy,
         opacity: 0,
         scale: 0.4,
-        transition: { duration: 0.32, ease: "easeIn" },
-      })
-      .then(() => setEscaped(false));
+        transition: { duration: 0.6, ease: "easeInOut" },
+      }).then(() => {
+        statusRef.current = 'orbiting';
+        setIsEscaped(false);
+      });
+    }
   }
 
   const time = now
@@ -202,8 +341,7 @@ function ISTClockCard() {
   return (
     <div
       ref={cardRef}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={handleClockHover}
       className="bg-[#111111]/80 backdrop-blur-md rounded-3xl p-5 shadow-sm border border-white/10 flex flex-col items-center justify-center text-white relative overflow-hidden cursor-default select-none"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
@@ -231,7 +369,7 @@ function ISTClockCard() {
         </svg>
 
         {/* Orbiting mouse (hidden while escaped) */}
-        {!escaped && (
+        {!isEscaped && (
           <div className="absolute inset-0 pointer-events-none" style={{ overflow: "visible" }}>
             <div
               ref={mouseOrbiterRef}
@@ -251,15 +389,19 @@ function ISTClockCard() {
       </div>
       <p className="mt-1.5 text-[10px] font-semibold text-neutral-500 uppercase tracking-wider">{date}</p>
 
-      {/* Fixed escaped mouse — always mounted, invisible until escape */}
-      <motion.div
-        className="fixed top-0 left-0 z-[500] pointer-events-none"
-        style={{ marginLeft: -12, marginTop: -8 }}
-        initial={{ opacity: 0, scale: 0 }}
-        animate={mouseControls}
-      >
-        <DashMouse flipped={flipped} />
-      </motion.div>
+      {/* Fixed escaped mouse — rendered in portal to escape backdrop-blur/overflow-hidden clipping! */}
+      {mounted && createPortal(
+        <motion.div
+          className={`fixed top-0 left-0 z-[9999] ${isEscaped ? "pointer-events-auto cursor-crosshair" : "pointer-events-none"}`}
+          style={{ marginLeft: -12, marginTop: -8 }}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={mouseControls}
+          onMouseEnter={handleEscapedMouseHover}
+        >
+          <DashMouse flipped={flipped} />
+        </motion.div>,
+        document.body
+      )}
     </div>
   );
 }

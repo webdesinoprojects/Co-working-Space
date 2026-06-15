@@ -8,7 +8,6 @@ import {
   FileText,
   Image as ImageIcon,
   MessageSquare,
-  Settings,
   LogOut,
   Sparkles,
 } from "lucide-react";
@@ -156,13 +155,6 @@ export function AdminSidebar({
       </div>
 
       <div className="p-4 border-t border-neutral-100 mt-auto">
-        <Link
-          href="/admin/settings"
-          className="flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-500 hover:text-neutral-900 hover:bg-neutral-50 transition-colors font-medium"
-        >
-          <Settings className="w-5 h-5 text-neutral-400" />
-          <span className="text-[15px]">Settings</span>
-        </Link>
         <Link
           href="/admin/logout"
           className="flex items-center gap-3 px-4 py-3 rounded-2xl text-neutral-500 hover:text-red-600 hover:bg-red-50 transition-colors font-medium mt-1"
