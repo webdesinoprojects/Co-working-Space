@@ -34,6 +34,18 @@ export function AdminLayoutShell({
       data-lenis-prevent
       style={{ fontFamily: "var(--font-outfit), sans-serif" }}
     >
+      {/* Mobile Warning Overlay */}
+      <div className="fixed inset-0 z-[100] flex md:hidden flex-col items-center justify-center bg-gray-900/95 backdrop-blur-xl text-center px-6">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-white mb-6 animate-bounce">
+          <rect width="16" height="20" x="4" y="2" rx="2" ry="2"/>
+          <path d="M12 18h.01"/>
+        </svg>
+        <h2 className="text-2xl font-bold text-white mb-3 tracking-tight font-spaceGrotesk">Desktop Recommended</h2>
+        <p className="text-gray-300 text-[15px] leading-relaxed max-w-[300px]">
+          This admin dashboard is designed for larger screens due to complex data tables. Please rotate your device or use a laptop/desktop for the best experience.
+        </p>
+      </div>
+
       {/* Liquid Chrome interactive background as the ONLY background */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <LiquidChrome
