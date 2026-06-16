@@ -175,9 +175,11 @@ export function HeroSection({ data }: { data?: HeroSectionVM }) {
         mode={index % 3}
       />
 
-      {/* Readability overlays */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/80 via-black/45 to-black/15" />
-      <div className="absolute inset-x-0 bottom-0 z-10 h-2/3 bg-gradient-to-t from-black/75 to-transparent" />
+      {/* Minimal readability shade — only a soft tint at the bottom-left where
+          the text sits, so the rest of the photo stays crisp. Text legibility is
+          mostly carried by the headline's own drop-shadow. */}
+      <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/35 via-transparent to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 z-10 h-1/2 bg-gradient-to-t from-black/45 to-transparent" />
 
       {/* HERO CONTENT (anchored bottom) */}
       <div className="relative z-20 max-w-[1440px] w-full mx-auto px-5 sm:px-8 lg:px-12 pt-[160px] pb-12 sm:pb-16 lg:pb-20">
