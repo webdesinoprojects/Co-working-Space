@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ElementType } from "react";
 import {
   Facebook,
@@ -99,7 +100,14 @@ export function FooterSection({
       <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-20">
           <div className="flex flex-col gap-4">
-            <img src="/alley_logo_final.png" alt="Alley Workspace Logo" className="w-40 sm:w-56 h-auto object-contain mb-2" />
+            <Link href="/" className="flex flex-col justify-center font-spaceGrotesk w-fit group select-none mb-6">
+              <span className="text-[28px] sm:text-[36px] font-black tracking-tighter text-white leading-[0.85]">
+                ALLEY
+              </span>
+              <span className="text-[12px] sm:text-[14px] font-bold tracking-[0.25em] text-[#00A1BA] leading-none mt-1 group-hover:text-[#F26522] transition-colors duration-300">
+                WORKSPACE
+              </span>
+            </Link>
             <h4 className="text-[12px] font-bold tracking-widest text-gray-500 uppercase mb-2">Location</h4>
             <p className="text-[20px] text-white font-semibold">Delhi, Rithala</p>
           </div>
