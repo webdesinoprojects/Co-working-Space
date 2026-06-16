@@ -20,7 +20,7 @@ export function IntroForm({ data }: { data: AdminIntroSectionVM }) {
   const actionHandler = async (formData: FormData) => {
     const result = await updateIntroTextAction(Object.fromEntries(formData.entries()));
     if (result.success) {
-      showToast("Saved changes", "Introducing Axion updated.", "success");
+      showToast("Saved changes", "Introducing Alley updated.", "success");
       router.refresh();
     } else {
       showToast("Save failed", result.error, "error");
@@ -31,7 +31,7 @@ export function IntroForm({ data }: { data: AdminIntroSectionVM }) {
     if (!activeSlot) return;
     const result = await assignIntroImageAction({ field: activeSlot + "_image_asset_id", asset_id: asset.id });
     if (result.success) {
-      showToast("Image updated", "Introducing Axion image saved.", "success");
+      showToast("Image updated", "Introducing Alley image saved.", "success");
       setActiveSlot(null);
       router.refresh();
     } else {
@@ -45,7 +45,7 @@ export function IntroForm({ data }: { data: AdminIntroSectionVM }) {
       <div className="flex items-center justify-between px-8 py-5 border-b border-white/30 bg-white/20 backdrop-blur-sm shrink-0">
         <div>
           <p className="text-[11px] font-semibold text-neutral-400 uppercase tracking-widest mb-0.5">Homepage</p>
-          <h1 className="text-xl font-bold text-neutral-900">Introducing Axion</h1>
+          <h1 className="text-xl font-bold text-neutral-900">Introducing Alley</h1>
         </div>
         <SubmitButton />
       </div>

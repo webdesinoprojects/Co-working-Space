@@ -23,7 +23,7 @@ const orbitVariants: Variants = {
 
 const STATIC_TESTIMONIALS = [
   {
-    quote: "Moving our startup to Axion Workspace was the best decision we made. The environment is inspiring, the amenities are flawless, and the community is incredible.",
+    quote: "Moving our startup to Alley Workspace was the best decision we made. The environment is inspiring, the amenities are flawless, and the community is incredible.",
     person_name: "Sarah Jenkins",
     person_role: "CEO",
     company_name: "TechFlow",

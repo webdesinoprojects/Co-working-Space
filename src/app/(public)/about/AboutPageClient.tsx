@@ -131,7 +131,7 @@ const FB_CLIENT_STORIES: AboutClientStoryVM[] = [
     tag: "Scaling Up",
     author: "Growing Remote Team",
     title: "From Home Office Chaos to Growth",
-    description: "Watch how Axion helped bring consistency, professionalism, and momentum back to work.",
+    description: "Watch how Alley helped bring consistency, professionalism, and momentum back to work.",
     icon_key: "satellite",
     sort_order: 50,
   },
@@ -187,7 +187,7 @@ export function AboutPageClient({ hero, pillars, story, clientStories }: Props) 
               className="flex items-center gap-3"
             >
               <div className="text-[13px] sm:text-[14px] font-semibold bg-white border border-gray-200 text-gray-900 rounded-full px-4 py-1.5 shadow-sm uppercase tracking-wider">
-                About Axion Spaces
+                About Alley Workspace
               </div>
             </motion.div>
             <motion.h1
@@ -206,7 +206,7 @@ export function AboutPageClient({ hero, pillars, story, clientStories }: Props) 
               className="text-[16px] sm:text-[18px] text-gray-600 leading-relaxed max-w-2xl"
             >
               {hero?.subtext ??
-                "Axion Spaces was built to make office decisions easier for founders, freelancers, and growing teams."}
+                "Alley Workspace was built to make office decisions easier for founders, freelancers, and growing teams."}
             </motion.p>
           </div>
 
@@ -301,7 +301,7 @@ export function AboutPageClient({ hero, pillars, story, clientStories }: Props) 
             <div className="space-y-6 text-[16px] sm:text-[18px] text-gray-600 leading-relaxed">
               <p>
                 {story?.body_1 ??
-                  "Axion Spaces started with a practical goal: create workspace experiences that feel professional, flexible, and easy to act on."}
+                  "Alley Workspace started with a practical goal: create workspace experiences that feel professional, flexible, and easy to act on."}
               </p>
               <p>
                 {story?.body_2 ??

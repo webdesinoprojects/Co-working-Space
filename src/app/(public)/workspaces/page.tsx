@@ -1,4 +1,4 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { getWorkspaceOverview, getActiveWorkspaceList } from "@/server/repositories/workspaces";
 
@@ -25,7 +25,7 @@ export default async function WorkspacesPage() {
         <div className="flex flex-col gap-6 max-w-4xl">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center overflow-hidden hover:scale-105 transition-transform border border-gray-200">
-              <img src="/axion_logo.png" alt="Axion Logo" className="w-[70%] h-[70%] object-contain" />
+              <img src="/alley_logo.png" alt="Alley Workspace Logo" className="w-[70%] h-[70%] object-contain" />
             </div>
             <div className="text-[13px] sm:text-[14px] font-medium bg-white/80 backdrop-blur-sm border border-gray-200 rounded-full px-4 py-1.5 text-gray-900 shadow-sm">
               {badge}

@@ -62,7 +62,7 @@ export function Navigation() {
           {/* LEFT */}
           <div className="flex items-center gap-6 pl-1">
             <Link href="/" className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center overflow-hidden hover:scale-105 transition-transform border border-gray-200">
-              <img src="/axion_logo.png" alt="Axion Logo" className="w-[70%] h-[70%] object-contain" />
+              <img src="/alley_logo.png" alt="Alley Workspace Logo" className="w-[70%] h-[70%] object-contain" />
             </Link>
             <div className="hidden md:flex items-center gap-6">
               {[

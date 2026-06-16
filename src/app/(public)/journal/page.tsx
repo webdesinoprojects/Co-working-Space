@@ -10,7 +10,7 @@ export default function JournalPage() {
         <div className="bg-white/90 backdrop-blur-md rounded-full p-[5px] flex items-center justify-between shadow-sm">
           <div className="flex items-center gap-6 pl-1">
             <Link href="/" className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center overflow-hidden hover:scale-105 transition-transform border border-gray-200">
-              <img src="/axion_logo.png" alt="Axion Logo" className="w-[70%] h-[70%] object-contain" />
+              <img src="/alley_logo.png" alt="Alley Workspace Logo" className="w-[70%] h-[70%] object-contain" />
             </Link>
             <div className="hidden md:flex items-center gap-6">
               <Link href="/workspaces" className="text-[14px] text-gray-900 hover:text-[#F26522] transition-colors">Workspaces</Link>

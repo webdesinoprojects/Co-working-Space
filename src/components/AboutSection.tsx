@@ -29,7 +29,7 @@ const FALLBACK_LEFT = "https://images.unsplash.com/photo-1524758631624-e2822e304
 const FALLBACK_RIGHT = "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1280&q=85";
 
 export function AboutSection({ data }: { data?: IntroSectionVM }) {
-  const badge = data?.badge_text ?? "Introducing Axion";
+  const badge = data?.badge_text ?? "Introducing Alley";
   const title = data?.title ?? "Strategy-led workspaces, delivering results for professionals and beyond.";
   const body = data?.body_text ?? "Through ergonomic design, thoughtful architecture, and iteration we help growing teams realize their full potential in physical spaces.";
   const ctaLabel = data?.cta_label ?? "About our spaces";

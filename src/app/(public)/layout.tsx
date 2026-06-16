@@ -48,7 +48,7 @@ export default async function PublicLayout({ children }: { children: ReactNode }
       <div id="contact">
         <ContactSection data={mergedContactData} />
       </div>
-      <FooterSection links={footerLinks} socialLinks={footerSocials} />
+      <FooterSection links={footerLinks} socialLinks={footerSocials} workspaceItems={workspaceNavItems} />
     </WorkspaceNavProvider>
   );
 }

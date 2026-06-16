@@ -19,7 +19,7 @@ const baseContentGroups = [
     base: "/admin/content/home",
     items: [
       { name: "Hero", href: "/hero" },
-      { name: "Introducing Axion", href: "/introducing-axion" },
+      { name: "Introducing Alley", href: "/introducing-axion" },
       { name: "Growing Network", href: "/growing-network" },
       { name: "Memberships", href: "/memberships" },
       { name: "Offerings", href: "/offerings" },
@@ -91,7 +91,7 @@ export function AdminSidebar({
           <div className="w-8 h-8 bg-neutral-900 rounded-lg flex items-center justify-center shrink-0">
             <Sparkles className="w-4 h-4 text-white" />
           </div>
-          <span className="font-bold text-xl tracking-tight text-neutral-900">Axion</span>
+          <span className="font-bold text-xl tracking-tight text-neutral-900">Alley</span>
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-8 scrollbar-hide">

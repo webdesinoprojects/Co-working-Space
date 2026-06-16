@@ -103,7 +103,7 @@ const reasons = [
   },
   {
     title: "Entrepreneurship",
-    desc: "Time has gone, for the jobseekers as the market is changing everyday and every moment thus we here at Axion trains our members not just to fit in any kind of jobs but to survive anywhere on their own.",
+    desc: "Time has gone, for the jobseekers as the market is changing everyday and every moment thus we here at Alley trains our members not just to fit in any kind of jobs but to survive anywhere on their own.",
     animation_key: "isometric-cube",
     Animation: IsometricCubeAnimation,
     theme: "dark",
@@ -143,10 +143,10 @@ const itemVariants: Variants = {
 
 export function WhyChooseUsSection({ data }: { data?: WhyChooseUsSectionVM }) {
   const badge = data?.badge_text ?? "Our Core Value";
-  const title = data?.title ?? "Why Should You Choose Axion?";
+  const title = data?.title ?? "Why Should You Choose Alley Workspace?";
   const body =
     data?.body_text ??
-    "Because Axion, Is A Place your Ideas deserve..!! a simple question with a simple answer well if your are reading let us tell you more about these big lines we say.. An incubator, A lab of innovations, start-up friendly community, Axion, has many faces to get described. Axion is a archetypical ecosystem, providing essential resources and hard support to the birthing start-ups. Axion is truly a birthing suite for start-ups, turning expectations into reality.";
+    "Because Alley, Is A Place your Ideas deserve..!! a simple question with a simple answer well if your are reading let us tell you more about these big lines we say.. An incubator, A lab of innovations, start-up friendly community, Alley, has many faces to get described. Alley is a archetypical ecosystem, providing essential resources and hard support to the birthing start-ups. Alley is truly a birthing suite for start-ups, turning expectations into reality.";
   const displayReasons =
     data && data.cards.length > 0
       ? data.cards.map((card) => ({

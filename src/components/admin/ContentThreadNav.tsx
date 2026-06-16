@@ -10,7 +10,7 @@ const contentTree = [
     base: "/admin/content/home",
     items: [
       { name: "Hero", href: "/hero" },
-      { name: "Introducing Axion", href: "/introducing-axion" },
+      { name: "Introducing Alley", href: "/introducing-axion" },
       { name: "Growing Network", href: "/growing-network" },
       { name: "Memberships", href: "/memberships" },
       { name: "Offerings", href: "/offerings" },

@@ -14,7 +14,7 @@ import {
 
 const sections = [
   { name: "Hero", href: "/admin/content/home/hero", icon: Image, desc: "Banner headline, subtitle, and CTA buttons" },
-  { name: "Introducing Axion", href: "/admin/content/home/introducing-axion", icon: Info, desc: "About section with stats and feature highlights" },
+  { name: "Introducing Alley", href: "/admin/content/home/introducing-axion", icon: Info, desc: "About section with stats and feature highlights" },
   { name: "Growing Network", href: "/admin/content/home/growing-network", icon: MapPin, desc: "Location cards bento grid" },
   { name: "Memberships", href: "/admin/content/home/memberships", icon: CreditCard, desc: "Pricing plans and their feature lists" },
   { name: "Offerings", href: "/admin/content/home/offerings", icon: LayoutGrid, desc: "Service offerings with included/excluded features" },

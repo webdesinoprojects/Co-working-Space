@@ -258,27 +258,8 @@ export function LocationsSection({ data }: { data?: LocationsSectionVM }) {
                     alt={`${loc.name} Workspace`}
                     className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500 group-hover:opacity-0"></div>
-                  <div className="absolute inset-0 bg-[#00A1BA]/80 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-3 sm:p-6 gap-2 sm:gap-3">
-                    <h3 className="text-[18px] sm:text-[26px] font-semibold text-white mb-0 sm:mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                      {loc.name}
-                    </h3>
-                    <div className="w-full max-w-[200px] hidden sm:flex flex-col gap-2 transform translate-y-8 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-75">
-                      <button type="button" className="w-full py-2 px-4 border border-white/80 text-white text-[11px] font-bold tracking-wider uppercase hover:bg-white hover:text-[#00A1BA] transition-colors rounded-sm">
-                        Request a Visit
-                      </button>
-                      <button type="button" className="w-full py-2 px-4 bg-white text-[#00A1BA] text-[11px] font-bold tracking-wider uppercase hover:bg-white/90 transition-colors rounded-sm">
-                        Book Meeting Room
-                      </button>
-                      <button type="button" className="w-full py-2 px-4 border border-white/80 text-white text-[11px] font-bold tracking-wider uppercase hover:bg-white hover:text-[#00A1BA] transition-colors rounded-sm">
-                        Book Your Space
-                      </button>
-                    </div>
-                    <span className="sm:hidden text-white text-[10px] font-medium tracking-wide uppercase border-b border-white/40 pb-0.5 mt-1 transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 delay-75">
-                      View Space
-                    </span>
-                  </div>
-                  <div className="absolute inset-0 p-3 sm:p-6 flex flex-col justify-end group-hover:opacity-0 transition-opacity duration-300">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                  <div className="absolute inset-0 p-3 sm:p-6 flex flex-col justify-end">
                     <h3 className="text-[16px] sm:text-[24px] font-semibold text-white mb-1">
                       {loc.name}
                     </h3>

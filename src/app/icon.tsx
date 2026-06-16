@@ -13,8 +13,8 @@ export default function Icon() {
     (
       <div
         style={{
-          fontSize: 20,
-          background: '#7b39fc',
+          fontSize: 18,
+          background: '#1A1A1A',
           width: '100%',
           height: '100%',
           display: 'flex',
@@ -23,6 +23,8 @@ export default function Icon() {
           color: 'white',
           borderRadius: '20%',
           fontWeight: 800,
+          fontFamily: 'sans-serif',
+          letterSpacing: '-1px',
         }}
       >
         A

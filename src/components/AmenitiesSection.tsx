@@ -114,7 +114,7 @@ export function AmenitiesSection({
       <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12 relative z-10">
 
         {/* HEADER ROW */}
-        <div className="relative flex items-center justify-between w-full mb-12 sm:mb-16 z-10">
+        <div className="relative flex items-center justify-between w-full mb-10 sm:mb-12 z-10">
           <div className="relative z-20">
             <div className="flex items-center gap-3 mb-6 sm:mb-8">
               <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gray-900 text-white text-[11px] sm:text-[12px] font-semibold flex items-center justify-center shadow-lg shadow-black/10">
@@ -131,23 +131,16 @@ export function AmenitiesSection({
           </div>
         </div>
 
-      </div>
-
-      {/* MARQUEE CARDS */}
-      <div className="relative flex overflow-hidden w-[100vw] ml-[calc(-50vw+50%)] py-8 z-10">
-        <motion.div
-          className="flex gap-4 sm:gap-6 px-4 sm:px-6 w-max"
-          animate={{ x: ["0%", "-50%"] }}
-          transition={{ repeat: Infinity, ease: "linear", duration: 60 }}
-        >
-          {repeatedAmenities.map((item, index) => {
+        {/* CARDS GRID (4 PER ROW) */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 relative z-10">
+          {displayAmenities.map((item, index) => {
             const Icon = item.icon;
             const BgAnimIcon = bgIcons[index % bgIcons.length];
 
             return (
               <div
                 key={index}
-                className="relative overflow-hidden bg-[#FAFAFA] border border-gray-100 rounded-2xl flex flex-col items-center justify-center text-center p-6 sm:p-8 hover:bg-gray-900 hover:border-gray-900 hover:text-white transition-all duration-300 group shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.1)] cursor-pointer flex-shrink-0 w-48 sm:w-64 h-48 sm:h-56"
+                className="relative overflow-hidden bg-[#FAFAFA] border border-gray-100 rounded-2xl flex flex-col items-center justify-center text-center p-6 sm:p-8 hover:bg-gray-900 hover:border-gray-900 hover:text-white transition-all duration-300 group shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.1)] cursor-pointer w-full h-48 sm:h-56"
               >
                 {/* Subtle Background Animation */}
                 <motion.div
@@ -167,9 +160,9 @@ export function AmenitiesSection({
               </div>
             );
           })}
-        </motion.div>
-      </div>
+        </div>
 
+      </div>
     </section>
   );
 }

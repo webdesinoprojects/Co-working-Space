@@ -14,7 +14,7 @@ const FALLBACK_SECTION: FaqSectionVM = {
   title: "Frequently Asked Questions",
   highlighted_word: "Questions",
   body_text:
-    "Everything you need to know about Axion Spaces, memberships, amenities, and how we can help your business thrive.",
+    "Everything you need to know about Alley Workspace, memberships, amenities, and how we can help your business thrive.",
 };
 
 const FALLBACK_ITEMS: FaqItemVM[] = [
@@ -57,54 +57,7 @@ export default function FaqPageClient({
     <main className="min-h-screen font-sans bg-[#faf8f5] relative overflow-hidden selection:bg-[#F26522]/30">
       <Navbar />
 
-      {/* INTERACTIVE 3D RINGS BACKGROUND */}
-      <div className="fixed inset-0 pointer-events-none flex justify-center items-center overflow-hidden z-0 opacity-50">
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
-          .tunnel-item {
-            position: absolute;
-            background-color: transparent;
-            width: calc(var(--i) * 6vmin);
-            aspect-ratio: 1;
-            border-radius: 50%;
-            border: 4px solid rgba(135, 206, 235, 0.7);
-            transform-style: preserve-3d;
-            transform: rotateX(70deg) translateZ(50px);
-            animation: tunnel-move 10s ease-in-out calc(var(--i) * 0.25s) infinite;
-            box-shadow: 0px 0px 15px rgba(255, 182, 193, 0.6), inset 0px 0px 15px rgba(255, 182, 193, 0.6);
-          }
-          @keyframes tunnel-move {
-            0%, 100% {
-              transform: rotateX(70deg) translateZ(50px) translateY(0px);
-              filter: hue-rotate(0deg);
-            }
-            50% {
-              transform: rotateX(70deg) translateZ(50px) translateY(-120vmin);
-              filter: hue-rotate(90deg);
-            }
-          }
-        `,
-          }}
-        />
-        <motion.div
-          animate={{
-            rotateX: mousePos.y * -30,
-            rotateY: mousePos.x * 30,
-          }}
-          transition={{ type: "spring", stiffness: 50, damping: 25 }}
-          style={{ transformStyle: "preserve-3d", perspective: "1000px" }}
-          className="relative flex justify-center items-center w-full h-full"
-        >
-          {Array.from({ length: 40 }).map((_, i) => (
-            <div
-              key={i}
-              className="tunnel-item mix-blend-multiply"
-              style={{ "--i": i } as React.CSSProperties}
-            />
-          ))}
-        </motion.div>
-      </div>
+
 
       <section className="pt-40 pb-24 px-5 sm:px-8 lg:px-12 max-w-[1000px] mx-auto relative z-10">
         {/* HEADER */}
@@ -190,18 +143,8 @@ export default function FaqPageClient({
                     transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                     className="overflow-hidden rounded-b-2xl border-t border-gray-100"
                   >
-                    <div
-                      className={`text-blue-700 font-medium ${caveat.className} text-[22px] sm:text-[28px]`}
-                      style={{
-                        background: `linear-gradient(transparent 92%, #a6d8fa 92%), linear-gradient(to right, transparent 50px, #f47b7b 50px, #f47b7b 52px, transparent 52px)`,
-                        backgroundSize: `100% 36px, 100% 100%`,
-                        lineHeight: `36px`,
-                        backgroundColor: `#fffdf8`,
-                        paddingBottom: `36px`,
-                        paddingTop: `2px`,
-                      }}
-                    >
-                      <div className="pl-[70px] pr-8 sm:pr-12">{faq.answer}</div>
+                    <div className="text-gray-600 text-base sm:text-lg pb-6 px-6 sm:px-8">
+                      {faq.answer}
                     </div>
                   </motion.div>
                 )}

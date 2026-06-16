@@ -1,4 +1,4 @@
-﻿// Public view model types - safe to import in both server and client code.
+// Public view model types - safe to import in both server and client code.
 // These contain ONLY what the public homepage renders. No internal IDs,
 // no admin notes, no unpublished state, no DB metadata.
 
@@ -22,7 +22,7 @@ export type HeroSectionVM = {
   bottom_right_image: PublicImageVM | null;
 };
 
-// -- Introducing Axion ---------------------------------------------------------
+// -- Introducing Alley ---------------------------------------------------------
 export type IntroSectionVM = {
   badge_text: string;
   title: string;

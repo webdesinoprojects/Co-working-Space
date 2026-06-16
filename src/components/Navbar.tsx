@@ -88,9 +88,16 @@ export default function Navbar({ workspaceNavItems }: { workspaceNavItems?: Work
       <div className={`mx-auto flex items-center justify-between px-4 py-3 md:px-6 max-w-7xl rounded-[1.25rem] border transition-all duration-300 ${scrolled ? 'bg-black/80 backdrop-blur-xl border-white/20 shadow-[0_8px_30px_rgba(0,0,0,0.3)]' : 'bg-black/25 backdrop-blur-md border-white/10 shadow-lg'}`}>
         <Link
           href="/"
-          className="flex items-center gap-2 rounded-full transition-all hover:scale-105 active:scale-95 h-10 w-28 sm:h-12 sm:w-36 relative bg-white/90 backdrop-blur-sm px-3 py-1"
+          className="flex items-center transition-all hover:scale-105 active:scale-95 group select-none py-1"
         >
-          <img src="/axion_logo.png" alt="Axion Logo" className="absolute inset-0 w-full h-full object-contain object-center scale-90" />
+          <div className="flex flex-col justify-center font-spaceGrotesk">
+            <span className="text-[22px] sm:text-[28px] font-black tracking-tighter text-white leading-[0.85]">
+              ALLEY
+            </span>
+            <span className="text-[10px] sm:text-[12px] font-bold tracking-[0.25em] text-[#00A1BA] leading-none mt-1 group-hover:text-[#F26522] transition-colors duration-300">
+              WORKSPACE
+            </span>
+          </div>
         </Link>
 
         <ul className="hidden items-center gap-1 lg:flex">
@@ -170,7 +177,7 @@ export default function Navbar({ workspaceNavItems }: { workspaceNavItems?: Work
               className="fixed top-0 right-0 bottom-0 z-[70] w-[85vw] max-w-sm bg-[#0D0D0D] border-l border-white/10 shadow-2xl lg:hidden flex flex-col"
             >
               <div className="flex items-center justify-between p-6 border-b border-white/10">
-                <img src="/axion_logo.png" alt="Axion Logo" className="h-8 object-contain" />
+                <img src="/alley_logo.png" alt="Alley Workspace Logo" className="h-8 object-contain" />
                 <button
                   onClick={closeMobileMenu}
                   className="grid h-10 w-10 place-items-center rounded-full bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-colors"

@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import { HeroSection } from "@/components/HeroSection";
 import { AboutSection } from "@/components/AboutSection";
+import { WorkspaceCardsSection } from "@/components/WorkspaceCardsSection";
 import { LocationsSection } from "@/components/LocationsSection";
 import { MembershipsSection } from "@/components/MembershipsSection";
 import { ServicesSection } from "@/components/ServicesSection";
@@ -17,6 +18,7 @@ import {
   getAmenitiesSection,
   getTestimonialsSection,
 } from "@/server/repositories/homepage";
+import { getActiveWorkspaceList } from "@/server/repositories/workspaces";
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +26,7 @@ export default async function Home() {
   const [
     heroData,
     introData,
+    workspaceCards,
     locationsData,
     membershipData,
     offeringsData,
@@ -33,6 +36,7 @@ export default async function Home() {
   ] = await Promise.all([
     getHeroSection().catch(() => null),
     getIntroSection().catch(() => null),
+    getActiveWorkspaceList().catch(() => []),
     getLocationsSection().catch(() => null),
     getMembershipSection().catch(() => null),
     getOfferingsSection().catch(() => null),
@@ -46,6 +50,7 @@ export default async function Home() {
       <Navbar />
       <HeroSection data={heroData ?? undefined} />
       <AboutSection data={introData ?? undefined} />
+      <WorkspaceCardsSection workspaces={workspaceCards} />
       <LocationsSection data={locationsData ?? undefined} />
       <MembershipsSection data={membershipData ?? undefined} />
       <ServicesSection

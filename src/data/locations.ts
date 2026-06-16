@@ -20,7 +20,7 @@ export const locationsData: LocationData[] = [
   {
     slug: "noida-sector-2",
     title: "Coworking space in the heart of Noida Sector 2.",
-    subtitle: "Axion Sector 2, where modern design blends with functional workspaces to inspire productivity.",
+    subtitle: "Alley Sector 2, where modern design blends with functional workspaces to inspire productivity.",
     address: "A-12, Sector 2, Noida, UP 201301",
     email: "sector2@axionspaces.com",
     phone: "+91 98765 00002",
@@ -31,9 +31,9 @@ export const locationsData: LocationData[] = [
       "https://images.unsplash.com/photo-1497215898141-926f34ce0519?auto=format&fit=crop&w=800&q=80"
     ],
     featuresTitle: "A full-service workspace tailored to you",
-    featuresDesc: "Curated by local design visionaries, Axion Sector 2 showcases a unique blend of artistry and functionality. The space is filled with custom furniture and decor that spark creativity, making it an ideal environment for startups and professionals.",
+    featuresDesc: "Curated by local design visionaries, Alley Sector 2 showcases a unique blend of artistry and functionality. The space is filled with custom furniture and decor that spark creativity, making it an ideal environment for startups and professionals.",
     servicesTitle: "Transparent services with no hidden fees",
-    servicesDesc: "At Axion, we prioritize your convenience with a range of premium services included in your membership. From mail handling to fully equipped meeting rooms, our dedicated team ensures you have everything you need to focus.",
+    servicesDesc: "At Alley, we prioritize your convenience with a range of premium services included in your membership. From mail handling to fully equipped meeting rooms, our dedicated team ensures you have everything you need to focus.",
     mapAddress: "Sector 2, Noida",
     gettingHere: [
       "Metro: 5 mins walk from Sector 15 Metro Station.",
@@ -47,7 +47,7 @@ export const locationsData: LocationData[] = [
   {
     slug: "noida-sector-3",
     title: "Premium coworking in the bustling Noida Sector 3.",
-    subtitle: "Axion Sector 3, designed for scaling teams and independent creators seeking a focused environment.",
+    subtitle: "Alley Sector 3, designed for scaling teams and independent creators seeking a focused environment.",
     address: "B-45, Sector 3, Noida, UP 201301",
     email: "sector3@axionspaces.com",
     phone: "+91 98765 00003",
@@ -102,7 +102,7 @@ export const locationsData: LocationData[] = [
     slug: "meeting-rooms",
     title: "State-of-the-art meeting rooms for high-impact presentations.",
     subtitle: "Book professional, tech-enabled rooms designed to impress clients and facilitate deep collaboration.",
-    address: "Axion Towers, Sector 16, Noida, UP 201301",
+    address: "Alley Towers, Sector 16, Noida, UP 201301",
     email: "meetings@axionspaces.com",
     phone: "+91 98765 00005",
     hours: "Available for booking 24/7",

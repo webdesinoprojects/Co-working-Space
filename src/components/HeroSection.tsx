@@ -104,7 +104,7 @@ function Hero3DTransition({
 }
 
 export function HeroSection({ data }: { data?: HeroSectionVM }) {
-  const badge = data?.badge_text ?? "Axion Workspace";
+  const badge = data?.badge_text ?? "Alley Workspace";
   const headline =
     data?.headline ??
     "We craft professional environments for teams ready to dominate their category.";
@@ -131,7 +131,10 @@ export function HeroSection({ data }: { data?: HeroSectionVM }) {
   const [index, setIndex] = useState(0);
   const [prev, setPrev] = useState(0);
   const indexRef = useRef(0);
-  indexRef.current = index;
+  
+  useEffect(() => {
+    indexRef.current = index;
+  }, [index]);
 
   // Preload the next image, THEN swap — so every strip reveals the fully-loaded
   // image at once (no half-loaded "only left side changed" seam).

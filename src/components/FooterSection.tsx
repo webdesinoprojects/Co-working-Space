@@ -84,9 +84,11 @@ function StaticSocialLinks() {
 export function FooterSection({
   links,
   socialLinks,
+  workspaceItems,
 }: {
   links?: FooterLinkVM[];
   socialLinks?: FooterSocialLinkVM[];
+  workspaceItems?: { slug: string; nav_label: string }[];
 }) {
   const sitemapLinks = links?.filter((link) => link.group_key === "sitemap") ?? [];
   const hasDynamicFooterLinks = sitemapLinks.length > 0;
@@ -96,52 +98,31 @@ export function FooterSection({
     <footer className="bg-gray-900 text-white pt-24 pb-8 rounded-t-[40px] mt-[-40px] relative z-10 border-t border-gray-800">
       <div className="max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-20">
-          <div className="flex flex-col gap-8">
-            <div>
-              <h4 className="text-[12px] font-bold tracking-widest text-gray-500 uppercase mb-4">Address I</h4>
-              <p className="text-[14px] text-gray-300 leading-relaxed font-medium">
-                148, Best Business Park,<br /> Netaji Subash Place,<br /> Pitampura, New Delhi - 110034
-              </p>
-            </div>
-            <div>
-              <h4 className="text-[12px] font-bold tracking-widest text-gray-500 uppercase mb-4">Address II</h4>
-              <p className="text-[14px] text-gray-300 leading-relaxed font-medium">
-                11th Floor, Best Sky Tower,<br /> Netaji Subash Place,<br /> Pitampura, New Delhi - 110034
-              </p>
-            </div>
-            <div>
-              <h4 className="text-[12px] font-bold tracking-widest text-gray-500 uppercase mb-4">Address III</h4>
-              <p className="text-[14px] text-gray-300 leading-relaxed font-medium">
-                Lower Ground, Best Business Square<br /> Plot No. 26, Sector-20, Dwarka,<br /> New Delhi - 110075
-              </p>
-              <p className="text-[13px] text-[#F26522] font-semibold mt-3">
-                Timings: 9:00 AM to 7:30 PM
-              </p>
-            </div>
+          <div className="flex flex-col gap-4">
+            <img src="/alley_logo_final.png" alt="Alley Workspace Logo" className="w-40 sm:w-56 h-auto object-contain mb-2" />
+            <h4 className="text-[12px] font-bold tracking-widest text-gray-500 uppercase mb-2">Location</h4>
+            <p className="text-[20px] text-white font-semibold">Delhi, Rithala</p>
           </div>
 
-          <div className="flex flex-col gap-8">
-            <div>
-              <h4 className="text-[12px] font-bold tracking-widest text-gray-500 uppercase mb-4">Call Us</h4>
-              <a href="tel:+919639636131" className="text-[16px] text-white hover:text-[#F26522] transition-colors font-medium flex items-center gap-3">
-                <Phone size={18} className="text-[#F26522]" />
-                +91 963 963 6131
+          <div className="flex flex-col gap-2">
+            <h4 className="text-[12px] font-bold tracking-widest text-gray-500 uppercase mb-4">Workspaces</h4>
+            {(workspaceItems && workspaceItems.length > 0
+              ? workspaceItems
+              : [
+                  { slug: "dedicated-desks", nav_label: "Dedicated Desks" },
+                  { slug: "private-cabins", nav_label: "Private Cabins" },
+                  { slug: "meeting-rooms", nav_label: "Meeting Rooms" },
+                  { slug: "virtual-office", nav_label: "Virtual Office" },
+                ]
+            ).map((ws) => (
+              <a
+                key={ws.slug}
+                href={`/workspaces/${ws.slug}`}
+                className="text-[14px] text-gray-300 hover:text-white hover:translate-x-1 transition-all py-2 font-medium"
+              >
+                {ws.nav_label}
               </a>
-            </div>
-            <div>
-              <h4 className="text-[12px] font-bold tracking-widest text-gray-500 uppercase mb-4">Email</h4>
-              <a href="mailto:admin@axionspaces.in" className="text-[16px] text-white hover:text-[#F26522] transition-colors font-medium flex items-center gap-3">
-                <Mail size={18} className="text-[#F26522]" />
-                admin@axionspaces.in
-              </a>
-            </div>
-            <div>
-              <h4 className="text-[12px] font-bold tracking-widest text-gray-500 uppercase mb-4">Call Us (Alternative)</h4>
-              <a href="tel:+919639635080" className="text-[16px] text-white hover:text-[#F26522] transition-colors font-medium flex items-center gap-3">
-                <Phone size={18} className="text-[#F26522]" />
-                +91 963 963 5080
-              </a>
-            </div>
+            ))}
           </div>
 
           <div className="flex flex-col gap-2">
@@ -166,34 +147,20 @@ export function FooterSection({
           </div>
 
           <div className="flex flex-col gap-6">
-            {["Pitampura Center", "Dwarka Center"].map((label, index) => (
-              <div
-                key={label}
-                className="relative w-full h-[150px] bg-gray-800 rounded-xl overflow-hidden border border-gray-700 group cursor-pointer"
-              >
-                <div
-                  className="absolute inset-0 opacity-40 group-hover:opacity-60 transition-opacity"
-                  style={{
-                    backgroundImage:
-                      "radial-gradient(circle at 50% 50%, #374151 10%, transparent 11%), radial-gradient(circle at 50% 50%, #374151 10%, transparent 11%)",
-                    backgroundSize: "20px 20px",
-                    backgroundPosition: index === 0 ? undefined : "10px 10px",
-                  }}
-                />
-                <div className="absolute inset-0 flex items-center justify-center flex-col gap-2">
-                  <MapPin
-                    size={32}
-                    className={index === 0 ? "text-[#F26522]" : "text-[#00A1BA]"}
-                  />
-                  <span className="text-[12px] font-bold bg-white text-gray-900 px-3 py-1 rounded shadow-lg">
-                    {label}
-                  </span>
-                </div>
-                <div className="absolute top-3 left-3 bg-white text-gray-900 text-[10px] font-bold px-2 py-1 rounded">
-                  Open in Maps
-                </div>
+            <h4 className="text-[12px] font-bold tracking-widest text-gray-500 uppercase mb-0">Visit Us</h4>
+            <div className="relative w-full h-[250px] bg-gray-800 rounded-xl overflow-hidden border border-gray-700 shadow-lg">
+              <iframe
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                loading="lazy"
+                src="https://www.openstreetmap.org/export/embed.html?bbox=77.0871%2C28.7008%2C77.1271%2C28.7408&layer=mapnik&marker=28.7208%2C77.1071"
+                title="Rithala, Delhi Map"
+              ></iframe>
+              <div className="absolute top-3 left-3 bg-white text-gray-900 text-[10px] font-bold px-2 py-1 rounded shadow-md pointer-events-none">
+                OpenStreetMap
               </div>
-            ))}
+            </div>
           </div>
         </div>
 
@@ -205,7 +172,7 @@ export function FooterSection({
 
         <div className="flex flex-col md:flex-row justify-between items-center gap-6 pt-8">
           <div className="text-[13px] text-gray-500 font-medium">
-            &copy; Copyright 2022 - {new Date().getFullYear()} | Axion Spaces | All Rights Reserved
+            &copy; Copyright 2022 - {new Date().getFullYear()} | Alley Workspace | All Rights Reserved
           </div>
 
           {hasDynamicLinks ? (
