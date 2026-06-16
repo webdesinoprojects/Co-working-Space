@@ -182,7 +182,7 @@ export function HeroSection({ data }: { data?: HeroSectionVM }) {
       <div className="absolute inset-x-0 bottom-0 z-10 h-1/2 bg-gradient-to-t from-black/45 to-transparent" />
 
       {/* HERO CONTENT (anchored bottom) */}
-      <div className="relative z-20 max-w-[1440px] w-full mx-auto px-5 sm:px-8 lg:px-12 pt-[160px] pb-12 sm:pb-16 lg:pb-20">
+      <div className="relative z-20 max-w-[1440px] w-full mx-auto px-5 sm:px-8 lg:px-12 pt-[160px] pb-12 sm:pb-16 lg:pb-20 [@media(min-height:1000px)]:pb-[120px] [@media(min-height:1100px)]:pb-[160px]">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-10">
           {/* LEFT: copy + CTA */}
           <div className="max-w-[720px]">
