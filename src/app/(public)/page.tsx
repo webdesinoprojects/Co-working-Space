@@ -50,6 +50,11 @@ export default async function Home() {
       <Navbar />
       <HeroSection data={heroData ?? undefined} />
       <AboutSection data={introData ?? undefined} />
+      <AmenitiesSection
+        dynamicAmenities={amenitiesData?.amenities}
+        dynamicBadge={amenitiesData?.badge_text}
+        dynamicTitle={amenitiesData?.title}
+      />
       <WorkspaceCardsSection workspaces={workspaceCards} />
       <LocationsSection data={locationsData ?? undefined} />
       <MembershipsSection data={membershipData ?? undefined} />
@@ -59,11 +64,6 @@ export default async function Home() {
         enquireBaseHref="#contact"
       />
       <WhyChooseUsSection data={whyChooseUsData ?? undefined} />
-      <AmenitiesSection
-        dynamicAmenities={amenitiesData?.amenities}
-        dynamicBadge={amenitiesData?.badge_text}
-        dynamicTitle={amenitiesData?.title}
-      />
       <TestimonialsSection data={testimonialsData ?? undefined} />
     </main>
   );

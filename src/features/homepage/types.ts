@@ -78,6 +78,7 @@ export type MembershipPlanVM = {
 export type MembershipSectionVM = {
   badge_text: string;
   title: string;
+  is_enabled: boolean;
   plans: MembershipPlanVM[];
 };
 

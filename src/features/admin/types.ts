@@ -115,6 +115,7 @@ export type AdminMembershipSectionVM = {
   id: string;
   badge_text: string;
   title: string;
+  is_enabled: boolean;
   plans: AdminMembershipPlanVM[];
 };
 

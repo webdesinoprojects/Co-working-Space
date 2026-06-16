@@ -238,7 +238,7 @@ export async function getMembershipSection(): Promise<MembershipSectionVM | null
   const { data, error } = await supabase
     .from("home_membership_sections")
     .select(
-      `badge_text, title,
+      `badge_text, title, is_enabled,
        home_membership_plans(
          id, title, description, price_text, cta_label,
          highlight_badge_text, is_featured, sort_order, is_active,
@@ -267,12 +267,14 @@ export async function getMembershipSection(): Promise<MembershipSectionVM | null
   const d = (data as unknown) as {
     badge_text: string;
     title: string;
+    is_enabled: boolean;
     home_membership_plans: PlanRow[];
   };
 
   return {
     badge_text: d.badge_text,
     title: d.title,
+    is_enabled: d.is_enabled,
     plans: (d.home_membership_plans ?? [])
       .filter((p) => p.is_active)
       .sort((a, b) => a.sort_order - b.sort_order)

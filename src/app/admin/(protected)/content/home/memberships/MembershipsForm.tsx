@@ -238,6 +238,23 @@ export function MembershipsForm({ data }: { data: AdminMembershipSectionVM }) {
               <input name="title" defaultValue={data.title} required className={INPUT} />
             </div>
           </div>
+
+          {/* Show / hide the whole section on the public site */}
+          <label className="flex items-center gap-3 mt-5 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              name="is_enabled"
+              defaultChecked={data.is_enabled}
+              className="w-4 h-4 rounded border-neutral-300"
+            />
+            <span className="text-sm font-medium text-neutral-700">
+              Show this section on the website
+            </span>
+            <span className="text-xs text-neutral-400">
+              (off = hidden completely, no placeholder)
+            </span>
+          </label>
+
           <div className="flex justify-end mt-4"><SubmitButton /></div>
         </form>
 

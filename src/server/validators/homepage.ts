@@ -87,6 +87,11 @@ export type LocationCardInput = z.infer<typeof locationCardSchema>;
 export const membershipsHeaderSchema = z.object({
   badge_text: shortText(100),
   title: shortText(300),
+  // Checkbox: present as "on" when checked, absent when not. Coerce to boolean.
+  is_enabled: z.preprocess(
+    (v) => v === "on" || v === true || v === "true",
+    z.boolean()
+  ),
 });
 export type MembershipsHeaderInput = z.infer<typeof membershipsHeaderSchema>;
 

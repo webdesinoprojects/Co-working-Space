@@ -204,7 +204,7 @@ export async function getAdminMembershipSection(): Promise<AdminMembershipSectio
   const { data, error } = await supabase
     .from("home_membership_sections")
     .select(
-      `id, badge_text, title,
+      `id, badge_text, title, is_enabled,
        home_membership_plans(
          id, section_id, title, description, price_text, cta_label,
          highlight_badge_text, is_featured, sort_order, is_active,
@@ -238,6 +238,7 @@ export async function getAdminMembershipSection(): Promise<AdminMembershipSectio
     id: string;
     badge_text: string;
     title: string;
+    is_enabled: boolean;
     home_membership_plans: PlanRow[];
   };
 
@@ -245,6 +246,7 @@ export async function getAdminMembershipSection(): Promise<AdminMembershipSectio
     id: d.id,
     badge_text: d.badge_text,
     title: d.title,
+    is_enabled: d.is_enabled,
     plans: (d.home_membership_plans ?? [])
       .sort((a, b) => a.sort_order - b.sort_order)
       .map((p) => ({

@@ -2,49 +2,6 @@
 
 import type { MembershipSectionVM } from "@/features/homepage/types";
 
-const STATIC_PLANS = [
-  {
-    title: "Hot Desk",
-    description: "Flexible access to any open desk.",
-    price_text: "Rs. 250/mo",
-    cta_label: "Select Plan",
-    highlight_badge_text: null,
-    is_featured: false,
-    features: [
-      "Access during business hours",
-      "Ultra-fast WiFi",
-      "Specialty coffee & tea",
-    ],
-  },
-  {
-    title: "Dedicated Desk",
-    description: "Your own permanent desk setup.",
-    price_text: "Rs. 400/mo",
-    cta_label: "Select Plan",
-    highlight_badge_text: "Most Popular",
-    is_featured: true,
-    features: [
-      "24/7 building access",
-      "Ergonomic chair & locking cabinet",
-      "Mail & package handling",
-      "5 meeting room credits/mo",
-    ],
-  },
-  {
-    title: "Private Office",
-    description: "Secure space for teams of 2-50.",
-    price_text: "From Rs. 900/mo",
-    cta_label: "Contact Us",
-    highlight_badge_text: null,
-    is_featured: false,
-    features: [
-      "Everything in Dedicated",
-      "Fully furnished & branded",
-      "Priority IT support",
-    ],
-  },
-];
-
 function PlanCard({
   isFeatured,
   badgeText,
@@ -117,9 +74,11 @@ function PlanCard({
 }
 
 export function MembershipsSection({ data }: { data?: MembershipSectionVM }) {
-  const badge = data?.badge_text ?? "Memberships";
-  const title = data?.title ?? "Plans for every stage of growth";
-  const hasDynamic = data && data.plans.length > 0;
+  // Hidden entirely when the section is disabled or has no plans — no placeholder.
+  if (!data || !data.is_enabled || data.plans.length === 0) return null;
+
+  const badge = data.badge_text;
+  const title = data.title;
 
   return (
     <section className="bg-[#EFEFEF] pt-16 sm:pt-20 lg:pt-28 pb-16 sm:pb-20 lg:pb-28">
@@ -138,31 +97,18 @@ export function MembershipsSection({ data }: { data?: MembershipSectionVM }) {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
-          {hasDynamic
-            ? data.plans.map((plan) => (
-                <PlanCard
-                  key={plan.id}
-                  isFeatured={plan.is_featured}
-                  badgeText={plan.highlight_badge_text}
-                  title={plan.title}
-                  description={plan.description}
-                  price={plan.price_text}
-                  ctaLabel={plan.cta_label}
-                  features={plan.features.map((feature) => feature.feature_text)}
-                />
-              ))
-            : STATIC_PLANS.map((plan) => (
-                <PlanCard
-                  key={plan.title}
-                  isFeatured={plan.is_featured}
-                  badgeText={plan.highlight_badge_text}
-                  title={plan.title}
-                  description={plan.description}
-                  price={plan.price_text}
-                  ctaLabel={plan.cta_label}
-                  features={plan.features}
-                />
-              ))}
+          {data.plans.map((plan) => (
+            <PlanCard
+              key={plan.id}
+              isFeatured={plan.is_featured}
+              badgeText={plan.highlight_badge_text}
+              title={plan.title}
+              description={plan.description}
+              price={plan.price_text}
+              ctaLabel={plan.cta_label}
+              features={plan.features.map((feature) => feature.feature_text)}
+            />
+          ))}
         </div>
       </div>
     </section>
