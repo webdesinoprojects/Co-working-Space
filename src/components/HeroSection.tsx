@@ -247,28 +247,6 @@ export function HeroSection({ data }: { data?: HeroSectionVM }) {
               </span>
             </div>
 
-            <div className="flex items-center gap-3">
-              {images.map((img, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => goTo(i)}
-                  aria-label={`Show slide ${i + 1}`}
-                  className={`relative h-16 w-24 sm:h-20 sm:w-28 overflow-hidden rounded-xl border transition-all duration-300 ${
-                    i === index
-                      ? "border-[#F26522] ring-2 ring-[#F26522]/50 scale-105 shadow-lg shadow-black/30"
-                      : "border-white/30 opacity-60 hover:opacity-100 hover:border-white/60"
-                  }`}
-                >
-                  <img
-                    src={img.url}
-                    alt=""
-                    aria-hidden
-                    className="h-full w-full select-none object-cover"
-                  />
-                </button>
-              ))}
-            </div>
           </div>
         </div>
       </div>
