@@ -38,6 +38,16 @@ async function fetchMediaMap(
   return map;
 }
 
+export async function getWorkspaceSlugsForSitemap(): Promise<string[]> {
+  const supabase = await createSupabaseServerClient();
+  const { data } = await supabase
+    .from("workspaces")
+    .select("slug")
+    .eq("is_active", true)
+    .order("sort_order");
+  return (data ?? []).map((r: { slug: string }) => r.slug);
+}
+
 export async function getWorkspaceOverview(): Promise<WorkspaceOverviewVM | null> {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
