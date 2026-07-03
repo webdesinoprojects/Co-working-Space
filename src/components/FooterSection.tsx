@@ -94,6 +94,12 @@ export function FooterSection({
   const sitemapLinks = links?.filter((link) => link.group_key === "sitemap") ?? [];
   const hasDynamicFooterLinks = sitemapLinks.length > 0;
   const hasDynamicLinks = socialLinks && socialLinks.length > 0;
+  const whatsappHref =
+    socialLinks?.find((link) => {
+      const platform = link.platform.toLowerCase();
+      const iconKey = link.icon_key.toLowerCase();
+      return platform === "whatsapp" || iconKey === "whatsapp";
+    })?.href ?? "https://wa.me/919639636131";
 
   return (
     <footer className="bg-gray-900 text-white pt-24 pb-8 rounded-t-[40px] mt-[-40px] relative z-10 border-t border-gray-800">
@@ -192,7 +198,8 @@ export function FooterSection({
       </div>
 
       <a
-        href="https://wa.me/919639636131"
+        href={whatsappHref}
+        aria-label="WhatsApp"
         target="_blank"
         rel="noreferrer"
         className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full flex items-center justify-center shadow-[0_10px_30px_rgba(37,211,102,0.4)] transition-transform hover:scale-110"
