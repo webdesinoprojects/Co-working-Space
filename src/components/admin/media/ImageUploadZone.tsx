@@ -189,7 +189,7 @@ export function ImageUploadZone({
               }`}>
                 {/* Thumbnail */}
                 <div className="w-9 h-9 rounded-lg overflow-hidden bg-neutral-100 shrink-0 border border-neutral-200">
-                  <img src={item.preview} alt="" className="w-full h-full object-cover" />
+                  <img src={item.preview} alt={`${item.file.name} preview`} className="w-full h-full object-cover" />
                 </div>
 
                 {/* Info */}

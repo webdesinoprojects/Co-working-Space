@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import type { HeroSectionVM } from "@/features/homepage/types";
@@ -11,7 +11,6 @@ const FALLBACK_IMAGES = {
   bottomRight: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80",
 };
 
-const STRIPS = 6; // vertical "cut" bars used for the reveal
 const SLIDE_MS = 5000; // change image every 5s
 
 type Slide = { url: string; alt: string };
@@ -45,11 +44,11 @@ function Hero3DTransition({
         >
           {/* CURRENT (Front) */}
           <div className="absolute inset-0 w-full h-full" style={{ transform: "rotateY(0deg) translateZ(50vw)", backfaceVisibility: "hidden" }}>
-            <img src={current.url} alt="" className="w-full h-full object-cover" />
+            <img src={current.url} alt={current.alt} className="w-full h-full object-cover" />
           </div>
           {/* PREV (Right face -> swings to front initially) */}
           <div className="absolute inset-0 w-full h-full" style={{ transform: "rotateY(90deg) translateZ(50vw)", backfaceVisibility: "hidden" }}>
-            <img src={prev.url} alt="" className="w-full h-full object-cover" />
+            <img src={prev.url} alt={prev.alt} className="w-full h-full object-cover" />
           </div>
         </motion.div>
       </div>
@@ -69,11 +68,11 @@ function Hero3DTransition({
         >
           {/* CURRENT (Front) */}
           <div className="absolute inset-0 w-full h-full" style={{ transform: "rotateX(0deg) translateZ(50vh)", backfaceVisibility: "hidden" }}>
-            <img src={current.url} alt="" className="w-full h-full object-cover" />
+            <img src={current.url} alt={current.alt} className="w-full h-full object-cover" />
           </div>
           {/* PREV (Bottom face -> swings to front initially) */}
           <div className="absolute inset-0 w-full h-full" style={{ transform: "rotateX(-90deg) translateZ(50vh)", backfaceVisibility: "hidden" }}>
-            <img src={prev.url} alt="" className="w-full h-full object-cover" />
+            <img src={prev.url} alt={prev.alt} className="w-full h-full object-cover" />
           </div>
         </motion.div>
       </div>
@@ -92,11 +91,11 @@ function Hero3DTransition({
       >
         {/* CURRENT (Front) */}
         <div className="absolute inset-0 w-full h-full" style={{ transform: "rotateY(0deg) translateZ(50vw)", backfaceVisibility: "hidden" }}>
-          <img src={current.url} alt="" className="w-full h-full object-cover" />
+          <img src={current.url} alt={current.alt} className="w-full h-full object-cover" />
         </div>
         {/* PREV (Left face -> swings to front initially) */}
         <div className="absolute inset-0 w-full h-full" style={{ transform: "rotateY(-90deg) translateZ(50vw)", backfaceVisibility: "hidden" }}>
-          <img src={prev.url} alt="" className="w-full h-full object-cover" />
+          <img src={prev.url} alt={prev.alt} className="w-full h-full object-cover" />
         </div>
       </motion.div>
     </div>
@@ -113,20 +112,30 @@ export function HeroSection({ data }: { data?: HeroSectionVM }) {
   const promoTitle = data?.promo_title ?? "Premium Coworking";
   const promoBadge = data?.promo_badge_text ?? "Top Rated 2026";
 
-  const images: Slide[] = [
-    {
-      url: data?.left_image?.url ?? FALLBACK_IMAGES.left,
-      alt: data?.left_image?.alt || "Premium coworking space",
-    },
-    {
-      url: data?.top_right_image?.url ?? FALLBACK_IMAGES.topRight,
-      alt: data?.top_right_image?.alt || "Meeting room lounge",
-    },
-    {
-      url: data?.bottom_right_image?.url ?? FALLBACK_IMAGES.bottomRight,
-      alt: data?.bottom_right_image?.alt || "Modern office interior",
-    },
-  ];
+  const images: Slide[] = useMemo(
+    () => [
+      {
+        url: data?.left_image?.url ?? FALLBACK_IMAGES.left,
+        alt: data?.left_image?.alt || "Premium coworking space at Alley Workspace",
+      },
+      {
+        url: data?.top_right_image?.url ?? FALLBACK_IMAGES.topRight,
+        alt: data?.top_right_image?.alt || "Meeting room at Alley Workspace",
+      },
+      {
+        url: data?.bottom_right_image?.url ?? FALLBACK_IMAGES.bottomRight,
+        alt: data?.bottom_right_image?.alt || "Modern office interior at Alley Workspace",
+      },
+    ],
+    [
+      data?.left_image?.alt,
+      data?.left_image?.url,
+      data?.top_right_image?.alt,
+      data?.top_right_image?.url,
+      data?.bottom_right_image?.alt,
+      data?.bottom_right_image?.url,
+    ]
+  );
 
   const [index, setIndex] = useState(0);
   const [prev, setPrev] = useState(0);

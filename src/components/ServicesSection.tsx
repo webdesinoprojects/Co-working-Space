@@ -9,6 +9,7 @@ import {
   Phone, HelpCircle,
 } from "lucide-react";
 import type { OfferingVM } from "@/features/homepage/types";
+import { toUrlSlug } from "@/lib/slug";
 
 export interface ServiceFeature {
   name: string;
@@ -355,7 +356,7 @@ export function ServicesSection({
                     </a>
                   ) : (
                     <Link
-                      href={`${enquireBaseHref}?interest=${encodeURIComponent(plan.title)}`}
+                      href={`${enquireBaseHref}?interest=${toUrlSlug(plan.title)}`}
                       className="bg-[#F26522] text-white font-semibold text-[15px] py-3.5 px-8 rounded-full shadow-lg shadow-[#F26522]/30 hover:bg-[#e05a1a] transition-colors inline-block text-center"
                     >
                       Enquire Now

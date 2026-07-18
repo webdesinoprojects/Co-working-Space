@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import { HeroSection } from "@/components/HeroSection";
 import { AboutSection } from "@/components/AboutSection";
@@ -19,8 +20,13 @@ import {
   getTestimonialsSection,
 } from "@/server/repositories/homepage";
 import { getActiveWorkspaceList } from "@/server/repositories/workspaces";
+import { getPublicPageMetadata } from "@/server/seo";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getPublicPageMetadata("/");
+}
 
 export default async function Home() {
   const [

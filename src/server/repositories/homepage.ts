@@ -1,5 +1,6 @@
 import "server-only";
 import { createSupabaseServerClient } from "@/server/db/client";
+import { withImageKitWebp } from "@/lib/image-url";
 import type {
   HeroSectionVM,
   IntroSectionVM,
@@ -27,7 +28,7 @@ type ImgRow = {
 function toPublicImage(row: Omit<ImgRow, "id"> | null): PublicImageVM | null {
   if (!row) return null;
   return {
-    url: row.file_url,
+    url: withImageKitWebp(row.file_url),
     alt: row.alt_text ?? "",
     width: row.width,
     height: row.height,

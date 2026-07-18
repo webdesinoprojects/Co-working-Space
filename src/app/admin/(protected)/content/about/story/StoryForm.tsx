@@ -211,7 +211,7 @@ export function StoryForm({ data }: { data: AdminAboutStorySectionVM }) {
                       <>
                         <img
                           src={img.url}
-                          alt=""
+                          alt={img.alt || label}
                           className="absolute inset-0 w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">

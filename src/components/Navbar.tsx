@@ -28,6 +28,7 @@ export type { WorkspaceNavItem };
 const staticNavItems = [
   { name: "Home", href: "/" },
   { name: "About Us", href: "/about" },
+  { name: "Services", href: "/services" },
   { name: "FAQs", href: "/faq" },
 ];
 
@@ -52,6 +53,7 @@ export default function Navbar({ workspaceNavItems }: { workspaceNavItems?: Work
       })),
     },
     staticNavItems[2],
+    staticNavItems[3],
   ];
 
   useEffect(() => {

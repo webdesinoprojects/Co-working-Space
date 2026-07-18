@@ -255,6 +255,58 @@ export type AdminFooterSocialLinkVM = {
   is_active: boolean;
 };
 
+// -- Admin Page SEO ------------------------------------------------------------
+export type AdminPageSeoVM = {
+  route_path: string;
+  label: string;
+  fallback_title: string;
+  fallback_description: string;
+  meta_title: string | null;
+  meta_description: string | null;
+};
+
+// -- Admin Privacy Policy ------------------------------------------------------
+export type AdminPrivacyPolicyPageVM = {
+  page_key: string;
+  headline: string;
+  effective_date_label: string;
+  intro_text: string;
+  body_content: string;
+};
+
+// -- Admin Services ------------------------------------------------------------
+export type AdminServiceItemVM = {
+  id: string;
+  title: string;
+  description: string;
+  icon_key: string;
+  image_asset_id: string | null;
+  image: AdminImagePreview | null;
+  features: string[];
+  cta_label: string;
+  cta_href: string;
+  sort_order: number;
+  is_active: boolean;
+};
+
+export type AdminServicesPageVM = {
+  page_key: string;
+  badge_text: string;
+  headline: string;
+  intro_text: string;
+  primary_cta_label: string;
+  primary_cta_href: string;
+  secondary_cta_label: string;
+  secondary_cta_href: string;
+  hero_image_asset_id: string | null;
+  hero_image: AdminImagePreview | null;
+  highlights: string[];
+  services_badge_text: string;
+  services_title: string;
+  services_intro_text: string;
+  items: AdminServiceItemVM[];
+};
+
 // -- Admin Messages ------------------------------------------------------------
 export type MessageStatus =
   | "new"

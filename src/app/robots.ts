@@ -1,9 +1,5 @@
 import type { MetadataRoute } from "next";
-
-const BASE_URL = (
-  process.env.SITE_URL ??
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
-).replace(/\/$/, "");
+import { SITE_URL } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -14,6 +10,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin", "/admin/"],
       },
     ],
-    sitemap: `${BASE_URL}/sitemap.xml`,
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

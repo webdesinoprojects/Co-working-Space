@@ -1,5 +1,6 @@
 ﻿import "server-only";
 import { createSupabaseServerClient } from "@/server/db/client";
+import { withImageKitWebp } from "@/lib/image-url";
 import type {
   WorkspaceOverviewVM,
   WorkspaceCardVM,
@@ -76,7 +77,7 @@ export async function getActiveWorkspaceList(): Promise<WorkspaceCardVM[]> {
     return {
       id: r.id, slug: r.slug, nav_label: r.nav_label, card_title: r.card_title,
       card_description: r.card_description,
-      overview_image: img ? { url: img.file_url, alt: img.alt_text ?? "", width: img.width, height: img.height } : null,
+      overview_image: img ? { url: withImageKitWebp(img.file_url), alt: img.alt_text ?? "", width: img.width, height: img.height } : null,
       sort_order: r.sort_order,
     };
   });
@@ -143,10 +144,10 @@ export async function getWorkspaceBySlug(slug: string): Promise<WorkspaceDetailV
   const mediaMap = await fetchMediaMap(supabase, allMediaIds);
   const hero_images = heroRows
     .filter((r) => r.image_asset_id && mediaMap[r.image_asset_id])
-    .map((r) => { const m = mediaMap[r.image_asset_id!]; return { slot: r.slot, url: m.file_url, alt: m.alt_text ?? "", width: m.width, height: m.height }; });
+    .map((r) => { const m = mediaMap[r.image_asset_id!]; return { slot: r.slot, url: withImageKitWebp(m.file_url), alt: m.alt_text ?? "", width: m.width, height: m.height }; });
   const gallery: WorkspaceGalleryImageVM[] = gallRows
     .filter((r) => r.image_asset_id && mediaMap[r.image_asset_id])
-    .map((r) => { const m = mediaMap[r.image_asset_id!]; return { url: m.file_url, alt: m.alt_text ?? r.caption ?? "", width: m.width, height: m.height }; });
+    .map((r) => { const m = mediaMap[r.image_asset_id!]; return { url: withImageKitWebp(m.file_url), alt: m.alt_text ?? r.caption ?? "", width: m.width, height: m.height }; });
   const marquee_bands: WorkspaceMarqueeBandVM[] = bands.map((b) => ({
     theme: b.theme, reverse: b.reverse,
     items: itemRows.filter((item) => item.band_id === b.id).map((item) => ({ item_text: item.item_text })),

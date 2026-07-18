@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { getWorkspaceOverview, getActiveWorkspaceList } from "@/server/repositories/workspaces";
+import { getPublicPageMetadata } from "@/server/seo";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getPublicPageMetadata("/workspaces");
+}
 
 export default async function WorkspacesPage() {
   const [overview, workspaces] = await Promise.all([
@@ -53,7 +59,7 @@ export default async function WorkspacesPage() {
                 <div className="w-full h-[60%] bg-gray-100 rounded-2xl mb-6 overflow-hidden flex-shrink-0">
                   <img
                     src={ws.overview_image?.url ?? FALLBACK_IMG}
-                    alt={ws.overview_image?.alt ?? ws.card_title}
+                    alt={ws.overview_image?.alt || ws.card_title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
                 </div>

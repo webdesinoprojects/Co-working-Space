@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { SmoothScrollerProvider } from "@/components/SmoothScroll";
 import { ThemeProvider } from "@/lib/ThemeContext";
+import { SITE_METADATA_BASE } from "@/lib/site";
 import { Toaster } from "sonner";
 import {
   manrope,
@@ -84,9 +85,13 @@ export const metadata: Metadata = {
       "Strategy-led workspaces delivering results. Premium coworking, private cabins, and meeting rooms in Delhi.",
     images: ["/alley_logo.png"],
   },
-  metadataBase: new URL("https://alleyworkspace.com"),
+  metadataBase: SITE_METADATA_BASE,
   alternates: {
     canonical: "/",
+    languages: {
+      "en-IN": "/",
+      "x-default": "/",
+    },
   },
   category: "business",
 };

@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getContactSection } from "@/server/repositories/homepage";
 import { getActiveWorkspaceList } from "@/server/repositories/workspaces";
+import { getPublicPageMetadata } from "@/server/seo";
 import { ConnectPageContent } from "./ConnectPageContent";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return getPublicPageMetadata("/connect");
+}
 
 export default async function ConnectPage() {
   const [data, workspaces] = await Promise.all([

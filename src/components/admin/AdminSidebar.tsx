@@ -46,9 +46,24 @@ const baseContentGroups = [
     items: [{ name: "All Workspaces", href: "" }],
   },
   {
+    section: "Services",
+    base: "/admin/content/services",
+    items: [{ name: "Services Page", href: "" }],
+  },
+  {
     section: "FAQ",
     base: "/admin/content/faq",
     items: [{ name: "All FAQs", href: "" }],
+  },
+  {
+    section: "SEO",
+    base: "/admin/content/seo",
+    items: [{ name: "All Pages", href: "" }],
+  },
+  {
+    section: "Legal",
+    base: "/admin/content/privacy-policy",
+    items: [{ name: "Privacy Policy", href: "" }],
   },
 ];
 

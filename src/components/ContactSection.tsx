@@ -6,6 +6,7 @@ import { ArrowRight, Mail, Phone, CheckCircle, AlertCircle, X } from "lucide-rea
 import { submitContactAction } from "@/features/contact/actions";
 import type { ContactSubmitResult } from "@/features/contact/types";
 import type { ContactSectionVM } from "@/features/homepage/types";
+import { toUrlSlug } from "@/lib/slug";
 
 const Panda = ({ state }: { state: "idle" | "peek" | "close" }) => {
   return (
@@ -140,6 +141,51 @@ const FALLBACK_CONTACT: ContactSectionVM = {
   ],
 };
 
+function resolveInitialInterest(
+  options: ContactSectionVM["interest_options"],
+  initialInterest?: string
+): { value: string; option: ContactSectionVM["interest_options"][number] | null } {
+  if (!initialInterest) return { value: "", option: null };
+  let decodedInterest = initialInterest;
+  try {
+    decodedInterest = decodeURIComponent(initialInterest);
+  } catch {
+    decodedInterest = initialInterest;
+  }
+  const normalizedInterest = toUrlSlug(decodedInterest);
+  const match = options.find((option) => {
+    return (
+      option.value === decodedInterest ||
+      toUrlSlug(option.value) === normalizedInterest ||
+      toUrlSlug(option.label) === normalizedInterest
+    );
+  });
+
+  if (match) return { value: match.value, option: null };
+
+  const generatedValue = normalizedInterest;
+  if (!generatedValue) return { value: "", option: null };
+
+  return {
+    value: generatedValue,
+    option: {
+      label: humanizeInterest(decodedInterest),
+      value: generatedValue,
+    },
+  };
+}
+
+function humanizeInterest(value: string): string {
+  const numericRangeToken = "NUMERICRANGETOKEN";
+  const normalized = value
+    .trim()
+    .replace(/(\d)-(\d)/g, `$1${numericRangeToken}$2`)
+    .replace(/[-_]+/g, " ")
+    .replace(new RegExp(numericRangeToken, "g"), "-")
+    .replace(/\s+/g, " ");
+  return normalized.replace(/\b[a-z]/g, (letter) => letter.toUpperCase());
+}
+
 export function ContactSection({
   data,
   initialInterest,
@@ -150,6 +196,13 @@ export function ContactSection({
   sourcePath?: string;
 }) {
   const content = data ?? FALLBACK_CONTACT;
+  const resolvedInitialInterest = resolveInitialInterest(
+    content.interest_options,
+    initialInterest
+  );
+  const interestOptions = resolvedInitialInterest.option
+    ? [...content.interest_options, resolvedInitialInterest.option]
+    : content.interest_options;
   const [pandaState, setPandaState] = useState<"idle" | "peek" | "close">("idle");
   const [result, setResult] = useState<ContactSubmitResult | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -332,13 +385,13 @@ export function ContactSection({
                     <select
                       suppressHydrationWarning
                       name="interest"
-                      defaultValue={initialInterest ?? ""}
+                      defaultValue={resolvedInitialInterest.value}
                       onFocus={() => setPandaState("peek")}
                       onBlur={() => setPandaState("idle")}
                       className="w-full bg-transparent border-0 border-b-2 border-gray-200 py-2 text-[16px] text-gray-500 focus:text-gray-900 focus:outline-none focus:border-gray-900 transition-colors appearance-none cursor-pointer rounded-none focus:ring-0"
                     >
                       <option value="" disabled>{content.interest_placeholder}</option>
-                      {content.interest_options.map((option) => (
+                      {interestOptions.map((option) => (
                         <option key={option.value} value={option.value}>{option.label}</option>
                       ))}
                     </select>

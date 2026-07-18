@@ -1,5 +1,6 @@
 import "server-only";
 import { createSupabaseServerClient } from "@/server/db/client";
+import { withImageKitWebp } from "@/lib/image-url";
 import type {
   AboutHeroSectionVM,
   AboutHeroImageVM,
@@ -66,7 +67,7 @@ export async function getAboutHeroSection(): Promise<AboutHeroSectionVM | null> 
       const m = mediaMap[r.image_asset_id!];
       return {
         slot: r.slot,
-        url: m.file_url,
+        url: withImageKitWebp(m.file_url),
         alt: m.alt_text ?? "",
         width: m.width,
         height: m.height,
@@ -124,7 +125,7 @@ export async function getAboutStorySection(): Promise<AboutStorySectionVM | null
       const m = mediaMap[r.image_asset_id!];
       return {
         slot: r.slot,
-        url: m.file_url,
+        url: withImageKitWebp(m.file_url),
         alt: m.alt_text ?? "",
         width: m.width,
         height: m.height,

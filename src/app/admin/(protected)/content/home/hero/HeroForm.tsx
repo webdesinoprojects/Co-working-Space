@@ -105,7 +105,7 @@ export function HeroForm({ data }: { data: AdminHeroSectionVM }) {
                   >
                     {imageObj ? (
                       <>
-                        <img src={imageObj.url} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                        <img src={imageObj.url} alt={imageObj.alt || `${label} preview`} className="absolute inset-0 w-full h-full object-cover" />
                         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                           <span className="text-white text-xs font-semibold">Change</span>
                         </div>
